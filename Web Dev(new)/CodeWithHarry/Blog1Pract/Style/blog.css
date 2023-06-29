@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300&display=swap");
+
+.blogContainer h1 {
+  font-family: "Fira Sans", sans-serif;
+  margin: 23px;
+}
+
+.blogitem {
+  margin: 20px;
+  font-family: "Fira Sans", sans-serif;
+}
+
+.blogitem p {
+  font-family: "Source Code Pro", monospace;
+}
+
+.btn-read {
+  padding: 7px;
+}

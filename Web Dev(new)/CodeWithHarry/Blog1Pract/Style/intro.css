@@ -1,0 +1,59 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300&display=swap");
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  margin-top: 0px;
+}
+
+.infoContainer h1 {
+  margin: 17px;
+  margin-bottom: 0px;
+}
+
+.infoContainer p,
+.infoContainer h2 {
+  margin: 10px;
+}
+
+.skillcontainer {
+  padding: 12px;
+}
+
+.skill {
+  height: 5px;
+  background-color: red;
+  width: 300px;
+}
+
+.skillItem {
+  display: flex;
+  align-items: center;
+}
+
+.hundred {
+  width: 265px;
+  background-color: blueviolet;
+}
+
+.fifty {
+  width: 125px;
+  background-color: aqua;
+}
+
+.t5 {
+  width: 75px;
+  background-color: yellow;
+}
+
+h1,
+h2 {
+  font-family: "Fira Sans";
+}
+
+p,
+.skillItem {
+  font-family: "Source Code Pro";
+}

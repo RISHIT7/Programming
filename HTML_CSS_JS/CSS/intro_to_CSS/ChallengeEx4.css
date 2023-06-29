@@ -1,0 +1,77 @@
+
+.div1 {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+.headings {
+  color: white;
+  background-color: black;
+  font-family: cursive;
+  text-align: center;
+}
+.s1 {
+  padding: 10px;
+  width: 125px;
+  height: 14px;
+  border-radius: 3px;
+  border-style: solid;
+  border-color: rgb(205, 205, 205);
+  margin: 5px;
+}
+.s2 {
+  padding: 10px;
+  width: 285px;
+  height: 14px;
+  border-radius: 3px;
+  border-style: solid;
+  border-color: rgb(205, 205, 205);
+  margin: 5px;
+}
+.but1 {
+  background-color: #1373b3;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  padding: 10px;
+  width: 315px;
+  border-radius: 5px;
+  border: none;
+  font-size: large;
+  cursor: pointer;
+}
+.div2{
+    font-family: Arial, Helvetica, sans-serif;
+}
+.h{
+    font-size: xx-large;
+    margin-bottom: 20px;
+}
+.epl, .ed{
+    border: none;
+    background-color: rgb(230, 230, 230);
+    padding: 10px;
+    width: 300px;
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.but2 {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+    margin-left: 0px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.but3 {
+    background-color: rgb(230, 230, 230);
+    color: black;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+    margin-left: 0px;
+    cursor: pointer;
+    margin-top: 20px;
+}

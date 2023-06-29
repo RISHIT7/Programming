@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar {
+  font-family: "Fira Sans", sans-serif;
+  background-color: rgb(183, 183, 183);
+  transition: transform 0.3s ease-in;
+  position: absolute;
+}
+
+.sidebar nav {
+  padding: 45px;
+  height: 100vh;
+}
+
+.sidebar nav {
+  font-size: 15px;
+  padding: 33px 0;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: medium;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar nav a {
+  color: rgb(40, 40, 40);
+  margin: 30px 50px;
+  text-decoration: none;
+}
+
+.main {
+  padding-left: 25px;
+  width: 90vw;
+}
+
+.container {
+  display: flex;
+}
+
+.infoContainer {
+  height: 58vh;
+  width: 80vw;
+  margin: 144px auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.sidebarGo {
+  transform: translate(-400px, 0px);
+  position: absolute;
+}
+
+.menu-ham {
+  position: absolute;
+  cursor: pointer;
+  top: 10px;
+  left: 10px;
+}
+
+.menu-cross {
+  position: absolute;
+  cursor: pointer;
+  top: 16.5px;
+  left: 145px;
+}
+
+
+.devInfo {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  font-family: "Source Code Pro", monospace;
+}
+
+.hello {
+  font-size: 65px;
+}
+.name {
+  font-size: 50px;
+  font-weight: bold;
+  font-family: "Fira Sans", sans-serif;
+}
+.about {
+  font-size: 30px;
+}
+
+.moreabout {
+  font-size: 22px;
+  margin-top: 23px;
+}
+
+.button {
+  margin-top: 34px;
+}
+
+.button button, .btn-read{
+  border: 1px solid rgb(65, 56, 234);
+  background-color: rgb(65, 56, 234);
+  color: white;
+  padding: 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.button button:hover {
+  background-color: white;
+  color: rgb(65, 56, 234);
+  border: 1px solid rgb(65, 56, 234);
+}
+
+.button button:active {
+  background-color: white;
+  color: rgb(65, 56, 234);
+  border: 1px solid white;
+}
+
+.devPic img {
+  height: 58vh;
+}
+
+@media (max-width: 1040px)
+{
+  /* .sidebar {
+    transform: translate(-400px, 0px);
+    position: absolute;
+  } */
+  .devPic {
+    display: none;
+  }
+}

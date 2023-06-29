@@ -1,0 +1,7 @@
+{% extends "Flask9.html" %} 
+{% block title %} Home Page {% endblock %} 
+{% block content %}
+    <h1>Home Page</h1>
+    <img src="{{ url_for("static", filename="images/12-basketball-ball-png-image.png") }}"
+    />
+{% endblock %}

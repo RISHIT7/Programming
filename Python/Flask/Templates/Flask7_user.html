@@ -1,0 +1,15 @@
+{% extends "Flask7.html" %}
+{% block title %}User{% endblock %}
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<form action="#" method="post">
+    <input type="email" value="{{email if email}}" name="email" placeholder="Enter email"/>
+    <input type="submit" value="submit"}/>
+</form>
+{% endblock %}

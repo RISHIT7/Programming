@@ -1,0 +1,52 @@
+body {
+  font-family: Arial;
+}
+p {
+  margin: 0;
+  font-size: small;
+  font-weight: bold;
+  margin-left: 10px;
+}
+.flexbox {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 40px;
+  align-items: center;
+}
+.left-section {
+  display: flex;
+  align-items: center;
+  margin-left: 60px;
+}
+.right-section {
+  margin-right: 60px;
+}
+.image {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+}
+.but1 {
+  color: white;
+  background-color: #5588ca;
+  border: none;
+  height: 32px;
+  font-size: x-small;
+  border-radius: 6px;
+  width: 75px;
+  cursor: pointer;
+}
+.but2 {
+  background-color: rgb(227, 227, 227);
+  border: none;
+  height: 32px;
+  font-size: x-small;
+  font-weight: bold;
+  border-radius: 6px;
+  width: 75px;
+  cursor: pointer;
+}

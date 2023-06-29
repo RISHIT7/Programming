@@ -1,0 +1,12 @@
+.back-g p {
+  position: absolute;
+  font-size: xx-large;
+  margin-top: 5cm;
+  color: white;
+  margin-left: 5%;
+  margin-right: 70%;
+  min-width: 300px;
+  background-color: rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
+  border-radius: 5px;
+}

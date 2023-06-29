@@ -1,0 +1,46 @@
+.sidebar {
+  position: fixed;
+  top: 40px;
+  bottom: 0;
+  left: 0;
+  width: 210px;
+  background-color: rgb(54, 54, 54);
+}
+.img {
+  width: 32px;
+  border-radius: 16px;
+  margin-left: 10px;
+  margin-top: 16px;
+}
+.images {
+  width: 52px;
+  background-color: rgb(42, 42, 42);
+  position: fixed;
+  top: 40px;
+  bottom: 0;
+}
+.div1 {
+  display: flex;
+  justify-content: space-between;
+  width: 148px;
+  align-items: center;
+}
+.INFO {
+  color: white;
+  font-size: small;
+  margin: 10px;
+}
+.div2 {
+  color: rgb(184, 184, 184);
+  font-size: small;
+  margin: 10px;
+}
+.info {
+  position: fixed;
+  margin-left: 62px;
+}
+.plus {
+  color: rgb(184, 184, 184);
+  font-size: x-large;
+  margin: 10px;
+}

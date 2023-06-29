@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <title>Calculator</title>
+  <link
+    rel="stylesheet"
+    text="text/css"
+    href="style.css"
+  />
+  <body>
+    <div class="calc">
+      <div class="screen"><p id="display" ></p></div>
+      <div class="bottom">
+        <div class="column">
+          <div class="butD"><input id="inp-1" onclick="log1()" type="button" value="(" /></div>
+          <div class="butD"><input id="inp-2" onclick="log2()" type="button" value="7" /></div>
+          <div class="butD"><input id="inp-3" onclick="log3()" type="button" value="4" /></div>
+          <div class="butD"><input id="inp-4" onclick="log4()" type="button" value="1" /></div>
+          <div class="butD"><input id="inp-5" onclick="log5()" type="button" value="-()" /></div>
+        </div>
+        <div class="column">
+          <div class="butD"><input id="inp-6" onclick="log6()" type="button" value=")" /></div>
+          <div class="butD"><input id="inp-7" onclick="log7()" type="button" value="8" /></div>
+          <div class="butD"><input id="inp-8" onclick="log8()" type="button" value="5" /></div>
+          <div class="butD"><input id="inp-9" onclick="log9()" type="button" value="2" /></div>
+          <div class="butD"><input id="inp-10" onclick="log10()" type="button" value="0" /></div>
+        </div>
+        <div class="column">
+          <div class="butD"><input id="inp-11" onclick="cls()" type="button" value="C" /></div>
+          <div class="butD"><input id="inp-12" onclick="log12()" type="button" value="9" /></div>
+          <div class="butD"><input id="inp-13" onclick="log13()" type="button" value="6" /></div>
+          <div class="butD"><input id="inp-14" onclick="log14()" type="button" value="3" /></div>
+          <div class="butD"><input id="inp-15" onclick="log15()" type="button" value="." /></div>
+        </div>
+        <div class="column">
+          <div class="butD"><input id="inp-16" onclick="log16()" type="button" value="/" /></div>
+          <div class="butD"><input id="inp-17" onclick="log17()" type="button" value="*" /></div>
+          <div class="butD"><input id="inp-18" onclick="log18()" type="button" value="-" /></div>
+          <div class="butD"><input id="inp-19" onclick="log19()" type="button" value="+" /></div>
+          <div class="butD"><input id="inp-20" onclick="result()" type="button" value="=" /></div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

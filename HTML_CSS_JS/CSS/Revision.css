@@ -1,0 +1,34 @@
+body {
+  background-color: rgba(98, 98, 166, 0.499);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+div {
+  margin: 10px;
+}
+input {
+  background-color: black;
+  color: white;
+  font-size: medium;
+  width: 300px;
+  height: 40px;
+  border: none;
+  border-radius: 5px 10px 5px 10px;
+  padding: 5px;
+  box-shadow: inset 0px 0px 10px 6px rgba(255, 255, 255, 0.1);
+}
+button {
+  margin: 10px;
+  border: 1px solid black;
+  border-radius: 10px 5px 10px 5px;
+  background-color: rgb(184, 184, 184);
+  color: black;
+  font-weight: bold;
+  width: 75px;
+  height: 40px;
+}
+button:active{
+    border: none;
+}

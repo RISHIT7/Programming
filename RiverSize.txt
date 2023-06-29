@@ -1,0 +1,65 @@
+# [1, 0, 0, 1, 0]
+# [1, 0, 1, 0, 0]
+# [0, 0, 1, 0, 1]
+# [1, 0, 1, 0, 1]
+# [1, 0, 1, 1, 0] = input
+
+# [1, 2, 2, 2, 5] = output desired
+
+
+input = [
+    [1, 0, 0, 1, 0],
+    [1, 0, 1, 0, 0],
+    [0, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1],
+    [1, 0, 1, 1, 0]
+]
+
+def checkVertical(input, i, j):
+    a = 1 # adiition to the index since we don't want to change the initial index
+    size_i = 1 # no. of 1s in that strip
+    if i == 0: # if that number is on the top, we will check for number below
+        while input[i+a][j] == 1:
+            size_i += 1
+            a += 1
+    elif i > 0 and input[i-1][j] != 1: # if that number is not on the top, we must check if there is a one above, as it would have been accounted for previously
+        while input[i+a][j] == 1:
+            size_i += 1
+            a += 1
+
+    return size_i
+
+def checkHorizontal(input, i, j):
+    b = 1
+    size_j = 1
+    if j == 0:
+        while input[i][j+b] == 1:
+            size_j += 1
+            b += 1
+    elif j > 0 and input[i][j-1] != 1:
+        while input[i][j+b] == 1:
+            size_j += 1
+            b += 1
+    else:
+        size_j = 0
+
+    return size_j
+
+def checkArea(input, i, j): # here we check the adjacent 1s on the right and left of the initial 1
+
+    size_i = checkVertical(input, i, j) # to check vertically
+    size_j = checkHorizontal(input, i, j) # to check horizontally
+    size = size_i + size_j -1 # principle of inclusion and exclusion
+
+    return size, size_i, size_j
+
+
+# to check all the element columnwise, that is, first we check all the element in the first column then we go toh the second column
+j = 0  # column
+while j < len(input[0]):
+    i = 0  # row
+    while i < len(input):
+        if input[i][j] == 1:
+            print(checkArea(input, i, j)) # everytime we find a 1, we run the check Area function
+        i += 1
+    j += 1

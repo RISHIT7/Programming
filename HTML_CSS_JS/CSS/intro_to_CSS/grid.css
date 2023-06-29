@@ -1,0 +1,39 @@
+body {
+    padding-bottom: 1000px;
+}
+
+.divi1 {
+  background-color: lightblue;
+  height: 200px;
+}
+
+.divi2 {
+  background-color: lightpink;
+  height: 200px;
+}
+
+.divi3 {
+  background-color: lightgreen;
+  height: 200px;
+}
+.divo {
+  display: grid;
+  grid-template-columns: 100px 100px 200px;
+}
+.divo_2 {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr;
+  margin-top: 30px;
+}
+.divo_1 {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  margin-top: 30px;
+}
+.divo_3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 10px;
+  column-gap: 20px;
+  row-gap: 40px;
+}

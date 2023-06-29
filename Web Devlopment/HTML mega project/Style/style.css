@@ -1,0 +1,111 @@
+*{
+  font-family: cursive;
+  background-color: lightyellow;
+}
+
+h1{
+  text-align: center;
+  background-color: turquoise;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+header{
+  padding: 20px;
+  background-color: turquoise;
+}
+
+nav{
+  padding: 15px;
+  background-color: darkslategrey;
+  overflow: hidden;
+}
+
+nav a{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  float: left;
+  background-color: darkslategrey;
+  color: lightyellow;
+  padding: 10px;
+  text-decoration: none;
+}
+
+nav a:hover{
+  color: tomato;
+  text-decoration: underline;
+}
+
+h2{
+  text-align: center;
+  text-decoration: underline;
+  margin: 50px;
+}
+
+.RN{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 5px 3px 15px black;
+  border-bottom: 15px;
+}
+
+img{
+  box-shadow: 5px 3px 15px black;
+}
+
+h4{
+  text-align: center;
+  padding: 15px;
+}
+
+p{
+  text-indent: 1px;
+  padding: 10px;
+}
+
+table,th,td,tr{
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+table{
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  border: 15px;
+}
+
+div table{
+  margin-bottom: 25px;
+}
+
+th,td,tr{
+  padding: 10px;
+  text-align: center;
+}
+
+th{
+  background-color: chocolate;
+}
+
+td{
+  background-color: royalblue;
+}
+
+footer{
+  background-color: darkslategrey;
+  overflow: hidden;
+}
+
+footer a{
+  padding: 15px;
+  float: left;
+  background-color: darkslategrey;
+  color: lightyellow;
+  text-decoration: none;
+}
+
+footer a:hover{
+  color:tomato;
+  text-decoration: underline;
+}

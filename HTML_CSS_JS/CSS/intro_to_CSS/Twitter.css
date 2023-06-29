@@ -1,0 +1,38 @@
+.div {
+    width: 300px;
+    height: 50px;
+    margin: 5px;
+    padding: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    border-radius: 7px;
+}
+.img {
+    display: inline-block;
+    width: 40px;
+    border-radius: 20px;
+    margin-top: 5px;
+    vertical-align: top;
+}
+.txt {
+    display: inline-block;
+    color: rgb(110, 110, 110);
+    font-family: Arial;
+    font-size: small;
+    margin-right: 70px;
+    margin-top: 12px;
+    margin-left: 5px;
+}
+.but {
+    display: inline-block;
+    font-size: 10px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background-color: #38aefd;
+    color: white;
+    padding: 7px 16px;
+    border: none;
+    font-weight: bold;
+    border-radius: 50px;
+    margin-top: 12px;
+    margin-right: 5px;
+}

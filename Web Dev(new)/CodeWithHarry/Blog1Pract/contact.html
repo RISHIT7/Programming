@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio tutorial</title>
+    <link rel="stylesheet" href="Style/style.css" />
+    <link rel="stylesheet" href="Style/contact.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <nav>
+          <a href="intro.html" target="_blank">My Intro</a>
+          <a href="index.html" target="_blank">Home</a>
+          <a href="blog.html" target="_blank">Blog</a>
+          <a href="contact.html" target="_blank">Contact Me</a>
+        </nav>
+      </div>
+      <div class="main">
+        <div class="contactform">
+          <h1>Contact me for work/general enquieries</h1>
+          <form>
+            <div class="mb-3">
+              <label for="client-email" class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="client-email"
+                aria-describedby="emailHelp"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="client-phone" class="form-label">Phone</label>
+              <input type="phone" class="form-control" id="client-phone" />
+            </div>
+            <div class="mb-3">
+              <label for="client-enquiery" class="form-label">Enquiery</label>
+              <input type="text" class="form-control" id="client-enquiery" />
+            </div>
+            <div id="emailHelp" class="form-text">
+              We'll never share your email & phone with anyone else.
+            </div>
+            <div class="mb-3 form-check">
+              <label class="form-check-label" for="isclient"
+                >Let's Work on a project together!!!</label
+              >
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

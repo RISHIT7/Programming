@@ -1,0 +1,45 @@
+p {
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.video-title {
+  font-weight: bold;
+  font-size: 18px;
+  width: 300px;
+  line-height: 24px;
+  color: rgb(36, 36, 36);
+  margin-bottom: 7px;
+}
+.video-statistics {
+  font-size: 14px;
+  color: rgb(80, 80, 80);
+  margin-bottom: 20px;
+}
+.video-author {
+  font-size: 14px;
+  color: rgb(80, 80, 80);
+  margin-bottom: 20px;
+}
+.video-description {
+  color: rgb(80, 80, 80);
+  font-size: 14px;
+  color: rgb(96, 96, 96);
+  width: 280px;
+  line-height: 22px;
+  margin-bottom: 100px;
+}
+
+.apple-text {
+  margin-bottom: 50px;
+  background-color: rgb(227, 65, 64);
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+.underline:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

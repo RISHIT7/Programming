@@ -1,0 +1,58 @@
+const todos = [
+  {
+    Title: "Get groceries",
+    DueDate: "10-04-2021",
+    id: "id1",
+  },
+  {
+    Title: "Wash Car",
+    DueDate: "03-04-2021",
+    id: "id2",
+  },
+  {
+    Title: "Make dinner",
+    DueDate: "03-04-2021",
+    id: "id3",
+  },
+];
+
+render();
+
+function Add() {
+  const textbox = document.getElementById("input-name");
+  const title = textbox.value;
+  const datePicker = document.getElementById("input-date");
+  const dueDate = datePicker.value;
+  const id = new Date().getTime(); // Amazing! id generator
+  todos.push({
+    Title: title,
+    DueDate: dueDate,
+    id: id,
+  });
+  render();
+}
+
+function deleteTodo(event) {
+  //target property!
+  const deleteButton = event.target;
+  const idToDelete = deleteButton.id;
+}
+
+function render() {
+  document.getElementById("div-display").innerHTML = "";
+
+  todos.forEach(function (todo) {
+    const element = document.createElement("div");
+    element.innerText = todo.Title + " " + todo.DueDate;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.innerText = "Delete";
+    deleteButton.style = "margin-left: 12px; ";
+    deleteButton.onclick = deleteTodo;
+    deleteButton.id = todo.id;
+    element.appendChild(deleteButton);
+
+    const todoList = document.getElementById("div-display");
+    todoList.appendChild(element);
+  });
+}

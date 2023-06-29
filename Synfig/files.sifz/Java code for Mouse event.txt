@@ -1,0 +1,22 @@
+<html>
+
+<head>
+
+<title>Rolling Ball upon event of mouse</title>
+
+<script type="text/javascript">
+if( document.images )
+{
+var image1 = new Image(); // Preload an image
+image.src = "Static Ball.gif";
+var image2 = new Image(); // Preload an image
+Image.src = "Animated Ball (java).gif";
+}
+</script>
+</heads>
+<body>
+
+<a herf="#" onMuseOver="doucment.myImage.src=image2.src" onMouseOut="document.myImage.src=image1.src">
+</a>
+</body>
+</html>

@@ -1,0 +1,14 @@
+.navigation {
+  height: 34px;
+  background-color: red;
+}
+
+.content {
+  height: 95px;
+  background-color: blue;
+}
+
+.footer {
+  height: 50px;
+  background-color: green;
+}

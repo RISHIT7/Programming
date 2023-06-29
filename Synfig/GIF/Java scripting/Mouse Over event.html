@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>Rollover with a mouse Events</title>
+<script type="text/javascript">
+if(document.images)
+{
+var image1=new Image();
+image1.src="Static Ball.gif";
+var image2=new Image();
+image2.src="Animated Ball (java).gif";
+}
+
+</script>
+</head>
+<body>
+<a herf="#" onMouseOver="document.myImage.src=image2.src" onMouseOut="document.myImage.src=image1.src">
+<img name="myImage" src="Static Ball.gif"/>
+</a>
+</body>
+</html>

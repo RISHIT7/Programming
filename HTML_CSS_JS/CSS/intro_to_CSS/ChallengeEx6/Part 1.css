@@ -1,0 +1,54 @@
+.headings {
+  font-family: cursive;
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+
+body {
+  font-family: Arial;
+  font-size: x-small;
+}
+.mdiv1 {
+  box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+  width: 245px;
+  padding-top: 5px;
+  padding-left: 7.5px;
+  border-radius: 3px;
+  padding-right: 7.5px;
+  padding-bottom: 14px;
+}
+.div1 {
+  display: flex;
+  width: 245px;
+  margin-top: 14px;
+  align-items: center;
+}
+.All {
+    color: rgb(102,102,102);
+}
+.img {
+  height: 32px;
+  border-radius: 16px;
+  margin-right: 4px;
+}
+.named {
+  display: flex;
+  justify-content: space-between;
+}
+.name {
+    font-weight: bolder;
+    margin: 3px;
+}
+.line {
+    font-weight: bolder;
+    margin-left: 3px;
+}
+.time {
+    color: rgb(102,102,102);
+}
+.status {
+    color: rgb(102,102,102);
+    margin-left: 3px;
+    margin-top: 3px;
+}

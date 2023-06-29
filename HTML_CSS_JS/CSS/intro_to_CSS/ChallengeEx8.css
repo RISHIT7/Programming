@@ -1,0 +1,37 @@
+.image {
+    width: 200px;
+}
+.container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+.discount {
+    position: absolute;
+    top: 5px;
+    font-family: Arial;
+    background-color: black;
+    color: white;
+    font-size: x-small;
+    right: 0;
+    padding: 5px;
+}
+.Buy {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255,255,255,0.85);
+}
+.Cart {
+    height: 27px;
+    width: 75px;
+    font-size: x-small;
+    background-color: white;
+    border-width: 1px;
+    cursor: pointer;
+}

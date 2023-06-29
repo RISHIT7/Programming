@@ -1,0 +1,78 @@
+.header {
+  color: white;
+  background-color: rgba(0,0,0,0);
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 75px;
+  align-items: center;
+  justify-content: space-between;
+  transition: 0.25s;
+}
+.header:hover{
+  background-color: rgba(0,0,0,1);
+}
+.Logo {
+  flex: 1;
+}
+.img {
+  width: 68px;
+}
+.planets {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 300px;
+  max-width: 500px;
+  margin: 0 20px 0 0;
+  flex: 1;
+}
+.planets .link1 a,
+.planets .link2 a,
+.planets .link3 a,
+.planets .link4 a {
+  text-decoration: none;
+  color: white;
+  transition: 0.15s;
+  border: 1px solid white;
+  padding: 5px 10px 5px 10px;
+}
+
+.planets .link1 a:hover {
+  color: grey;
+  border: 1px solid grey;
+}
+.planets .link1 a:active {
+  color: rgb(57, 57, 57);
+  border: 1px solid rgb(57, 57, 57);
+}
+
+.planets .link2 a:hover {
+  color: rgb(255, 242, 0);
+  border: 1px solid rgb(255, 242, 0);
+}
+.planets .link2 a:active {
+  color: rgb(255, 221, 0);
+  border: 1px solid rgb(255, 221, 0);
+}
+
+.planets .link3 a:hover {
+  color: rgb(0, 119, 255);
+  border: 1px solid rgb(183, 233, 45);
+}
+.planets .link3 a:active {
+  color: rgb(0, 124, 0);
+  border: 1px solid rgb(0, 124, 0);
+}
+
+.planets .link4 a:hover {
+  color: rgb(255, 89, 0);
+  border: 1px solid rgb(255, 89, 0);
+}
+.planets .link4 a:active {
+  color: rgb(165, 47, 0);
+  border: 1px solid rgb(165, 47, 0);
+}

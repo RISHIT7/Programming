@@ -1,0 +1,51 @@
+body {
+  padding-bottom: 1000px;
+}
+.div1 {
+  background-color: lightpink;
+  width: 100px;
+}
+.div2 {
+  background-color: lightblue;
+  flex: 1;
+}
+.div3 {
+  background-color: lightblue;
+  flex: 2;
+}
+.grid1 {
+  display: flex;
+  flex-direction: row;
+}
+
+.grid_1 {
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: grey;
+  justify-content: space-between;
+}
+.div_1 {
+  background-color: lightpink;
+  width: 100px;
+}
+.div_2 {
+  background-color: lightblue;
+  width: 100px;
+}
+.div_3 {
+  background-color: lightblue;
+  width: 100px;
+}
+.grid__1 {
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: grey;
+  align-items: start;
+  justify-content: space-between;
+}
