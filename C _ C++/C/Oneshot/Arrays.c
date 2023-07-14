@@ -12,6 +12,5 @@ int main()
     {
         printf("The value of index %d is %d\n", i, arr[i]);
     }
-
     return 0;
 }
