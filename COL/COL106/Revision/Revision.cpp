@@ -1,36 +1,33 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
+#include <set>
+#include <vector>
+#include <map>
+#include <unordered_map>
+#include <queue>
+#include <stack>
+#include <algorithm>
+#include <string>
 
-int change_mod(int curr, int req)
-{
-    int m1 = curr % 3;
-    int m2 = req % 3;
+// #define int long long
+#define ll long long int
+#define vi vector<int>
+#define pii pair<int, int>
+#define vii vector<pii>
+#define rep(i, a, b) for (int i = a; i < b; i++)
+#define ff first
+#define ss second
+#define setBits(x) builtin_popcount(x)
+#define fastio()                      \
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);                    \
+    cout.tie(NULL);
+#define print_any(vec)     \
+    for (auto value : vec) \
+        cout << value << " ";
+#define next_line cout << endl;
 
-    if (m1 == m2)
-    {
-        return 0;
-    }
-    if (m1 < m2)
-    {
-        return m2 - m1;
-    }
-    return m2 + (3 - m1);
-}
-
-int solver(vector<int> &a)
-{
-    int ans = 0;
-    for (int i = 3; i < a.size(); i++)
-    {
-        ans += change_mod(a[i], a[i - 3]);
-        a[i] = a[i - 3];
-    }
-    return ans;
-}
-
-int main()
+signed main()
 {
     int t;
     cin >> t;
@@ -38,14 +35,28 @@ int main()
     {
         int n;
         cin >> n;
-        vector<int> a(n);
-        for (int i = 0; i < n; i++)
+        vector<long long int> a(n);
+        rep(i, 0, n)
         {
             cin >> a[i];
         }
-        int res = solver(a);
-        cout<<res<<endl;
+        vector<ll> mult;
+        rep(i, 0, n)
+        {
+            rep(j, 0, n)
+            {
+                mult.push_back((a[i]*a[j])/__gcd(a[i], a[j]));
+            }
+        }
+        sort(mult.begin(), mult.end());
+        rep(i, 0, mult.size()-1)
+        {
+            if (mult[i] == mult[i+1])
+            {
+                cout<<mult[i]<<endl;
+                break;
+            }
+        }
     }
-
     return 0;
 }
