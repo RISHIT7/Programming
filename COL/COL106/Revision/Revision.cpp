@@ -29,34 +29,12 @@ using namespace std;
 
 signed main()
 {
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        int n;
-        cin >> n;
-        vector<long long int> a(n);
-        rep(i, 0, n)
-        {
-            cin >> a[i];
-        }
-        vector<ll> mult;
-        rep(i, 0, n)
-        {
-            rep(j, 0, n)
-            {
-                mult.push_back((a[i]*a[j])/__gcd(a[i], a[j]));
-            }
-        }
-        sort(mult.begin(), mult.end());
-        rep(i, 0, mult.size()-1)
-        {
-            if (mult[i] == mult[i+1])
-            {
-                cout<<mult[i]<<endl;
-                break;
-            }
-        }
-    }
+    int x =5;
+    int *xptr = &x;
+    int y = *xptr;
+    *xptr = 6;
+    cout<<x<<endl;
+    cout<<*xptr<<endl;
+    cout<<y<<endl;
     return 0;
 }
