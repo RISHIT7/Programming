@@ -28,13 +28,4 @@ using namespace std;
 #define next_line cout << endl;
 
 signed main()
-{
-    int x =5;
-    int *xptr = &x;
-    int y = *xptr;
-    *xptr = 6;
-    cout<<x<<endl;
-    cout<<*xptr<<endl;
-    cout<<y<<endl;
-    return 0;
-}
+{}
