@@ -6,12 +6,12 @@ END ENTITY;
 ARCHITECTURE sim OF T01_HelloWorld_tb IS
 BEGIN
 
-PROCESS IS
-BEGIN
+    PROCESS IS
+    BEGIN
 
-REPORT "Hello World!";
-WAIT;
+        REPORT "Hello World!";
+        WAIT;
 
-END PROCESS;
+    END PROCESS;
 
 END ARCHITECTURE;
