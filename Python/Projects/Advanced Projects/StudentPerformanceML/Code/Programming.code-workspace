@@ -14,7 +14,8 @@
 			"vector": "cpp",
 			"string_view": "cpp",
 			"span": "cpp",
-			"ostream": "cpp"
+			"ostream": "cpp",
+			"iostream": "cpp"
 		}
 	}
 }
