@@ -33,115 +33,83 @@ struct node
 {
     int data;
     node *next;
+    node *prev;
 
     node(int val)
     {
         data = val;
         next = NULL;
+        prev = NULL;
     }
 };
 
 void insertAtHead(node *&head, int val)
 {
-    node *temp = new node(val);
     if (head == NULL)
     {
-        head = temp;
+        head = new node(val);
     }
 
+    node *temp = new node(val);
     temp->next = head;
+    head->prev = temp;
     head = temp;
 }
 
 void insertAtTail(node *&head, int val)
 {
     node *new_node = new node(val);
-    node *temp = head;
     if (head == NULL)
     {
-        head = new_node;
+        insertAtHead(head, val);
+        return;
     }
+
+    node *temp = head;
     while (temp->next != NULL)
     {
         temp = temp->next;
     }
+
     temp->next = new_node;
+    new_node->prev = temp;
 }
 
-void insertAt(node *&head, int index, int val)
+void deleteAtHead(node *&head)
 {
-    node *new_node = new node(val);
-    node *trav = head;
-    while (index > 1)
-    {
-        if (trav->next == NULL)
-        {
-            cout << "Index out of range" << endl;
-            return;
-        }
-        trav = trav->next;
-        index--;
-    }
-    new_node->next = trav->next;
-    trav->next = new_node;
-}
-
-void deletionAtHead(node *&head)
-{
-    if (head == NULL)
-    {
-        cout << "Empty Linked List" << endl;
-        return;
-    }
     node *remove = head;
     head = head->next;
+    head->prev = NULL;
+
     delete remove;
 }
 
 void deletion(node *&head, int val)
 {
-    if (head == NULL)
+    if (head == val)
     {
-        cout << "Empty Linked List" << endl;
-        return;
+        deleteAtHead(head);
     }
 
-    if (head->data == val)
+    node *temp = head;
+    while (temp->data != val)
     {
-        deletionAtHead(head);
-        return;
-    }
-
-    node *trav = head;
-    while (trav->next->data != val)
-    {
-        if (trav->next == NULL)
+        if (temp->next == NULL)
         {
-            cout << "Element not found" << endl;
+            cout << "No element of this index" << endl;
             return;
         }
-        trav = trav->next;
+        temp = temp->next;
     }
-    node *remove = trav->next;
-    trav->next = trav->next->next;
-    delete remove;
+    node *to_delete = temp;
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
+
+    delete to_delete;
 }
 
-void display(node *head)
+signed main
 {
-    node *ptr = head;
-    while (ptr != NULL)
-    {
-        cout << ptr->data << " -> ";
-        ptr = ptr->next;
-    }
-    cout << "NULL" << endl;
-}
 
-signed main()
-{
-    node *head = new node(2);
-    insertAtHead(head, 1);
-    display(head);
     return 0;
 }
