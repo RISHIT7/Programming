@@ -20,7 +20,7 @@ public:
     Employee(int identity) // constructor
     {
         id = identity;
-        unique = true;               // initialize unque with true
+        unique = true;               // initialize unique with true
         if (database.count(id) != 0) // if the count is 0, that means id is unique
             unique = false;
 
@@ -93,24 +93,24 @@ int main() // main function
 {
     /*--------------- Part 1 ----------------*/
 
-    Employee Rishit = Employee(230947);
-    Rishit.work();
-    cout << Rishit.id << endl;
+    // Employee Rishit = Employee(230947);
+    // Rishit.work();
+    // cout << Rishit.id << endl;
 
-    Employee Raman = Employee(36554);
-    Raman.work();
-    cout << Raman.id << endl;
+    // Employee Raman = Employee(36554);
+    // Raman.work();
+    // cout << Raman.id << endl;
 
-    Employee Ram = Employee(230947);
-    Ram.work();
-    cout << Ram.id << endl;
+    // Employee Ram = Employee(230947);
+    // Ram.work();
+    // cout << Ram.id << endl;
 
-    Rishit.login(24755);
-    Raman.sign_up(24755);
-    Rishit.sign_up(24755);
-    Rishit.login(24777);
-    Rishit.login(24755);
-    Ram.sign_up(654);
+    // Rishit.login(24755);
+    // Raman.sign_up(24755);
+    // Rishit.sign_up(24755);
+    // Rishit.login(24777);
+    // Rishit.login(24755);
+    // Ram.sign_up(654);
 
     // /*-------------- Part 2 ----------------*/
 
