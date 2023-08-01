@@ -128,6 +128,15 @@ signed main()
     {
         input[1] = input[2];
         input[2] = 0;
+
+        bool in_set = avail_set(input[1], vs);
+
+        if (in_set == false)
+        {
+            SET set = SET();
+            vs.push_back({input[1], set});
+        }
+
     } // checked
 
     // ------------------------- calling of functions -------------------------

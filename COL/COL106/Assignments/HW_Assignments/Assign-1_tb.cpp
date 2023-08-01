@@ -87,12 +87,12 @@ must be able to be done in O(n)
 easily can be done in O(n) no doubt
 */
 
-bool avail_set(int input[3], vector<pair<int, SET>> vs)
+bool avail_set(int set_num, vector<pair<int, SET>> vs)
 {
     bool in_set = false;
     for (int i = 0; i < vs.size(); i++)
     {
-        if (input[1] == vs[i].first)
+        if (set_num == vs[i].first)
         {
             in_set = true;
         }
@@ -109,7 +109,6 @@ signed main()
 
     // ------------------------------------ INPUT --------------------------------------
 
-    vector<int[3]> in;
     int input[3];
     bool first = true;
 
@@ -123,36 +122,65 @@ signed main()
         }
     }
 
+    // when we only need two inputs
+
     if (input[0] == 6 or input[0] == 9)
     {
         input[1] = input[2];
         input[2] = 0;
-    }
 
-    // ------------------- checking if we already have the set ---------------------
+        bool in_set = avail_set(input[1], vs);
 
-    bool in_set = avail_set(input, vs);
+        if (in_set == false)
+        {
+            SET set = SET();
+            vs.push_back({input[1], set});
+        }
 
-    // --------------------------- if not we create a set ---------------------------
+    } // checked
 
-    if (in_set == false)
+    // ------------------------- calling of functions -------------------------
+
+    // when the second and third input is set_num
+
+    else if (input[0] == 4 or input[0] == 5 or input[0] == 7 or input[0] == 8)
     {
-        SET set = SET();
-        vs.push_back({input[1], set});
+
+        // ------------------- checking if we already have the set ---------------------
+
+        bool in_set_1 = avail_set(input[1], vs);
+        bool in_set_2 = avail_set(input[2], vs);
+
+        // --------------------------- if not we create a set ---------------------------
+
+        if (in_set_1 == false)
+        {
+            SET set = SET();
+            vs.push_back({input[1], set});
+        }
+
+        if (in_set_2 == false)
+        {
+            SET set = SET();
+            vs.push_back({input[2], set});
+        }
     }
 
-    // ------------ temp output -------------
-    cout << in_set << endl;
-    for (int i = 0; i < 3; i++)
+    // when only the second input is set_num
+
+    else if (input[0] == 1 or input[0] == 2 or input[0] == 3)
     {
-        cout << input[i] << " ";
-    }
-    cout << "\n";
-    
-    // input[0] == function
-    // input[1] == set_num
-    // input[2] == input
+        // ------------------- checking if we already have the set ---------------------
 
-    
+        bool in_set = avail_set(input[1], vs);
+
+        // --------------------------- if not we create a set ---------------------------
+
+        if (in_set == false)
+        {
+            SET set = SET();
+            vs.push_back({input[1], set});
+        }
+    }
     return 0;
 }
