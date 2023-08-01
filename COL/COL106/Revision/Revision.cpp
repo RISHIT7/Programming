@@ -29,87 +29,9 @@ using namespace std;
 
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
-struct node
+signed main()
 {
-    int data;
-    node *next;
-    node *prev;
-
-    node(int val)
-    {
-        data = val;
-        next = NULL;
-        prev = NULL;
-    }
-};
-
-void insertAtHead(node *&head, int val)
-{
-    if (head == NULL)
-    {
-        head = new node(val);
-    }
-
-    node *temp = new node(val);
-    temp->next = head;
-    head->prev = temp;
-    head = temp;
-}
-
-void insertAtTail(node *&head, int val)
-{
-    node *new_node = new node(val);
-    if (head == NULL)
-    {
-        insertAtHead(head, val);
-        return;
-    }
-
-    node *temp = head;
-    while (temp->next != NULL)
-    {
-        temp = temp->next;
-    }
-
-    temp->next = new_node;
-    new_node->prev = temp;
-}
-
-void deleteAtHead(node *&head)
-{
-    node *remove = head;
-    head = head->next;
-    head->prev = NULL;
-
-    delete remove;
-}
-
-void deletion(node *&head, int val)
-{
-    if (head == val)
-    {
-        deleteAtHead(head);
-    }
-
-    node *temp = head;
-    while (temp->data != val)
-    {
-        if (temp->next == NULL)
-        {
-            cout << "No element of this index" << endl;
-            return;
-        }
-        temp = temp->next;
-    }
-    node *to_delete = temp;
-    temp->prev->next = temp->next;
-    temp->next->prev = temp->prev;
-
-    delete to_delete;
-}
-
-signed main
-{
-
+    vector<pair<int, set<int>>> vs;
+    vs.push_back({1, {1, 2, 3}});
     return 0;
 }
