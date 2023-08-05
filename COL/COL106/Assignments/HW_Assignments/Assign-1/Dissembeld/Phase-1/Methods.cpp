@@ -17,7 +17,7 @@ public:
         length = s;
     }
 
-    int insertion(int data) // if set does not exist then return -1
+    int insertion(int data)
     {
         cout << "insertion was called"
              << " with data input " << data << endl;
