@@ -34,6 +34,8 @@ public:
                 return length;
             }
         }
+        set.push_back(data); // if the element is larger than every other element
+        length++;
         return length;
     }
 
@@ -154,7 +156,7 @@ int main()
     set1.print();
     set2.print();
 
-    cout << set1.insertion(3) << endl;
+    cout << set1.insertion(9) << endl;
     cout << set2.insertion(3) << endl;
 
     set1.print();

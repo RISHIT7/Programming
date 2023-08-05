@@ -3,6 +3,8 @@
 #include <vector>
 using namespace std;
 
+void print(vector<int> set1);
+
 int intersection(vector<int> set1, vector<int> set2, vector<int> *change) // done in O(n), change the code for sets, rather than vector inputs
 {
     int i = 0, j = 0;
@@ -108,6 +110,10 @@ int Union(vector<int> set1, vector<int> set2, vector<int> *change)
                 res.insert(res.begin() + j, set2[i]);
                 break;
             }
+            if (j == res.size() - 1)
+            {
+                res.push_back(set2[i]);
+            }
         }
     }
     *change = res;
@@ -115,36 +121,59 @@ int Union(vector<int> set1, vector<int> set2, vector<int> *change)
     return change->size();
 }
 
+int Sym_diff(vector<int> set1, vector<int> set2, vector<int> *change)
+{
+    vector<int> temp = set1;
+
+    Union(set1, set2, &set1);        // here our set1 will become the union
+    intersection(temp, set2, &temp); // here our temp will become the intersection
+    difference(set1, temp, &set1);   // here out set1 will become the symmetric difference
+
+    *change = set1;
+
+    return change->size();
+}
+
 void print(vector<int> set1)
 {
-    for (int i = 0; i < set1.size(); i++)
+    for (int i = 0; i < set1.size() - 1; i++)
     {
-        cout << set1[i] << " ";
+        cout << set1[i] << ",";
     }
-    cout << endl;
+    cout << set1[set1.size() - 1] << endl;
 }
 
 int main()
 {
-    vector<int> set1 = {1, 2, 4, 5, 7, 8, 9, 12, 14, 15, 25};
-    vector<int> set2 = {1, 3, 5, 6, 7, 9, 12, 15, 52};
+    vector<int> set1 = {1, 2, 4, 5, 7, 8, 9, 12, 14, 15, 25}; // 11
+    vector<int> set2 = {1, 3, 5, 6, 7, 9, 12, 15, 52};        // 9
 
     // 1 5 7 9 12 15
 
+    cout << "\n<---------- intersection -------------->" << endl;
     cout << intersection(set1, set2, &set1) << endl;
     print(set1);
 
     // 2 4 8 14 25
 
     set1 = {1, 2, 4, 5, 7, 8, 9, 12, 14, 15, 25};
+    cout << "\n<------------ difference --------------->" << endl;
     cout << difference(set1, set2, &set1) << endl;
     print(set1);
 
     // 1 2 3 4 5 6 7 8 9 12 14 15 25 52
 
     set1 = {1, 2, 4, 5, 7, 8, 9, 12, 14, 15, 25};
+    cout << "\n<----------------- Union ----------------->" << endl;
     cout << Union(set1, set2, &set1) << endl;
-    print(set1); // remeber this is not sorted
+    print(set1);
+
+    // 2 3 4 6 8 14 25 52
+
+    cout << "\n<---------- Symmetric difference ---------->" << endl;
+    set1 = {1, 2, 4, 5, 7, 8, 9, 12, 14, 15, 25};
+    cout << Sym_diff(set1, set2, &set1) << endl;
+    print(set1);
 
     return 0;
 }
