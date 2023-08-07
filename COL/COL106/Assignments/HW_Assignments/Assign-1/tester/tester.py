@@ -3,7 +3,7 @@ import random
 
 # Generate mode was used to create test cases - you only need to work with Test Mode
 
-MODE = "TEST" # "GENERATE" or "TEST"
+MODE = "GENERATE" # "GENERATE" or "TEST"
 if(MODE == "GENERATE"):
     print("Generating test cases...")
     print("")
@@ -47,7 +47,7 @@ def generate_test_cases():
 
 class Tester:
     def __init__(self):
-        self.bin = subprocess.Popen(["./main"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        self.bin = subprocess.Popen(["./main_op"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         self.marks = 0
         self.out_str = ""
 
@@ -82,8 +82,8 @@ if __name__ == '__main__':
         print('Missing some required files!')
         exit(1)
 
-    subprocess.run(["rm", "-f", "main"], check=True)
-    subprocess.run(["g++", "main.cpp", "-o", "main"], check=True)
+    subprocess.run(["rm", "-f", "main_op"], check=True)
+    subprocess.run(["g++", "main_op.cpp", "-o", "main_op"], check=True)
  
     test_cases = []
     if MODE == "GENERATE":

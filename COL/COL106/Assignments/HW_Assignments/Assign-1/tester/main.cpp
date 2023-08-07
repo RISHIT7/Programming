@@ -241,8 +241,12 @@ int find_idx(int set_num, vector<pair<int, vector<int>>> set_db)
 
 int main()
 {
-    // creating a vector to store all the sets
+    // fast io
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
+    // creating a vector to store all the sets
     vector<pair<int, vector<int>>> set_database;
 
     // ---------------------- INPUT ----------------------
