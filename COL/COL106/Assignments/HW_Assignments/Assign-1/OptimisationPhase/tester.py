@@ -3,7 +3,7 @@ import random
 
 # Generate mode was used to create test cases - you only need to work with Test Mode
 
-MODE = "GENERATE" # "GENERATE" or "TEST"
+MODE = "TEST" # "GENERATE" or "TEST"
 if(MODE == "GENERATE"):
     print("Generating test cases...")
     print("")
@@ -71,7 +71,7 @@ class Tester:
             return None
 
 if __name__ == '__main__':
-    missing_files = check_submitted_files(['main.cpp'])
+    missing_files = check_submitted_files(['main_op.cpp'])
     for path in missing_files:
         print('Missing {0}'.format(path))
     if len(missing_files) == 0:

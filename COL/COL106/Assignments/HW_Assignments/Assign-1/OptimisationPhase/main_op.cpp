@@ -49,6 +49,20 @@ public:
 
     int deletion(int data)
     {
+        if (set.size() == 0)
+        {
+            return set.size();
+        }
+        else if (set[0] == data)
+        {
+            set.erase(set.begin());
+            return set.size();
+        }
+        else if (set[set.size() -1] == data)
+        {
+            set.pop_back();
+            return set.size();
+        }
         for (int i = 0; i < set.size(); i++)
         {
             if (set[i] == data)
@@ -60,7 +74,7 @@ public:
         return set.size();
     }
 
-    bool belongs_to(int data)
+    bool belongs_to(int data) // binary search for the element
     {
         for (int i = 0; i < set.size(); i++)
         {
@@ -224,7 +238,7 @@ public:
     }
 };
 
-vector<int> avail_set(int set_num, vector<pair<int, vector<int>>> set_db)
+vector<int> avail_set(int set_num, vector<pair<int, vector<int>>> set_db) // binary search
 {
     for (int i = 0; i < set_db.size(); i++)
     {
@@ -237,7 +251,7 @@ vector<int> avail_set(int set_num, vector<pair<int, vector<int>>> set_db)
     return {-1};
 }
 
-int find_idx(int set_num, vector<pair<int, vector<int>>> set_db)
+int find_idx(int set_num, vector<pair<int, vector<int>>> set_db) // implement with avail_set
 {
     for (int i = 0; i < set_db.size(); i++)
     {
