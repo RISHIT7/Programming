@@ -47,7 +47,7 @@ def generate_test_cases():
 
 class Tester:
     def __init__(self):
-        self.bin = subprocess.Popen(["./main_op"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        self.bin = subprocess.Popen(["./main"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         self.marks = 0
         self.out_str = ""
 
@@ -71,7 +71,7 @@ class Tester:
             return None
 
 if __name__ == '__main__':
-    missing_files = check_submitted_files(['main_op.cpp'])
+    missing_files = check_submitted_files(['main.cpp'])
     for path in missing_files:
         print('Missing {0}'.format(path))
     if len(missing_files) == 0:
@@ -82,8 +82,8 @@ if __name__ == '__main__':
         print('Missing some required files!')
         exit(1)
 
-    subprocess.run(["rm", "-f", "main_op"], check=True)
-    subprocess.run(["g++", "main_op.cpp", "-o", "main_op"], check=True)
+    subprocess.run(["rm", "-f", "main"], check=True)
+    subprocess.run(["g++", "main.cpp", "-o", "main"], check=True)
  
     test_cases = []
     if MODE == "GENERATE":

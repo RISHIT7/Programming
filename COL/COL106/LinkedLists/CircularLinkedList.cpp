@@ -14,8 +14,7 @@ public:
     }
 };
 
-void
-insertAtTail(node *&head, int val)
+void insertAtTail(node *&head, int val)
 {
     node *n = new node(val);
     if (head == NULL)

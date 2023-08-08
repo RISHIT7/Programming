@@ -67,11 +67,6 @@ public:
         temp_set->difference(set2);
         set = temp_set->set;
         delete temp_set;
-        if (set.size() == 0)
-        {
-            set = set2;
-            return;
-        }
         for (int i = 0; i < set2.size(); i++)
         {
             for (int j = 0; j < set.size(); j++)
@@ -147,11 +142,6 @@ public:
     void difference(vector<int> set2)
     {
         int i = 0, j = 0;
-        if (set.size() == 0)
-        {
-            set = {};
-            return;
-        }
         while (i < set.size() && j < set2.size())
         {
             if (set[i] == set2[j])
@@ -232,7 +222,8 @@ vector<int> avail_set(int set_num, vector<pair<int, vector<int>>> set_db)
             return set_db[i].second;
         }
     }
-    return {};
+
+    return {-1};
 }
 
 int find_idx(int set_num, vector<pair<int, vector<int>>> set_db)
@@ -266,20 +257,19 @@ int main()
         if (a == 6 || a == 9)
         {
             // checking for availability of set
+            vector<int> set = avail_set(b, set_database);
             int idx = find_idx(b, set_database);
-            if (idx == -1 && a == 6)
+            if (set.size() == 1 && set[0] == -1 && a == 6)
             {
-                vector<int> set = {};
+                set = {};
                 set_database.push_back({b, set});
             }
-            if (idx == -1 && a == 9)
+            if (set.size() == 1 && set[0] == -1 && a == 9)
             {
                 cout << endl;
                 continue;
             }
-            idx = find_idx(b, set_database);
             // calling some functions
-            vector<int> set = avail_set(b, set_database);
             if (a == 6)
             {
                 SET *new_set = new SET(set, b);
@@ -301,20 +291,18 @@ int main()
             if (a == 1 || a == 2 || a == 3)
             {
                 // checking availability for 1
-                // vector<int> set = avail_set(b, set_database);
-                int idx = find_idx(b, set_database);
-                if (a == 1 && idx == -1)
+                vector<int> set = avail_set(b, set_database);
+                if (a == 1 && set.size() == 1 && set[0] == -1)
                 {
-                    vector<int> set = {};
+                    set = {};
                     set_database.push_back({b, set});
                 }
-                else if (a != 1 && idx == -1)
+                else if (a != 1 && set.size() == 1 && set[0] == -1)
                 {
                     cout << -1 << endl;
                     continue;
                 }
-                idx = find_idx(b, set_database);
-                vector<int> set = avail_set(b, set_database);
+                int idx = find_idx(b, set_database);
                 // calling functions with 1 set
                 if (a == 1)
                 {
@@ -348,29 +336,25 @@ int main()
             else if (a == 4 || a == 5 || a == 7 || a == 8)
             {
                 // checking availability
+                vector<int> set1 = avail_set(b, set_database);
                 int idx1 = find_idx(b, set_database);
-                int idx2 = find_idx(c, set_database);
-                if (idx1 == -1)
+                vector<int> set2 = avail_set(c, set_database);
+                if (set1.size() == 1 && set1[0] == -1)
                 {
-                    vector<int> set1 = {};
+                    set1 = {};
                     set_database.push_back({b, set1});
                 }
-                if (idx2 == -1)
+                if (set2.size() == 1 && set2[0] == -1)
                 {
-                    vector<int> set2 = {};
+                    set2 = {};
                     set_database.push_back({c, set2});
                 }
-                idx1 = find_idx(b, set_database);
-                idx2 = find_idx(c, set_database);
-                vector<int> set1 = avail_set(b, set_database);
-                vector<int> set2 = avail_set(c, set_database);
                 // calling functions with 2 sets
                 if (a == 4)
                 {
                     // calling Union
                     SET *new_set = new SET(set1, b);
                     new_set->Union(set2);
-                    vector<int> v = new_set->set;
                     set_database[idx1].second = new_set->set;
                     cout << set_database[idx1].second.size() << endl;
                     delete new_set;
