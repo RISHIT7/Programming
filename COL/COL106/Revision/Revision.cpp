@@ -31,7 +31,5 @@ const int N = 1e5 + 2, MOD = 1e9 + 7;
 
 signed main()
 {
-    vector<pair<int, set<int>>> vs;
-    vs.push_back({1, {1, 2, 3}});
     return 0;
 }
