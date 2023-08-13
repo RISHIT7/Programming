@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <set>
 #include <vector>
 #include <map>
@@ -30,12 +31,4 @@ using namespace std;
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
 signed main()
-{
-    int Set[1024] = {0};
-    for (int i = 0; i <  ; i++)
-    {
-        cout<<Set[i]<<endl;
-    }
-    
-    return 0;
-}
+{}

@@ -156,7 +156,6 @@ public:
     {
         if (top >= 1)
         {
-
             int tmp1 = stk[top];
             if (tmp1 != 0)
             {
@@ -187,6 +186,15 @@ public:
     {
         return top + 1;
     }
+
+    void temp_check()
+    {
+        for (int i = 0; i <= top; i++)
+        {
+            cout << stk[i] << " ";
+        }
+        cout << endl;
+    }
 };
 
 int main()
@@ -197,10 +205,42 @@ int main()
     st.push(2);
     st.push(3);
     st.push(4);
+    st.push(5);
+    st.push(6);
     // cout << st.get_size() << endl;
-    cout << st.get_element_from_bottom(1) << endl; // for 1 2 3 4, we should get 2
-    cout << st.get_element_from_top(5) << endl;    // for 1 2 3 4, we should get 2
-    // st.print_stack(true);
+    // cout << "---------- first iter ------------\n";
+    // st.temp_check();
+    // cout << "\n-------------------\n"
+    //      << endl;
+    // cout << "The second element from bottom " << st.get_element_from_bottom(1) << endl; // for 1 2 3 4, we should get 2
+    // cout << "The sixth element from top  " << st.get_element_from_top(5) << endl;       // for 1 2 3 4, we should get 2
+    // cout << "The size of the stack " << st.get_size() << endl;
+    // int *s = st.get_stack();
+    // cout << "Getting the top int " << *s << endl;
+    // cout << "---------- second iter ------------\n";
+    // st.temp_check();
+    // cout << "\n-------------------\n"
+    //      << endl;
+
+    // cout << "Top most element " << st.get_element_from_top(0) << endl;
+    // st.add();
+    // s = st.get_stack();
+    // cout << "Getting the top int " << *s << endl;
+    cout << "---------- third iter ------------\n";
+    st.temp_check();
+    cout << "\n-------------------\n"
+         << endl;
+
+    // cout << "Top most element after adding the top 2 elements " << st.get_element_from_top(0) << endl;
+    st.divide();
+    // s = st.get_stack();
+    // cout << "Getting the top int " << *s << endl;
+    cout << "---------- fourth iter ------------\n";
+    st.temp_check();
+    cout << "\n-------------------\n"
+         << endl;
+
+    cout << "Top most element after dividing the top 2 elements " << st.get_element_from_top(0) << endl;
     // st.print_stack(false);
     // st.pop();
     // cout << st.get_size() << endl;
