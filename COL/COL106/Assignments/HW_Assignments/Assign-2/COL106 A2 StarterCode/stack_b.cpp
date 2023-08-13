@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream> // include stack_b.h
 using namespace std;
 #define C 2
 
@@ -46,6 +46,11 @@ public:
 
     int pop()
     {
+        if (t == -1)
+        {
+            throw std::runtime_error("Empty stack");
+        }
+
         int result = stk[t];
         if (t <= capacity / (C * C)) // Reallocate space and copy
         {
@@ -197,7 +202,7 @@ public:
 int main()
 {
     Stack_B st = Stack_B();
-    st.pop();
+    // st.pop();
     st.push(1);
     st.push(2);
     st.push(3);
@@ -240,6 +245,11 @@ int main()
     cout << "Top most element after dividing the top 2 elements " << st.get_element_from_top(0) << endl;
     st.print_stack(false);
     st.pop();
+    cout << "---------- fifth iter ------------\n";
+    st.temp_check();
+    cout << "\n-------------------\n"
+         << endl;
+
     cout << st.get_size() << endl;
     return 0;
 }

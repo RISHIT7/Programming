@@ -31,4 +31,8 @@ using namespace std;
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
 signed main()
-{}
+{
+    int arr[3] = {1, 2, 3};
+    cout<<sizeof(arr)<<endl;
+    return 0;
+}

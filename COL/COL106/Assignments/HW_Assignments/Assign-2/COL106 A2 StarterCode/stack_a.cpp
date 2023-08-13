@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack_a.h>
 #include <stdexcept>
 using namespace std;
 
