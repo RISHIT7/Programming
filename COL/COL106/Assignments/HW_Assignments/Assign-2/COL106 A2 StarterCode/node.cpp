@@ -29,9 +29,9 @@ int Node::get_value()
     return value;
 }
 
-int main()
-{
-    Node *head = new Node(3);
-    cout<<head->get_value()<<endl;
-    return 0;
-}
+// int main()
+// {
+//     Node *head = new Node(3);
+//     cout<<head->get_value()<<endl;
+//     return 0;
+// }
