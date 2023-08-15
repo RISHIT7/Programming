@@ -3,6 +3,18 @@
 #include <stdexcept>
 using namespace std;
 
+int floor_c(float a)
+{
+    if ((int)(a*10)%10 == 0)
+    {
+        return (int)a;
+    }
+    else
+    {
+        return (int)a-1;
+    }
+}
+
 Stack_C::Stack_C()
 {
     stk = new List();
@@ -155,7 +167,7 @@ int Stack_C::divide()
         int tmp2 = trav->prev->prev->get_value();
         if (tmp1 != 0)
         {
-            int fin = tmp2 / tmp1;
+            int fin = floor_c((float)tmp2 / tmp1);
             stk->delete_tail();
             stk->delete_tail();
             stk->insert(fin);

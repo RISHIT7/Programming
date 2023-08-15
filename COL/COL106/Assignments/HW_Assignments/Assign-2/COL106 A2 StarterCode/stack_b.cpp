@@ -4,6 +4,19 @@
 using namespace std;
 #define C 2
 
+int floor_b(float a)
+{
+    if ((int)(a*10)%10 == 0)
+    {
+        return (int)a;
+    }
+    else
+    {
+        return (int)a-1;
+    }
+}
+
+
 Stack_B::Stack_B()
 {
     capacity = C;
@@ -153,7 +166,7 @@ int Stack_B::divide()
         {
             int tmp2 = stk[size - 1 - 1];
             size--;
-            int fin = tmp2 / tmp1;
+            int fin = floor_b((float)tmp2 / tmp1);
             stk[size - 1] = fin;
             return fin;
         }

@@ -6,6 +6,19 @@ using namespace std;
 /* PART A */
 /* Stacks using Fixed Size Arrays */
 
+int floor_a(float a)
+{
+    if ((int)(a * 10) % 10 == 0)
+    {
+        return (int)a;
+    }
+    else
+    {
+        return (int)a - 1;
+    }
+}
+
+
 Stack_A::Stack_A()
 {
     stk[1024];
@@ -149,9 +162,8 @@ int Stack_A::divide()
         if (tmp1 != 0)
         {
             int tmp2 = stk[size - 1 - 1];
-            cout<<tmp1<<" "<<tmp2<<endl;
             size--;
-            int fin = tmp2 / tmp1;
+            int fin = floor_a((float)tmp2 / tmp1);
             stk[size - 1] = fin;
             return fin;
         }

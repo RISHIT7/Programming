@@ -30,9 +30,20 @@ using namespace std;
 
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
+int floor(float a)
+{
+    if ((int)(a * 10) % 10 == 0)
+    {
+        return (int)a;
+    }
+    else
+    {
+        return (int)a - 1;
+    }
+}
+
 signed main()
 {
-    int arr[3] = {1, 2, 3};
-    cout<<sizeof(arr)<<endl;
+    cout << floor(-0.1) << endl;
     return 0;
 }
