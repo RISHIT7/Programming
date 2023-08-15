@@ -149,6 +149,7 @@ int Stack_A::divide()
         if (tmp1 != 0)
         {
             int tmp2 = stk[size - 1 - 1];
+            cout<<tmp1<<" "<<tmp2<<endl;
             size--;
             int fin = tmp2 / tmp1;
             stk[size - 1] = fin;
@@ -165,7 +166,7 @@ int Stack_A::divide()
     }
 }
 
-int* Stack_A::get_stack() // Get a pointer to the array
+int *Stack_A::get_stack() // Get a pointer to the array
 {
 
     return stk; // doubtful
@@ -176,53 +177,52 @@ int Stack_A::get_size() // Get the size of the stack
     return size;
 }
 
+// int main()
+// {
+//     Stack_A st = Stack_A();
+//     // // st.pop();
+//     st.push(1);
+//     st.push(2);
+//     st.push(3);
+//     st.push(4);
+//     st.push(5);
+//     st.push(6);
+//     // cout << st.get_size() << endl;
+//     // cout << "---------- first iter ------------\n";
+//     // st.temp_check();
+//     // cout << "\n-------------------\n"
+//     //      << endl;
+//     // cout << "The second element from bottom " << st.get_element_from_bottom(1) << endl; // for 1 2 3 4, we should get 2
+//     // cout << "The sixth element from top  " << st.get_element_from_top(5) << endl;       // for 1 2 3 4, we should get 2
+//     // cout << "The size of the stack " << st.get_size() << endl;
+//     // int *s = st.get_stack();
+//     // cout << "Getting the top int " << *s << endl;
+//     // cout << "---------- second iter ------------\n";
+//     // st.temp_check();
+//     // cout << "\n-------------------\n"
+//     //      << endl;
 
-int main()
-{
-    Stack_A st = Stack_A();
-    // // st.pop();
-    st.push(1);
-    st.push(2);
-    st.push(3);
-    st.push(4);
-    st.push(5);
-    st.push(6);
-    // cout << st.get_size() << endl;
-    // cout << "---------- first iter ------------\n";
-    // st.temp_check();
-    // cout << "\n-------------------\n"
-    //      << endl;
-    // cout << "The second element from bottom " << st.get_element_from_bottom(1) << endl; // for 1 2 3 4, we should get 2
-    // cout << "The sixth element from top  " << st.get_element_from_top(5) << endl;       // for 1 2 3 4, we should get 2
-    // cout << "The size of the stack " << st.get_size() << endl;
-    // int *s = st.get_stack();
-    // cout << "Getting the top int " << *s << endl;
-    // cout << "---------- second iter ------------\n";
-    // st.temp_check();
-    // cout << "\n-------------------\n"
-    //      << endl;
+//     // cout << "Top most element " << st.get_element_from_top(0) << endl;
+//     // st.add();
+//     // s = st.get_stack();
+//     // cout << "Getting the top int " << *s << endl;
+//     cout << "---------- third iter ------------\n";
+//     st.print_stack(true);
+//     cout << "\n-------------------\n"
+//          << endl;
 
-    // cout << "Top most element " << st.get_element_from_top(0) << endl;
-    // st.add();
-    // s = st.get_stack();
-    // cout << "Getting the top int " << *s << endl;
-    cout << "---------- third iter ------------\n";
-    st.print_stack(true);
-    cout << "\n-------------------\n"
-         << endl;
+//     // cout << "Top most element after adding the top 2 elements " << st.get_element_from_top(0) << endl;
+//     st.divide();
+//     // s = st.get_stack();
+//     // cout << "Getting the top int " << *s << endl;
+//     cout << "---------- fourth iter ------------\n";
+//     st.print_stack(true);
+//     cout << "\n-------------------\n"
+//          << endl;
 
-    // cout << "Top most element after adding the top 2 elements " << st.get_element_from_top(0) << endl;
-    st.divide();
-    // s = st.get_stack();
-    // cout << "Getting the top int " << *s << endl;
-    cout << "---------- fourth iter ------------\n";
-    st.print_stack(true);
-    cout << "\n-------------------\n"
-         << endl;
-
-    cout << "Top most element after dividing the top 2 elements " << st.get_element_from_top(0) << endl;
-    // st.print_stack(false);
-    // st.pop();
-    // cout << st.get_size() << endl;
-    return 0;
-}
+//     cout << "Top most element after dividing the top 2 elements " << st.get_element_from_top(0) << endl;
+//     // st.print_stack(false);
+//     // st.pop();
+//     // cout << st.get_size() << endl;
+//     return 0;
+// }

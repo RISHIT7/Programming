@@ -1,5 +1,6 @@
-#include <iostream> // include stack_b.h
+#include <iostream>
 #include "stack_b.h"
+#include <stdexcept>
 using namespace std;
 #define C 2
 
@@ -37,7 +38,7 @@ int Stack_B::pop()
 {
     if (size - 1 == -1)
     {
-        throw std::runtime_error("Empty stack");
+        throw std::runtime_error("Empty Stack");
     }
 
     int result = stk[size - 1];
@@ -170,13 +171,14 @@ int Stack_B::divide()
 int *Stack_B::get_stack() // Get a pointer to the array
 {
 
-    return &stk[size-1]; // doubtful
+    return &stk[size - 1]; // doubtful
 }
 
 int Stack_B::get_size() // Get the size of the stack
 {
     return size;
 }
+
 
 /* PART B */
 /* Dynamic Stacks */
@@ -375,58 +377,3 @@ int Stack_B::get_size() // Get the size of the stack
 //         cout << endl;
 //     }
 // };
-
-int main()
-{
-    Stack_B st = Stack_B();
-    // st.pop();
-    st.push(1);
-    st.push(2);
-    st.push(3);
-    st.push(4);
-    st.push(5);
-    st.push(6);
-    cout << st.get_size() << endl;
-    cout << "---------- first iter ------------\n";
-    st.print_stack(true);
-    cout << "\n-------------------\n"
-         << endl;
-    cout << "The second element from bottom " << st.get_element_from_bottom(1) << endl; // for 1 2 3 4, we should get 2
-    cout << "The sixth element from top  " << st.get_element_from_top(5) << endl;       // for 1 2 3 4, we should get 2
-    cout << "The size of the stack " << st.get_size() << endl;
-    int *s = st.get_stack();
-    cout << "Getting the top int " << *s << endl;
-    cout << "---------- second iter ------------\n";
-    st.print_stack(true);
-    cout << "\n-------------------\n"
-         << endl;
-
-    cout << "Top most element " << st.get_element_from_top(0) << endl;
-    st.add();
-    s = st.get_stack();
-    cout << "Getting the top int " << *s << endl;
-    cout << "---------- third iter ------------\n";
-    st.print_stack(true);
-    cout << "\n-------------------\n"
-         << endl;
-
-    cout << "Top most element after adding the top 2 elements " << st.get_element_from_top(0) << endl;
-    st.divide();
-    s = st.get_stack();
-    cout << "Getting the top int " << *s << endl;
-    cout << "---------- fourth iter ------------\n";
-    st.print_stack(true);
-    cout << "\n-------------------\n"
-         << endl;
-
-    cout << "Top most element after dividing the top 2 elements " << st.get_element_from_top(0) << endl;
-    st.print_stack(false);
-    st.pop();
-    cout << "---------- fifth iter ------------\n";
-    st.print_stack(true);
-    cout << "\n-------------------\n"
-         << endl;
-
-    cout << st.get_size() << endl;
-    return 0;
-}

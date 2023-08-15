@@ -1,6 +1,6 @@
 #include <iostream>
-#include "node.cpp"
 #include "list.h"
+#include <stdexcept>
 using namespace std;
 
 /* PART B */
@@ -59,10 +59,8 @@ int List::delete_tail()
     else
     {
         Node *tail = sentinel_tail->prev;
-        cout << "check: " << tail->get_value() << endl;
         int temp = tail->get_value();
         Node *new_tail = tail->prev;
-        cout << "check: " << new_tail->is_sentinel_node() << endl;
         new_tail->next = sentinel_tail;
         sentinel_tail->prev = new_tail;
         size--;
@@ -97,33 +95,4 @@ void print(Node *sentinel_head)
         trav = trav->next;
     }
     cout << "sentinel_tail" << endl;
-}
-
-int main()
-{
-    List L = List();
-    L.insert(5);
-    cout << L.get_size() << endl;
-    cout << "printing List..." << endl;
-    print(L.get_head());
-    // cout << L.get_head()->next->get_value() << endl;
-    L.insert(6);
-    cout << L.get_size() << endl;
-    cout << "printing List..." << endl;
-    print(L.get_head());
-    // cout << L.get_head()->next->next->get_value() << endl;
-    L.delete_tail();
-    cout << L.get_size() << endl;
-    cout << "printing List..." << endl;
-    print(L.get_head());
-    // cout << L.get_head()->next->get_value() << endl;
-    L.delete_tail();
-    cout << L.get_size() << endl;
-    cout << "printing List..." << endl;
-    print(L.get_head());
-    L.delete_tail();
-    cout << L.get_size() << endl;
-    cout << "printing List..." << endl;
-    print(L.get_head());
-    return 0;
 }
