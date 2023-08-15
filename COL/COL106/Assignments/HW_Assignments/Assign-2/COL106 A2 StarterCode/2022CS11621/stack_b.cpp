@@ -171,7 +171,7 @@ int Stack_B::divide()
 int *Stack_B::get_stack() // Get a pointer to the array
 {
 
-    return &stk[size-1]; // doubtful
+    return stk; // doubtful
 }
 
 int Stack_B::get_size() // Get the size of the stack
