@@ -5,15 +5,15 @@ using namespace std;
 class SET
 {
 public:
-    vector<int> set;
-    int set_num;
+    vector<int> set; // vector to store the elements of the set
+    int set_num; // set num
 
-    SET(int set_n)
+    SET(int set_n) // initialize an empty set
     {
         set = {};
         set_num = set_n;
     }
-    SET(vector<int> set_in, int set_n)
+    SET(vector<int> set_in, int set_n) // initialize a set with a given vector, as we are using set methods only temporarily
     {
         set = set_in;
         set_num = set_n;
@@ -22,11 +22,11 @@ public:
     {
         for (int i = 0; i < set.size(); i++)
         {
-            if (set[i] == data)
+            if (set[i] == data) // if the data is in the set
             {
                 return set.size();
             }
-            else if (set[i] > data)
+            else if (set[i] > data) // if not, then we add at the location when we find a larger element, hence is sorted
             {
                 set.insert(set.begin() + i, data);
                 return set.size();
@@ -36,7 +36,7 @@ public:
         return set.size();
     }
 
-    int deletion(int data)
+    int deletion(int data) // deleting is trivial
     {
         for (int i = 0; i < set.size(); i++)
         {
@@ -49,7 +49,7 @@ public:
         return set.size();
     }
 
-    bool belongs_to(int data)
+    bool belongs_to(int data) // linear search, simple
     {
         for (int i = 0; i < set.size(); i++)
         {
@@ -65,9 +65,9 @@ public:
     {
         SET *temp_set = new SET(set, set_num);
         temp_set->difference(set2);
-        set = temp_set->set;
+        set = temp_set->set; // creating a vector <int> set, that is the difference of the two input sets
         delete temp_set;
-        if (set.size() == 0)
+        if (set.size() == 0) // using the same algorithm as the intersection lagorithm to fill the rest
         {
             set = set2;
             return;
@@ -97,7 +97,7 @@ public:
         }
     }
 
-    void Intersection(vector<int> set2)
+    void Intersection(vector<int> set2) // dp algo, loking at the common elelements
     {
         int i = 0, j = 0;
         vector<int> res = {};
@@ -139,12 +139,12 @@ public:
         set = res;
     }
 
-    void size()
+    void size() // returning the size
     {
         cout << set.size() << endl;
     }
 
-    void difference(vector<int> set2)
+    void difference(vector<int> set2) // 
     {
         int i = 0, j = 0;
         if (set.size() == 0)
@@ -152,7 +152,7 @@ public:
             set = {};
             return;
         }
-        while (i < set.size() && j < set2.size())
+        while (i < set.size() && j < set2.size()) // setting the common intersection values to any random value as -1
         {
             if (set[i] == set2[j])
             {
@@ -183,13 +183,13 @@ public:
         {
             if (set[i] == -1)
             {
-                set.erase(set.begin() + i);
+                set.erase(set.begin() + i); // then removing all -1s
                 i--;
             }
         }
     }
 
-    void sym_diff(vector<int> set2)
+    void sym_diff(vector<int> set2) // using the other functions plainly
     {
         SET *Union_set = new SET(set, set_num);
         Union_set->Union(set2);

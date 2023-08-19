@@ -30,20 +30,19 @@ using namespace std;
 
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
-int floor(float a)
-{
-    if ((int)(a * 10) % 10 == 0)
-    {
-        return (int)a;
-    }
-    else
-    {
-        return (int)a - 1;
-    }
-}
-
 signed main()
 {
-    cout << floor(-0.1) << endl;
+    int n, p, ans;
+    cin >> n;
+    ans = 0;
+    p = 0;
+    while (n > 0)
+    {
+        int r = n % 2;
+        ans += ((r)*(pow(10, p)));
+        p += 1;
+        n = n / 2;
+    }
+    cout << ans;
     return 0;
 }
