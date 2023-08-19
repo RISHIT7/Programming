@@ -23,7 +23,6 @@ def parse_input(lines, delays_list):
         temp = gate_delays.split(" ")
         gate = temp[0]
         delay = temp[1]
-        print(delay)
         delays_dict[gate] = float(delay)
 
     primary_inputs = lines[0].split()[1:]
@@ -97,13 +96,34 @@ def output(dict, primary_outputs):
     output = []
     for outputs in primary_outputs:
         output.append(f"{outputs} {(dict[outputs])}")
-    with open("output_delays.txt", 'w') as file:
+    with open("input_delays.txt", 'w') as file:
         for item in output:
             file.write(item + '\n')
 
 
+def input_b():
+    input_output = ""
+    filename = "required_delays.txt"
+    with open(filename, 'r') as file:
+        input_output = file.read()
 
-def main():
+    output = input_output.strip().split('\n')
+    required_output = {}
+    for line in output:
+        try:
+            if not line[0]:
+                continue
+            elif line[0] == '/' and line[1] == '/':
+                continue
+            else:
+                required_output[line[0]] = int(line[2:])
+        except:
+            continue
+
+    return required_output
+
+
+def part_a():
     input_spice, gate_delay_str = formatted_input()
     primary_inputs, primary_outputs, gates = parse_input(
         input_spice, gate_delay_str)
@@ -114,7 +134,70 @@ def main():
     for gate in gates:
         dict[gate.outputs] = max_delay(gate.inputs, dict) + gate.delay
 
-    output(dict, primary_outputs)
+    return dict, primary_inputs, primary_outputs, gates
+
+
+def final_check(dict_a, ans_dict, primary_inputs, primary_outputs, gates):
+    input_spice, gate_delay_str = formatted_input()
+    primary_inputs, primary_outputs, gates = parse_input(
+        input_spice, gate_delay_str)
+
+    # modified dict_a will be passed
+
+    dict = {}  # signal vs time delay
+    for signal in primary_inputs:
+        dict[signal] = dict_a[signal]
+
+    for gate in gates:
+        dict[gate.outputs] = max_delay(gate.inputs, dict) + gate.delay
+
+    check = True
+    for output in primary_outputs:
+        if dict[output] != ans_dict[output]:
+            check = False
+            break
+
+    return check
+
+
+def primary_check(dict_a, ans_dict, primary_inputs, primary_outputs, gates):
+    # checking if the case of having the only one primary input as non zero helps
+    diff = -1
+    passed = True
+    for output in primary_outputs:
+        if diff == -1:
+            diff = ans_dict[output] - dict_a[output]
+        elif diff != ans_dict[output] - dict_a[output]:
+            passed = False
+
+    if passed:
+        for inputs in primary_inputs:
+            dict_a[inputs] = diff
+            check = final_check(
+                dict_a, ans_dict, primary_inputs, primary_outputs, gates)
+            if check:
+                return dict_a
+            else:
+                dict_a[inputs] = 0
+    else:
+        return dict_a
+
+
+def secondary_check(dict_a, ans_dict, primary_inputs, primary_outputs, gates):
+    pass
+
+
+def main():
+    dict_a, primary_inputs, primary_outputs, gates = part_a()
+    ans_dict = input_b()
+    dict_a = primary_check(
+        dict_a, ans_dict, primary_inputs, primary_outputs, gates)
+    if final_check(dict_a, ans_dict, primary_inputs, primary_outputs, gates):
+        output(dict_a, primary_inputs)
+    else:
+        dict_a = secondary_check(
+            dict_a, ans_dict, primary_inputs, primary_outputs, gates)
+        output(dict_a, primary_inputs)
 
 
 if __name__ == "__main__":
