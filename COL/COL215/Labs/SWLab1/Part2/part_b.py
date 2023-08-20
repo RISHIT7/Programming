@@ -94,12 +94,20 @@ def formatted_input():
 
 def output(dict, primary_outputs):
     output = []
+    not_possible = True
     for outputs in primary_outputs:
-        output.append(f"{outputs} {(dict[outputs])}")
-    with open("input_delays.txt", 'w') as file:
-        for item in output:
-            file.write(item + '\n')
-
+        if dict[outputs] != 0:
+            not_possible = False
+    
+    if not not_possible:
+        for outputs in primary_outputs:
+            output.append(f"{outputs} {(dict[outputs])}")
+        with open("input_delays.txt", 'w') as file:
+            for item in output:
+                file.write(item + '\n')
+    else:
+        with open("input_delays.txt", 'w') as file:
+            file.write("not possible")
 
 def input_b():
     input_output = ""
@@ -143,20 +151,18 @@ def final_check(dict_a, ans_dict, primary_inputs, primary_outputs, gates):
         input_spice, gate_delay_str)
 
     # modified dict_a will be passed
-
     dict = {}  # signal vs time delay
     for signal in primary_inputs:
         dict[signal] = dict_a[signal]
 
     for gate in gates:
         dict[gate.outputs] = max_delay(gate.inputs, dict) + gate.delay
-
+    print(dict)
     check = True
     for output in primary_outputs:
         if dict[output] != ans_dict[output]:
             check = False
             break
-
     return check
 
 
@@ -184,7 +190,18 @@ def primary_check(dict_a, ans_dict, primary_inputs, primary_outputs, gates):
 
 
 def secondary_check(dict_a, ans_dict, primary_inputs, primary_outputs, gates):
-    pass
+    upper_bound = max(ans_dict.values())
+    for a in range(upper_bound):
+        for b in range(upper_bound):
+            dict_a[primary_inputs[0]] = a
+            dict_a[primary_inputs[1]] = b
+            check = final_check(dict_a, ans_dict, primary_inputs, primary_outputs, gates)
+            if check:
+                return dict_a
+            else:
+                dict_a[primary_inputs[0]] = 0
+                dict_a[primary_inputs[1]] = 0
+    return dict_a
 
 
 def main():
