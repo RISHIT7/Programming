@@ -23,7 +23,6 @@ def parse_input(lines, delays_list):
         temp = gate_delays.split(" ")
         gate = temp[0]
         delay = temp[1]
-        print(delay)
         delays_dict[gate] = float(delay)
 
     primary_inputs = lines[0].split()[1:]
@@ -96,7 +95,7 @@ def formatted_input():
 def output(dict, primary_outputs):
     output = []
     for outputs in primary_outputs:
-        output.append(f"{outputs} {(dict[outputs])}")
+        output.append(f"{outputs} {(dict[outputs]):.3f}")
     with open("output_delays.txt", 'w') as file:
         for item in output:
             file.write(item + '\n')
