@@ -2,6 +2,11 @@
 
 void Chaining::createAccount(std::string id, int count) {
     // IMPLEMENT YOUR CODE HERE
+    Account *new_account = new Account();
+    new_account->balance = count;
+    new_account->id = id;
+    bankStorage1d.push_back(*new_account); // check for uniqueness of the id as well
+    delete new_account;
 }
 
 std::vector<int> Chaining::getTopK(int k) {
