@@ -32,17 +32,30 @@ const int N = 1e5 + 2, MOD = 1e9 + 7;
 
 signed main()
 {
-    int n, p, ans;
+    int n;
     cin >> n;
-    ans = 0;
-    p = 0;
-    while (n > 0)
+    int arr[n];
+    for (int i = 0; i < n; i++)
     {
-        int r = n % 2;
-        ans += ((r)*(pow(10, p)));
-        p += 1;
-        n = n / 2;
+        cin >> arr[i];
     }
-    cout << ans;
+    int counter = 1;
+    while (n - counter > 0)
+    {
+        for (int i = 0; i < n - counter; i++)
+        {
+            if (arr[i] > arr[i + 1])
+            {
+                int temp = arr[i];
+                arr[i] = arr[i + 1];
+                arr[i + 1] = temp;
+            }
+        }
+        counter += 1;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
     return 0;
 }
