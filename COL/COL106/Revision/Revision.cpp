@@ -30,21 +30,7 @@ using namespace std;
 
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
-struct Account
-{
-    std::string id;
-    int balance;
-};
-
 signed main()
 {
-    vector<Account> bankstorage1d;
-    Account *new_account = new Account();
-    new_account->balance = 365514;
-    new_account->id = "abcdef";
-    bankstorage1d.push_back(*new_account);
-    delete new_account;
-
-    cout << "id is: " << bankstorage1d[0].id << "\nand the balance is: " << bankstorage1d[0].balance << endl;
     return 0;
 }
