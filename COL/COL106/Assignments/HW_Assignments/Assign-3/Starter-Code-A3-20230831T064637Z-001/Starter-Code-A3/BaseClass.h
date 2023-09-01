@@ -19,8 +19,8 @@ public:
     virtual int databaseSize() = 0;
     virtual int hash(std::string id) = 0;
 
-    std::vector<Account> bankStorage1d;
-    std::vector<std::vector<Account>> bankStorage2d;
+    std::vector<Account> bankStorage1d; // probing stratergies
+    std::vector<std::vector<Account>> bankStorage2d; // chaining stratergies
     
 };
 

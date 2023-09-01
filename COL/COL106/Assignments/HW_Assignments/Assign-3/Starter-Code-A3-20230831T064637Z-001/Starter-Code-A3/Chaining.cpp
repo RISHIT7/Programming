@@ -5,7 +5,9 @@ void Chaining::createAccount(std::string id, int count) {
     Account *new_account = new Account();
     new_account->balance = count;
     new_account->id = id;
-    bankStorage1d.push_back(*new_account); // check for uniqueness of the id as well
+
+
+
     delete new_account;
 }
 
@@ -38,7 +40,16 @@ int Chaining::databaseSize() {
 }
 
 int Chaining::hash(std::string id) {
-    // IMPLEMENT YOUR CODE HERE
-    return 0; // Placeholder return value
+    int p = 31;
+    int hash = 0;
+    int factor = 1;
+
+    for (int i = 0; i < id.size(); i++)
+    {
+        hash += (id[i] - 'A' + 1)*factor;
+        factor *= p;
+    }
+    
+    return hash%(100003);
 }
 
