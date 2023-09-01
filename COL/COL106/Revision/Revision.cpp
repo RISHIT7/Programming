@@ -30,7 +30,28 @@ using namespace std;
 
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
+struct Node
+{
+    int data;
+    struct Node *right;
+    struct Node *left;
+    Node(int val)
+    {
+        data = val;
+        right = NULL;
+        left = NULL;
+    }
+};
+
+
+
 signed main()
 {
+    Node* root = new Node(2);
+    root->left = new Node(1);
+    root->right = new Node(3);
+    root->right->left = new Node(4);
+    root->right->right = new Node(5);
+    root->right->right->left = new Node(6);
     return 0;
 }
