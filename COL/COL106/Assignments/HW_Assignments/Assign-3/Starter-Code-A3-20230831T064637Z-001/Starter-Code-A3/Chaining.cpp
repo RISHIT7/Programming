@@ -34,61 +34,6 @@ void Chaining::createAccount(std::string id, int count)
     delete new_account;
 }
 
-void merge(vector<int> output, int left, int mid, int right)
-{
-    int Size1 = mid - left + 1;
-    int Size2 = right - mid;
-    int i, j, k;
-
-    vector<int> L(Size1), R(Size2);
-
-    for (j = 0; j < Size2; j++)
-    {
-        R[j] = output[mid + 1 + j];
-    }
-    for (i = 0; i < Size1; i++)
-    {
-        L[i] = output[left + i];
-    }
-
-    i = 0;
-    j = 0;
-    k = left;
-
-    while (i < Size1 && j < Size2)
-    {
-        if (L[i] > R[j])
-        {
-            output[k] = R[j];
-            j++;
-        }
-        else
-        {
-            output[k] = L[i];
-            i++;
-        }
-        k++;
-    }
-}
-
-void sorter(vector<int> output, int n)
-{
-    int curr_size = 1;
-    int left = 0;
-
-    while (curr_size < n)
-    {
-        while (left < n - 1)
-        {
-            int mid = min(left + curr_size - 1, n - 1);
-            int right = min(left + 2 * curr_size - 1, n - 1);
-            merge(output, left, mid, right);
-            left += 2 * curr_size;
-        }
-        curr_size = 2 * curr_size;
-    }
-}
-
 std::vector<int> Chaining::getTopK(int k) // easily can be optimised
 {
     vector<int> output;
