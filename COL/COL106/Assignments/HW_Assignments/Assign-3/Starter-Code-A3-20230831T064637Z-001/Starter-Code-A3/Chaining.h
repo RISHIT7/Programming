@@ -7,6 +7,7 @@
 
 class Chaining : public BaseClass {
 public:
+    Chaining();
     void createAccount(std::string id, int count) override;
     std::vector<int> getTopK(int k) override;
     int getBalance(std::string id) override;
@@ -18,7 +19,7 @@ public:
     
 private:
     int MAX_SIZE = 99991;
-    int size = 0;
+    int SIZE = 0;
 };
 
 #endif // CHAINING_H
