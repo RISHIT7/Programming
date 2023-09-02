@@ -141,14 +141,14 @@ int Chaining::databaseSize()
 
 int Chaining::hash(std::string id)
 {
-    int p = 31;
+    int p = 37;
     long long int hash = 0;
     int factor = 1;
 
     for (int i = 0; i < id.size(); i++)
     {
         hash += (id[i] + 1) * factor;
-        factor += p;
+        factor += 2*p;
     }
     return hash % (99991);
 }
