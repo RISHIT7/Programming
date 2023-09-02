@@ -36,15 +36,92 @@ struct Account
     int balance;
 };
 
+void createAccount(std::string id, int count)
+{
+    Account *new_account = new Account();
+    new_account->balance = count;
+    new_account->id = id;
+
+    int Hash_val = hash(id);
+
+    vector<Account> temp;
+    temp.push_back(*new_account);
+
+    try
+    {
+        bankstorage2d[Hash_val].push_back(*new_account);
+    }
+    catch (std::runtime_error())
+    {
+        vector<Account> temp;
+        temp.push_back(*new_account);
+        bankstorage2d.insert(bankstorage2d.begin() + Hash_val, temp);
+    }
+
+    size++;
+
+    delete new_account;
+}
+
+
+int hash_foo(string id)
+{
+    int p = 31;
+    int hash = 0;
+    int factor = 1;
+
+    for (int i = 0; i < id.size(); i++)
+    {
+        hash += (id[i] - 'A' + 1) * factor;
+        factor *= p;
+    }
+
+    return hash % (99991);
+}
+
 signed main()
 {
-    vector<Account> bankstorage1d;
+    vector<vector<Account>> bankstorage2d(100000);
+    // Account *init = new Account();
+    // init->balance = 545161;
+    // init->id = "abcdef";
+
+    // int idx = hash_foo(init->id);
+    // vector<Account> vec;
+    // vec.push_back(*init);
+    // bankstorage2d.insert(bankstorage2d.begin() + idx, vec);
+
     Account *new_account = new Account();
     new_account->balance = 365514;
     new_account->id = "abcdef";
-    bankstorage1d.push_back(*new_account);
+
+    int Hash_val = hash_foo(new_account->id);
+
+    try
+    {
+        bankstorage2d[Hash_val].push_back(*new_account);
+    }
+    catch (std::runtime_error())
+    {
+        vector<Account> temp;
+        temp.push_back(*new_account);
+        bankstorage2d.insert(bankstorage2d.begin() + Hash_val, temp);
+    }
+
+    // try
+    // {
+    //     bankstorage2d[Hash_val].push_back(*new_account);
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     // nothing
+    // }
+    // vector<Account> temp;
+    // temp.push_back(*new_account);
+    // bankstorage2d.insert(bankstorage2d.begin() + Hash_val, temp);
+
     delete new_account;
 
-    cout << "id is: " << bankstorage1d[0].id << "\nand the balance is: " << bankstorage1d[0].balance << endl;
+    cout << "id is: " << bankstorage2d[Hash_val][0].id << "\nand the balance is: " << bankstorage2d[Hash_val][0].balance << endl;
     return 0;
 }

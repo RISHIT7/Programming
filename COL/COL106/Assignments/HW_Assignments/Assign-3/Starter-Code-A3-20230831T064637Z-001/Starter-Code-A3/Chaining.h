@@ -17,7 +17,8 @@ public:
     int hash(std::string id) override;
     
 private:
-    int MAX_SIZE = 100003;
+    int MAX_SIZE = 99991;
+    int size = 0;
 };
 
 #endif // CHAINING_H

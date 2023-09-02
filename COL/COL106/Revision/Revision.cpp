@@ -43,15 +43,58 @@ struct Node
     }
 };
 
+bool getPath(Node *root, int key, vector<Node *> &path)
+{
+    if (root == NULL)
+    {
+        return false;
+    }
 
+    path.push_back(root);
+    if (root->data == key)
+    {
+        return true;
+    }
+
+    if (getPath(root->left, key, path) || getPath(root->right, key, path))
+    {
+        return true;
+    }
+    path.pop_back();
+
+    return false;
+}
+
+Node *LCA(Node *root, int n1, int n2)
+{
+    vector<Node *> path1, path2;
+
+    if (!getPath(root, n1, path1) || !getPath(root, n2, path2))
+    {
+        return NULL;
+    }
+
+    int pc;
+    for (pc = 0; pc < path1.size() && path2.size(); pc++)
+    {
+        if (path1[pc] != path2[pc])
+        {
+            break;
+        }
+    }
+
+    return path1[pc-1];
+}
 
 signed main()
 {
-    Node* root = new Node(2);
+    Node *root = new Node(2);
     root->left = new Node(1);
     root->right = new Node(3);
     root->right->left = new Node(4);
     root->right->right = new Node(5);
     root->right->right->left = new Node(6);
+
+    cout<<LCA(root, 4, 6)->data<<endl;;
     return 0;
 }
