@@ -18,7 +18,6 @@ public:
     int hash(std::string id) override;
     
 private:
-    int MAX_SIZE = 99991;
     int SIZE = 0;
     std::vector<int> output;
 };

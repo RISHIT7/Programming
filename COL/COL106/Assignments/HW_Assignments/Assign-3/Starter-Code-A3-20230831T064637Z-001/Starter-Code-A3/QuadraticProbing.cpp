@@ -1,14 +1,14 @@
 #include <iostream>
-#include "LinearProbing.h"
+#include "QuadraticProbing.h"
 #include <vector>
 using namespace std;
 
-LinearProbing::LinearProbing()
+QuadraticProbing::QuadraticProbing()
 {
     bankStorage1d.resize(100000);
 }
 
-void LinearProbing::createAccount(std::string id, int count) // to be tested, handle the case when size == max
+void QuadraticProbing::createAccount(std::string id, int count) // to be tested, handle the case when size == max
 {
     Account new_account = Account();
     new_account.balance = count;
@@ -27,7 +27,7 @@ void LinearProbing::createAccount(std::string id, int count) // to be tested, ha
     SIZE++;
 }
 
-std::vector<int> LinearProbing::getTopK(int k) // can easily be optimised, to be tested
+std::vector<int> QuadraticProbing::getTopK(int k) // can easily be optimised, to be tested
 {
 
     int first_idx = 0;
@@ -58,7 +58,7 @@ std::vector<int> LinearProbing::getTopK(int k) // can easily be optimised, to be
     return ans;
 }
 
-int LinearProbing::getBalance(std::string id) // to be tested, wrong implementation of search, does not check modded values, same for all functions
+int QuadraticProbing::getBalance(std::string id) // to be tested, wrong implementation of search, does not check modded values, same for all functions
 {
     int Hash_val = hash(id);
 
@@ -92,7 +92,7 @@ int LinearProbing::getBalance(std::string id) // to be tested, wrong implementat
     return -1;
 }
 
-void LinearProbing::addTransaction(std::string id, int count) // to be tested
+void QuadraticProbing::addTransaction(std::string id, int count) // to be tested
 {
     int Hash_val = hash(id);
     if (bankStorage1d[Hash_val].id != "")
@@ -145,7 +145,7 @@ void LinearProbing::addTransaction(std::string id, int count) // to be tested
     return;
 }
 
-bool LinearProbing::doesExist(std::string id) // to be tested
+bool QuadraticProbing::doesExist(std::string id) // to be tested
 {
     int Hash_val = hash(id);
     if (bankStorage1d[Hash_val].id != "")
@@ -178,7 +178,7 @@ bool LinearProbing::doesExist(std::string id) // to be tested
     return false;
 }
 
-bool LinearProbing::deleteAccount(std::string id)
+bool QuadraticProbing::deleteAccount(std::string id)
 {
     int Hash_val = hash(id);
     if (bankStorage1d[Hash_val].id != "")
@@ -232,12 +232,12 @@ bool LinearProbing::deleteAccount(std::string id)
 
     return false;
 }
-int LinearProbing::databaseSize()
+int QuadraticProbing::databaseSize()
 {
     return SIZE;
 }
 
-int LinearProbing::hash(std::string id)
+int QuadraticProbing::hash(std::string id)
 {
     int p = 37;
     long long int hash = 0;
@@ -254,7 +254,7 @@ int LinearProbing::hash(std::string id)
 
 int main()
 {
-    LinearProbing *chain = new LinearProbing();
+    QuadraticProbing *chain = new QuadraticProbing();
     chain->createAccount("CDAD7786825_7990768648", 648);
     chain->createAccount("DCDA7547234_9919615552", 552);
     chain->createAccount("AACB1850545_7974534788", 788);
