@@ -10,20 +10,18 @@ LinearProbing::LinearProbing()
 
 void LinearProbing::createAccount(std::string id, int count) // to be tested, handle the case when size == max
 {
-    Account *new_account = new Account();
-    new_account->balance = count;
-    new_account->id = id;
+    Account new_account = Account();
+    new_account.balance = count;
+    new_account.id = id;
 
     int Hash_val = hash(id);
     while (bankStorage1d[Hash_val].id != "")
     {
         Hash_val = (Hash_val + 1) % 100001;
     }
-    bankStorage1d.insert(bankStorage1d.begin() + Hash_val, *new_account);
-    cout << Hash_val << endl;
+    bankStorage1d[Hash_val].id = id;
+    bankStorage1d[Hash_val].balance = count;
     SIZE++;
-
-    delete new_account;
 }
 
 std::vector<int> LinearProbing::getTopK(int k) // can easily be optimised, to be tested
@@ -66,7 +64,6 @@ int LinearProbing::getBalance(std::string id) // to be tested, wrong implementat
 {
     int Hash_val = hash(id);
 
-    cout << Hash_val << endl;
     if (bankStorage1d[Hash_val].id != "")
     {
         if (bankStorage1d[Hash_val].id == id)
@@ -214,18 +211,5 @@ int LinearProbing::hash(std::string id)
         factor += 2 * p;
     }
     return hash % (100001);
-    return 0;
-}
-
-int main()
-{
-    LinearProbing *chain = new LinearProbing();
-    cout << chain->hash("Alice") << endl;
-    chain->createAccount("Alice", 1000);
-    chain->createAccount("Bob", 1500);
-    chain->createAccount("Charlie", 2000);
-    cout << chain->databaseSize() << endl;
-    cout << chain->getBalance("Alice") << endl;
-
     return 0;
 }

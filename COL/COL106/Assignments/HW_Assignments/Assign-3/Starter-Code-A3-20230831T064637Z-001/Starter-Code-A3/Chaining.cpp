@@ -6,7 +6,7 @@ Chaining::Chaining()
     bankStorage2d.resize(99991);
 }
 
-void Chaining::createAccount(std::string id, int count)
+void Chaining::createAccount(std::string id, int count) 
 {
     Account *new_account = new Account();
     new_account->balance = count;
