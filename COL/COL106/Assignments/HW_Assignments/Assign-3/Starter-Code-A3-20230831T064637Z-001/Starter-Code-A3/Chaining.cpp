@@ -1,6 +1,4 @@
-#include <iostream>
 #include "Chaining.h"
-#include <vector>
 using namespace std;
 
 Chaining::Chaining()
@@ -45,14 +43,27 @@ std::vector<int> Chaining::getTopK(int k) // easily can be optimised
         }
     }
 
+    int first_idx = 0;
+    int idx = 0;
     for (int i = 0; i < output.size(); i++)
     {
-        cout << output[i] << " ";
+        int Max_ele = 0;
+        for (int j = i; j < output.size(); j++)
+        {
+            if (Max_ele < output[j])
+            {
+                Max_ele = output[j];
+                idx = j;
+            }
+        }
+        int temp = output[first_idx];
+        output[first_idx] = output[idx];
+        output[idx] = temp;
+        first_idx++;
     }
-    cout << endl;
 
     vector<int> ans;
-    for (int i = output.size() - 1; i > output.size() - 1 - min(k, SIZE); i--)
+    for (int i = 0; i < min(k, SIZE); i++)
     {
         ans.push_back(output[i]);
     }
@@ -63,7 +74,6 @@ std::vector<int> Chaining::getTopK(int k) // easily can be optimised
 int Chaining::getBalance(std::string id)
 {
     int Hash_val = hash(id);
-    vector<Account> temp;
     try
     {
         vector<Account> temp = bankStorage2d[Hash_val];
@@ -139,7 +149,7 @@ bool Chaining::deleteAccount(std::string id)
     {
         for (int i = 0; i < bankStorage2d[Hash_val].size(); i++)
         {
-            if (bankStorage2d[Hash_val][i].id == id)
+            if (bankStorage2d[Hash_val][i].id == id) // can be optimised
             {
                 SIZE--;
                 bankStorage2d[Hash_val].erase(bankStorage2d[Hash_val].begin() + i);
@@ -171,34 +181,4 @@ int Chaining::hash(std::string id)
         factor += 2 * p;
     }
     return hash % (99991);
-}
-
-signed main()
-{
-    Chaining *chain = new Chaining();
-    chain->createAccount("ZZZZ9999999_9999999999", 68464);
-    cout << "Balance 1: " << chain->getBalance("ZZZZ9999999_9999999999") << endl;
-    cout << "Balance 2: " << chain->getBalance("SBIN6354165_8112283535") << endl;
-    chain->addTransaction("SBIN6354165_8112283535", 10000);
-    cout << "Balance 2': " << chain->getBalance("SBIN6354165_8112283535") << endl;
-    cout << "Exists1: " << chain->doesExist("ZZZZ9999999_9999999999") << endl;
-    cout << "Exists2: " << chain->doesExist("SBIN6354165_8212283535") << endl;
-    cout << "Size1: " << chain->databaseSize() << endl;
-    cout << "Delete 1: " << chain->deleteAccount("SBIN6354165_8112283535") << endl;
-    cout << "Delete 2: " << chain->deleteAccount("SBIN6354165_8212283536") << endl;
-    cout << "Size2: " << chain->databaseSize() << endl;
-    chain->createAccount("ZZZZ9999999_9999989999", 54135);
-    chain->createAccount("ZZZZ9999999_9998999999", 513534);
-    chain->createAccount("ZZZZ9999999_9999989499", 33333);
-    chain->createAccount("ZZZZ9999999_9999989499", 11111);
-    chain->createAccount("ZZZZ9999999_9999989499", 111111);
-
-    vector<int> ans = chain->getTopK(2);
-    for (int i = 0; i < 2; i++)
-    {
-        cout << ans[i] << " ";
-    }
-    cout << endl;
-
-    return 0;
 }

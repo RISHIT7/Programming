@@ -6,6 +6,7 @@
 
 class LinearProbing : public BaseClass {
 public:
+    LinearProbing();
     void createAccount(std::string id, int count) override;
     std::vector<int> getTopK(int k) override;
     int getBalance(std::string id) override;
@@ -16,7 +17,8 @@ public:
     int hash(std::string id) override;
     
 private:
-    // Other data members and functions specific to Linear Probing
+    int MAX_SIZE = 99991;
+    int SIZE = 0;
 };
 
 #endif // LINEARPROBING_H
