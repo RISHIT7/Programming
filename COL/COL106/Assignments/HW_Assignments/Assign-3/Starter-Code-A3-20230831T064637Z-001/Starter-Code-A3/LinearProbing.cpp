@@ -1,6 +1,4 @@
-#include <iostream>
 #include "LinearProbing.h"
-#include <vector>
 using namespace std;
 
 LinearProbing::LinearProbing()
@@ -242,68 +240,68 @@ int LinearProbing::hash(std::string id)
     return 0;
 }
 
-int main()
-{
-    LinearProbing *chain = new LinearProbing();
-    chain->createAccount("CDAD7786825_7990768648", 648);
-    chain->createAccount("DCDA7547234_9919615552", 552);
-    chain->createAccount("AACB1850545_7974534788", 788);
-    cout << chain->databaseSize() << endl;
-    chain->createAccount("CDBD5250777_1124276711", 711);
-    chain->createAccount("ABCB8377155_0656808575", 575);
-    vector<int> ans;
-    ans = chain->getTopK(1);
-    for (int i = 0; i < 1; i++)
-    {
-        cout << ans[i] << " ";
-    }
-    cout << endl;
+// int main()
+// {
+//     LinearProbing *chain = new LinearProbing();
+//     chain->createAccount("CDAD7786825_7990768648", 648);
+//     chain->createAccount("DCDA7547234_9919615552", 552);
+//     chain->createAccount("AACB1850545_7974534788", 788);
+//     cout << chain->databaseSize() << endl;
+//     chain->createAccount("CDBD5250777_1124276711", 711);
+//     chain->createAccount("ABCB8377155_0656808575", 575);
+//     vector<int> ans;
+//     ans = chain->getTopK(1);
+//     for (int i = 0; i < 1; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-    chain->createAccount("CDDC3792028_3313680038", 38);
-    chain->createAccount("CBBA9574444_7470182321", 321);
-    chain->createAccount("DBCC4334636_8057544188", 188);
-    ans = chain->getTopK(3);
-    for (int i = 0; i < 3; i++)
-    {
-        cout << ans[i] << " ";
-    }
-    cout << endl;
+//     chain->createAccount("CDDC3792028_3313680038", 38);
+//     chain->createAccount("CBBA9574444_7470182321", 321);
+//     chain->createAccount("DBCC4334636_8057544188", 188);
+//     ans = chain->getTopK(3);
+//     for (int i = 0; i < 3; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-    chain->createAccount("BABD5741078_5109455304", 304);
-    chain->createAccount("BCBA7529510_0817878868", 868);
-    cout << chain->databaseSize() << endl;
-    ans = chain->getTopK(1);
-    for (int i = 0; i < 1; i++)
-    {
-        cout << ans[i] << " ";
-    }
-    cout << endl;
+//     chain->createAccount("BABD5741078_5109455304", 304);
+//     chain->createAccount("BCBA7529510_0817878868", 868);
+//     cout << chain->databaseSize() << endl;
+//     ans = chain->getTopK(1);
+//     for (int i = 0; i < 1; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-    chain->addTransaction("BCBA7529510_0817878868", -860);
-    cout << chain->getBalance("BCBA7529510_0817878868") << endl;
-    ans = chain->getTopK(1);
-    for (int i = 0; i < 1; i++)
-    {
-        cout << ans[i] << " ";
-    }
-    cout << endl;
+//     chain->addTransaction("BCBA7529510_0817878868", -860);
+//     cout << chain->getBalance("BCBA7529510_0817878868") << endl;
+//     ans = chain->getTopK(1);
+//     for (int i = 0; i < 1; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-    chain->addTransaction("DCDA7547234_9919615552", 592);
-    ans = chain->getTopK(5);
-    for (int i = 0; i < 5; i++)
-    {
-        cout << ans[i] << " ";
-    }
-    cout << endl;
+//     chain->addTransaction("DCDA7547234_9919615552", 592);
+//     ans = chain->getTopK(5);
+//     for (int i = 0; i < 5; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-    chain->deleteAccount("DCDA7547234_9919615552");
-    ans = chain->getTopK(4);
-    for (int i = 0; i < 4; i++)
-    {
-        cout << ans[i] << " ";
-    }
-    cout << endl;
+//     chain->deleteAccount("DCDA7547234_9919615552");
+//     ans = chain->getTopK(4);
+//     for (int i = 0; i < 4; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-    cout << chain->databaseSize() << endl;
-    return 0;
-}
+//     cout << chain->databaseSize() << endl;
+//     return 0;
+// }

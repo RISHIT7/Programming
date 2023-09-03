@@ -35,23 +35,23 @@ void testDatabase(BaseClass *db) {
 
 
 int main() {
-    // Chaining chainingDB;
+    Chaining chainingDB;
     LinearProbing linearProbingDB;
-    // QuadraticProbing quadraticProbingDB;
-    // CubicProbing cubicProbingDB;
+    QuadraticProbing quadraticProbingDB;
+    CubicProbing cubicProbingDB;
     // Comp compDB;
 
-    // std::cout << "Testing Chaining:" << std::endl;
-    // testDatabase(&chainingDB);
+    std::cout << "Testing Chaining:" << std::endl;
+    testDatabase(&chainingDB);
 
     std::cout << "\nTesting Linear Probing:" << std::endl;
     testDatabase(&linearProbingDB);
 
-    // std::cout << "\nTesting Quadratic Probing:" << std::endl;
-    // testDatabase(&quadraticProbingDB);
+    std::cout << "\nTesting Quadratic Probing:" << std::endl;
+    testDatabase(&quadraticProbingDB);
 
-    // std::cout << "\nTesting Cubic Probing:" << std::endl;
-    // testDatabase(&cubicProbingDB);
+    std::cout << "\nTesting Cubic Probing:" << std::endl;
+    testDatabase(&cubicProbingDB);
 
     // std::cout << "\nTesting Comp:" << std::endl;
     // testDatabase(&compDB);
