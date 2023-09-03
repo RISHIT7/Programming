@@ -3,6 +3,7 @@
 
 #include "BaseClass.h"
 #include <iostream>
+#include <vector>
 
 class LinearProbing : public BaseClass {
 public:
@@ -19,6 +20,7 @@ public:
 private:
     int MAX_SIZE = 99991;
     int SIZE = 0;
+    std::vector<int> output;
 };
 
 #endif // LINEARPROBING_H
