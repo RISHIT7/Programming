@@ -8,10 +8,6 @@ QuadraticProbing::QuadraticProbing()
 
 void QuadraticProbing::createAccount(std::string id, int count) // to be tested, handle the case when size == max
 {
-    Account new_account = Account();
-    new_account.balance = count;
-    new_account.id = id;
-
     int Hash_val = hash(id);
     int factor = 1;
     while (bankStorage1d[Hash_val].id != "")

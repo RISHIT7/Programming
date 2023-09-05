@@ -7,6 +7,7 @@
 
 class Comp : public BaseClass {
 public:
+    Comp();
     void createAccount(std::string id, int count) override;
     std::vector<int> getTopK(int k) override;
     int getBalance(std::string id) override;
@@ -17,8 +18,7 @@ public:
     int hash(std::string id) override;
     
 private:
-    
-    // Other data members and functions specific to Your implementation
+    std::vector<int> output;
 };
 
 #endif // COMP_H
