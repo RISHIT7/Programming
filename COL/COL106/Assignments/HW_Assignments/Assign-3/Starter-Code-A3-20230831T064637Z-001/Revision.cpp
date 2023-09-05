@@ -1,128 +1,85 @@
-#include <iostream>
-#include <cmath>
-#include <set>
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include <queue>
-#include <stack>
-#include <algorithm>
-#include <string>
+
+#include "LinearProbing.h"
 using namespace std;
 
-// #define int long long
-#define ll long long int
-#define vi vector<int>
-#define pii pair<int, int>
-#define vii vector<pii>
-#define rep(i, a, b) for (int i = a; i < b; i++)
-#define ff first
-#define ss second
-#define setBits(x) builtin_popcount(x)
-#define fastio()                      \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL);
-#define print_any(vec)     \
-    for (auto value : vec) \
-        cout << value << " ";
-#define next_line cout << endl;
-
-const int N = 1e5 + 2, MOD = 1e9 + 7;
-
-struct Account
+LinearProbing::LinearProbing()
 {
-    std::string id;
-    int balance;
-};
-
-vector<vector<Account>> bankstorage2d(100000);
-int S = 0;
-
-int hash_foo(string id)
-{
-    int p = 31;
-    long long int hash = 0;
-    int factor = 1;
-
-    for (int i = 0; i < id.size(); i++)
-    {
-        hash += (id[i] + 1) * factor;
-        factor *= p;
-    }
-
-    return hash % (99991);
+    bankStorage1d.resize(100000);
 }
 
-void createAccount(std::string id, int count)
+void LinearProbing::createAccount(std::string id, int count) // to be tested, handle the case when size == max
 {
-    Account *new_account = new Account();
-    new_account->balance = count;
-    new_account->id = id;
+    Account new_account = Account();
+    new_account.balance += count;
+    new_account.id = id;
 
-    int Hash_val = hash_foo(id);
-
-    vector<Account> temp;
-    temp.push_back(*new_account);
-
-    try
+    int Hash_val = hash(id);
+    while (bankStorage1d[Hash_val].id != "")
     {
-        bankstorage2d[Hash_val].push_back(*new_account);
+        Hash_val = (Hash_val + 1) % 100001;
     }
-    catch (std::runtime_error())
-    {
-        vector<Account> temp;
-        temp.push_back(*new_account);
-        bankstorage2d.insert(bankstorage2d.begin() + Hash_val, temp);
-    }
-
-    S++;
-
-    delete new_account;
+    bankStorage1d[Hash_val].id = id;
+    bankStorage1d[Hash_val].balance = count;
+    output.push_back(count);
+    SIZE++;
 }
 
-void addTransaction(std::string id, int count) // to be tested, could be better implemented
+std::vector<int> LinearProbing::getTopK(int k) // can easily be optimised, to be tested
 {
-    int Hash_val = hash_foo(id);
-    vector<Account> temp;
-    try
+
+    int first_idx = 0;
+    int idx = 0;
+    for (int i = 0; i < output.size(); i++)
     {
-        temp = bankstorage2d[Hash_val];
-        for (int i = 0; i < temp.size(); i++)
+        int Max_ele = 0;
+        for (int j = i; j < output.size(); j++)
         {
-            if (temp[i].id == id)
+            if (Max_ele < output[j])
             {
-                bankstorage2d[Hash_val][i].balance += count;
-                return;
+                Max_ele = output[j];
+                idx = j;
             }
         }
-    }
-    catch (std::runtime_error())
-    {
-        createAccount(id, count);
-        return;
+        int temp = output[first_idx];
+        output[first_idx] = output[idx];
+        output[idx] = temp;
+        first_idx++;
     }
 
-    createAccount(id, count);
-    return;
+    vector<int> ans;
+    for (int i = 0; i < min(k, SIZE); i++)
+    {
+        ans.push_back(output[i]);
+    }
+
+    return ans;
 }
 
-int getBalance(std::string id)
+int LinearProbing::getBalance(std::string id) // to be tested, wrong implementation of search, does not check modded values, same for all functions
 {
-    int Hash_val = hash_foo(id);
-    vector<Account> temp;
-    try
+    int Hash_val = hash(id);
+
+    if (bankStorage1d[Hash_val].id != "")
     {
-        vector<Account> temp = bankstorage2d[Hash_val];
-        for (int i = 0; i < temp.size(); i++)
+        if (bankStorage1d[Hash_val].id == id)
         {
-            if (temp[i].id == id)
-            {
-                return temp[i].balance;
-            }
+            return bankStorage1d[Hash_val].balance;
+        }
+        int idx = Hash_val + 1;
+        while (bankStorage1d[idx].id != id && Hash_val != idx)
+        {
+            idx = (idx + 1) % 100001;
+        }
+        if (bankStorage1d[idx].id == id)
+        {
+            return bankStorage1d[idx].balance;
+        }
+        else
+        {
+            return -1;
         }
     }
-    catch (std::runtime_error())
+    else
     {
         return -1;
     }
@@ -130,52 +87,182 @@ int getBalance(std::string id)
     return -1;
 }
 
-bool deleteAccount(std::string id) // to be tested, does not include case when Has dne
+void LinearProbing::addTransaction(std::string id, int count) // to be tested
 {
-    int Hash_val = hash_foo(id);
-    vector<Account> temp;
-    try
+    int Hash_val = hash(id);
+    if (bankStorage1d[Hash_val].id != "")
     {
-        vector<Account> temp = bankstorage2d[Hash_val];
-        for (int i = 0; i < temp.size(); i++)
+        if (bankStorage1d[Hash_val].id == id)
         {
-            if (temp[i].id == id)
+            for (int i = 0; i < output.size(); i++)
             {
-                S--;
-                bankstorage2d[Hash_val].erase(temp.begin() + i);
-                return true;
+                if (output[i] == bankStorage1d[Hash_val].balance)
+                {
+                    output[i] += count;
+                    break;
+                }
             }
+            bankStorage1d[Hash_val].balance += count;
+            return;
+        }
+        int idx = Hash_val + 1;
+        while (bankStorage1d[idx].id != id && idx != Hash_val)
+        {
+            idx = (idx + 1) % (100001);
+        }
+        if (bankStorage1d[idx].id == id)
+        {
+            for (int i = 0; i < output.size(); i++)
+            {
+                if (output[i] == bankStorage1d[idx].balance)
+                {
+                    output[i] += count;
+                    break;
+                }
+            }
+            bankStorage1d[idx].balance += count;
+            return;
+        }
+        else
+        {
+            createAccount(id, count);
+            return;
         }
     }
-    catch (std::runtime_error())
+    else
     {
-        return -1;
+        createAccount(id, count);
+        return;
+    }
+    createAccount(id, count);
+    return;
+}
+
+bool LinearProbing::doesExist(std::string id) // to be tested
+{
+    int Hash_val = hash(id);
+    if (bankStorage1d[Hash_val].id != "")
+    {
+        if (bankStorage1d[Hash_val].id == id)
+        {
+            return true;
+        }
+        int idx = Hash_val + 1;
+        while (bankStorage1d[idx].id != id and idx != Hash_val)
+        {
+            idx = (idx + 1) % 100001;
+        }
+        if (bankStorage1d[idx].id == id)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
     }
 
     return false;
 }
 
-signed main()
+bool LinearProbing::deleteAccount(std::string id)
 {
-    createAccount("ABCDEF1", 11111);
-    createAccount("ABCDE", 11111);
-    createAccount("ABCDEF2", 123456);
+    int Hash_val = hash(id);
+    if (bankStorage1d[Hash_val].id != "")
+    {
+        if (bankStorage1d[Hash_val].id == id)
+        {
+            SIZE--;
+            bankStorage1d[Hash_val].id = "";
+            for (int i = 0; i < output.size(); i++)
+            {
+                if (output[i] == bankStorage1d[Hash_val].balance)
+                {
+                    output.erase(output.begin() + i);
+                    break;
+                }
+            }
+            bankStorage1d[Hash_val].balance = 0;
+            return true;
+        }
+        int idx = Hash_val + 1;
+        while (bankStorage1d[idx].id != id and idx != Hash_val)
+        {
+            idx = (idx + 1) % 100001;
+        }
+        if (bankStorage1d[idx].id == id)
+        {
+            SIZE--;
+            bankStorage1d[idx].id = "";
+            for (int i = 0; i < output.size(); i++)
+            {
+                if (output[i] == bankStorage1d[idx].balance)
+                {
+                    output.erase(output.begin() + i);
+                    break;
+                }
+            }
+            bankStorage1d[idx].balance = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
 
-    cout << getBalance("ABCDEF1") << " " << endl;
-    addTransaction("ABCDEF1", 1000);
-    cout << getBalance("ABCDEF1") << endl;
-    cout << getBalance("ABCDE") << " " << endl;
-    addTransaction("ABCDE", 1000);
-    cout << getBalance("ABCDE") << endl;
-    cout << getBalance("ABCDEF2") << " " << endl;
-    addTransaction("ABCDEF2", 1000);
-    cout << getBalance("ABCDEF2") << endl;
-    cout << getBalance("ABCDEF3") << " " << endl;
-    addTransaction("ABCDEF3", 1000);
-    cout << getBalance("ABCDEF3") << endl;
-
-    cout << deleteAccount("ABCDEF1") << endl;
-    cout << deleteAccount("ABCDEF5") << endl;
-
-    return 0;
+    return false;
 }
+int LinearProbing::databaseSize()
+{
+    return output.size();
+}
+
+int LinearProbing::hash(std::string id)
+{
+    int p = 37;
+    long long int hash = 0;
+    int factor = 1;
+
+    for (int i = 0; i < id.size(); i++)
+    {
+        hash += (id[i] + 1) * factor;
+        factor += 2 * p;
+    }
+    return hash % (100001);
+}
+
+// int main()
+// {
+//     LinearProbing *chain = new LinearProbing();
+//     chain->createAccount("AAAA_1", 899);
+//     // cout << chain->hash("AAAZ_1") << endl;
+//     chain->createAccount("FABL_9", 899);
+//     // cout << chain->hash("FABL_9") << endl;
+//     cout << chain->databaseSize() << endl;
+
+//     cout << chain->doesExist("AAAA_1") << endl;
+//     cout << chain->doesExist("FABL_9") << endl;
+
+//     cout << chain->getBalance("FABL_9") << endl;
+//     cout << chain->getBalance("AAAA_1") << endl;   
+
+//     cout << chain->deleteAccount("FABL_9") << endl;
+//     cout << chain->databaseSize() << endl;
+
+//     cout << chain->doesExist("AAAA_1") << endl;
+//     cout << chain->doesExist("FABL_9") << endl;
+
+//     cout << chain->getBalance("FABL_9") << endl;
+//     cout << chain->getBalance("AAAA_1") << endl;
+
+//     return 0;
+// }

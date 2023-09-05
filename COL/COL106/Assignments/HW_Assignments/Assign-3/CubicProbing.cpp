@@ -1,23 +1,45 @@
 #include "CubicProbing.h"
-#include <cassert>
 using namespace std;
 
 CubicProbing::CubicProbing()
 {
-    bankStorage1d.resize(100003);
+    bankStorage1d.resize(246343);
+}
+
+int getInd(string id, vector<Account> bankStorage1d)
+{
+    int Hash_val = CubicProbing().hash(id);
+
+    if (bankStorage1d[Hash_val].id == id)
+    {
+        return Hash_val;
+    }
+    int idx = Hash_val + 1;
+    int factor = 1;
+    while (bankStorage1d[idx].id != id and idx != Hash_val)
+    {
+        idx = (idx + (factor*factor*factor)) % 246343;
+        factor += 1;
+    }
+    if (bankStorage1d[idx].id == id)
+    {
+        return idx;
+    }
+
+    return -1;
 }
 
 void CubicProbing::createAccount(std::string id, int count) // to be tested, handle the case when size == max
 {
     Account new_account = Account();
-    new_account.balance = count;
+    new_account.balance += count;
     new_account.id = id;
 
     int Hash_val = hash(id);
     int factor = 1;
     while (bankStorage1d[Hash_val].id != "")
     {
-        Hash_val = (Hash_val + (factor * factor * factor)) % 100001;
+        Hash_val = (Hash_val + (factor*factor*factor)) % 246343;
         factor += 1;
     }
     bankStorage1d[Hash_val].id = id;
@@ -59,22 +81,10 @@ std::vector<int> CubicProbing::getTopK(int k) // can easily be optimised, to be 
 
 int CubicProbing::getBalance(std::string id) // to be tested, wrong implementation of search, does not check modded values, same for all functions
 {
-    int Hash_val = hash(id);
-
-    if (bankStorage1d[Hash_val].id == id)
+    int Hash_val = getInd(id, bankStorage1d);
+    if (Hash_val != -1)
     {
         return bankStorage1d[Hash_val].balance;
-    }
-    int idx = Hash_val + 1;
-    int factor = 2;
-    while (bankStorage1d[idx].id != id && Hash_val != idx)
-    {
-        idx = (idx + (factor * factor * factor)) % 100001;
-        factor += 1;
-    }
-    if (bankStorage1d[idx].id == id)
-    {
-        return bankStorage1d[idx].balance;
     }
     else
     {
@@ -84,38 +94,18 @@ int CubicProbing::getBalance(std::string id) // to be tested, wrong implementati
 
 void CubicProbing::addTransaction(std::string id, int count) // to be tested
 {
-    int Hash_val = hash(id);
-    if (bankStorage1d[Hash_val].id == id)
+    int Hash_val = getInd(id, bankStorage1d);
+    if (Hash_val != -1)
     {
         for (int i = 0; i < output.size(); i++)
         {
-            if (output[i] == bankStorage1d[Hash_val].balance)
+            if (bankStorage1d[Hash_val].balance == output[i])
             {
                 output[i] += count;
                 break;
             }
         }
         bankStorage1d[Hash_val].balance += count;
-        return;
-    }
-    int idx = Hash_val + 1;
-    int factor = 2;
-    while (bankStorage1d[idx].id != id and idx != Hash_val)
-    {
-        idx = (idx + (factor * factor * factor)) % 100001;
-        factor += 1;
-    }
-    if (bankStorage1d[idx].id == id)
-    {
-        for (int i = 0; i < output.size(); i++)
-        {
-            if (output[i] == bankStorage1d[idx].balance)
-            {
-                output[i] += count;
-                break;
-            }
-        }
-        bankStorage1d[idx].balance += count;
         return;
     }
     else
@@ -127,39 +117,21 @@ void CubicProbing::addTransaction(std::string id, int count) // to be tested
 
 bool CubicProbing::doesExist(std::string id) // to be tested
 {
-    int Hash_val = hash(id);
-    if (bankStorage1d[Hash_val].id == id)
+    if (getInd(id, bankStorage1d) == -1)
     {
-        return true;
-    }
-    int idx = (Hash_val + 1);
-    int factor = 2;
-    while (bankStorage1d[idx].id != id and idx != Hash_val)
-    {
-        idx = (idx + (factor * factor * factor)) % 100001;
-        if (idx < 0)
-        {
-            idx = -1*idx;
-        }
-        factor += 1;
-    }
-    if (bankStorage1d[idx].id == id)
-    {
-        return true;
+        return false;
     }
     else
     {
-        return false;
+        return true;
     }
 }
 
 bool CubicProbing::deleteAccount(std::string id)
 {
-    int Hash_val = hash(id);
-
-    if (bankStorage1d[Hash_val].id == id)
+    int Hash_val = getInd(id, bankStorage1d);
+    if (Hash_val != -1)
     {
-        SIZE--;
         bankStorage1d[Hash_val].id = "";
         for (int i = 0; i < output.size(); i++)
         {
@@ -171,35 +143,13 @@ bool CubicProbing::deleteAccount(std::string id)
         }
         bankStorage1d[Hash_val].balance = 0;
         return true;
-    }
-    int idx = Hash_val + 1;
-    int factor = 2;
-    while (bankStorage1d[idx].id != id and idx != Hash_val)
-    {
-        idx = (idx + (factor * factor * factor)) % 100001;
-        factor += 1;
-    }
-    if (bankStorage1d[idx].id == id)
-    {
         SIZE--;
-        bankStorage1d[idx].id = "";
-        for (int i = 0; i < output.size(); i++)
-        {
-            if (output[i] == bankStorage1d[idx].balance)
-            {
-                output.erase(output.begin() + i);
-                break;
-            }
-        }
-        bankStorage1d[idx].balance = 0;
-        return true;
     }
     else
     {
         return false;
     }
 }
-
 int CubicProbing::databaseSize()
 {
     return output.size();
@@ -216,5 +166,5 @@ int CubicProbing::hash(std::string id)
         hash += (id[i] + 1) * factor;
         factor += 2 * p;
     }
-    return hash % (100001);
+    return hash % (246343);
 }

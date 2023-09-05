@@ -3,7 +3,7 @@ using namespace std;
 
 QuadraticProbing::QuadraticProbing()
 {
-    bankStorage1d.resize(100000);
+    bankStorage1d.resize(100003);
 }
 
 void QuadraticProbing::createAccount(std::string id, int count) // to be tested, handle the case when size == max
@@ -60,179 +60,147 @@ int QuadraticProbing::getBalance(std::string id) // to be tested, wrong implemen
 {
     int Hash_val = hash(id);
 
-    if (bankStorage1d[Hash_val].id != "")
+    if (bankStorage1d[Hash_val].id == id)
     {
-        if (bankStorage1d[Hash_val].id == id)
-        {
-            return bankStorage1d[Hash_val].balance;
-        }
-        int idx = Hash_val + 1;
-        int factor = 2;
-        while (bankStorage1d[idx].id != id && Hash_val != idx)
-        {
-            idx = (idx + (factor * factor)) % 100001;
-            factor += 1;
-        }
-        if (bankStorage1d[idx].id == id)
-        {
-            return bankStorage1d[idx].balance;
-        }
-        else
-        {
-            return -1;
-        }
+        return bankStorage1d[Hash_val].balance;
+    }
+    int idx = Hash_val + 1;
+    int factor = 2;
+    while (bankStorage1d[idx].id != id && Hash_val != idx)
+    {
+        idx = (idx + (factor * factor)) % 100001;
+        factor += 1;
+    }
+    if (bankStorage1d[idx].id == id)
+    {
+        return bankStorage1d[idx].balance;
     }
     else
     {
         return -1;
     }
-
-    return -1;
 }
 
 void QuadraticProbing::addTransaction(std::string id, int count) // to be tested
 {
     int Hash_val = hash(id);
-    if (bankStorage1d[Hash_val].id != "")
+    if (bankStorage1d[Hash_val].id == id)
     {
-        if (bankStorage1d[Hash_val].id == id)
+        for (int i = 0; i < output.size(); i++)
         {
-            for (int i = 0; i < output.size(); i++)
+            if (output[i] == bankStorage1d[Hash_val].balance)
             {
-                if (output[i] == bankStorage1d[Hash_val].balance)
-                {
-                    output[i] += count;
-                    break;
-                }
+                output[i] += count;
+                break;
             }
-            bankStorage1d[Hash_val].balance += count;
-            return;
         }
-        int idx = Hash_val + 1;
-        int factor = 2;
-        while (bankStorage1d[idx].id != id and idx != Hash_val)
+        bankStorage1d[Hash_val].balance += count;
+        return;
+    }
+    int idx = Hash_val + 1;
+    int factor = 2;
+    while (bankStorage1d[idx].id != id and idx != Hash_val)
+    {
+        idx = (idx + (factor * factor)) % 100001;
+        factor += 1;
+    }
+    if (bankStorage1d[idx].id == id)
+    {
+        for (int i = 0; i < output.size(); i++)
         {
-            idx = (idx + (factor * factor)) % 100001;
-            factor += 1;
-        }
-        if (bankStorage1d[idx].id == id)
-        {
-            for (int i = 0; i < output.size(); i++)
+            if (output[i] == bankStorage1d[idx].balance)
             {
-                if (output[i] == bankStorage1d[idx].balance)
-                {
-                    output[i] += count;
-                    break;
-                }
+                output[i] += count;
+                break;
             }
-            bankStorage1d[idx].balance += count;
-            return;
         }
-        else
-        {
-            createAccount(id, count);
-            return;
-        }
+        bankStorage1d[idx].balance += count;
+        return;
     }
     else
     {
         createAccount(id, count);
         return;
     }
-    createAccount(id, count);
-    return;
 }
 
 bool QuadraticProbing::doesExist(std::string id) // to be tested
 {
     int Hash_val = hash(id);
-    if (bankStorage1d[Hash_val].id != "")
+    if (bankStorage1d[Hash_val].id == id)
     {
-        if (bankStorage1d[Hash_val].id == id)
+        return true;
+    }
+    int idx = Hash_val + 1;
+    int factor = 2;
+    while (bankStorage1d[idx].id != id and idx != Hash_val)
+    {
+        idx = (idx + (factor * factor)) % 100001;
+        if (idx < 0)
         {
-            return true;
+            idx = -1 * idx;
         }
-        int idx = Hash_val + 1;
-        int factor = 2;
-        while (bankStorage1d[idx].id != id and idx != Hash_val)
-        {
-            idx = (idx + (factor * factor)) % 100001;
-            factor += 1;
-        }
-        if (bankStorage1d[idx].id == id)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        factor += 1;
+    }
+    if (bankStorage1d[idx].id == id)
+    {
+        return true;
     }
     else
     {
         return false;
     }
-
-    return false;
 }
 
 bool QuadraticProbing::deleteAccount(std::string id)
 {
     int Hash_val = hash(id);
-    if (bankStorage1d[Hash_val].id != "")
+    if (bankStorage1d[Hash_val].id == id)
     {
-        if (bankStorage1d[Hash_val].id == id)
+        SIZE--;
+        bankStorage1d[Hash_val].id = "";
+        for (int i = 0; i < output.size(); i++)
         {
-            SIZE--;
-            bankStorage1d[Hash_val].id = "";
-            for (int i = 0; i < output.size(); i++)
+            if (output[i] == bankStorage1d[Hash_val].balance)
             {
-                if (output[i] == bankStorage1d[Hash_val].balance)
-                {
-                    output.erase(output.begin() + i);
-                    break;
-                }
+                output.erase(output.begin() + i);
+                break;
             }
-            bankStorage1d[Hash_val].balance = 0;
-            return true;
         }
-        int idx = Hash_val + 1;
-        int factor = 2;
-        while (bankStorage1d[idx].id != id and idx != Hash_val)
+        bankStorage1d[Hash_val].balance = 0;
+        return true;
+    }
+    int idx = Hash_val + 1;
+    int factor = 2;
+    while (bankStorage1d[idx].id != id and idx != Hash_val)
+    {
+        idx = (idx + (factor * factor)) % 100001;
+        factor += 1;
+    }
+    if (bankStorage1d[idx].id == id)
+    {
+        SIZE--;
+        bankStorage1d[idx].id = "";
+        for (int i = 0; i < output.size(); i++)
         {
-            idx = (idx + (factor * factor)) % 100001;
-            factor += 1;
-        }
-        if (bankStorage1d[idx].id == id)
-        {
-            SIZE--;
-            bankStorage1d[idx].id = "";
-            for (int i = 0; i < output.size(); i++)
+            if (output[i] == bankStorage1d[idx].balance)
             {
-                if (output[i] == bankStorage1d[idx].balance)
-                {
-                    output.erase(output.begin() + i);
-                    break;
-                }
+                output.erase(output.begin() + i);
+                break;
             }
-            bankStorage1d[idx].balance = 0;
-            return true;
         }
-        else
-        {
-            return false;
-        }
+        bankStorage1d[idx].balance = 0;
+        return true;
     }
     else
     {
         return false;
     }
-
-    return false;
 }
+
 int QuadraticProbing::databaseSize()
 {
-    return SIZE;
+    return output.size();
 }
 
 int QuadraticProbing::hash(std::string id)
