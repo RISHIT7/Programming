@@ -46,7 +46,8 @@ std::vector<int> Comp::getTopK(int k)
 {
     int first_idx = 0;
     int idx = 0;
-    for (int i = 0; i < output.size(); i++)
+    int size = output.size();
+    for (int i = 0; i < min(k, size); i++)
     {
         int Max_ele = 0;
         for (int j = i; j < output.size(); j++)
@@ -64,7 +65,6 @@ std::vector<int> Comp::getTopK(int k)
     }
 
     vector<int> ans;
-    int size = output.size();
     for (int i = 0; i < min(k, size); i++)
     {
         ans.push_back(output[i]);
@@ -174,26 +174,73 @@ int Comp::hash(std::string id)
 // int main()
 // {
 //     Comp *chain = new Comp();
-//     chain->createAccount("AAAZ_1", 899);
-//     // cout << chain->hash("AAAZ_1") << endl;
-//     chain->createAccount("FABL_9", 899);
-//     // cout << chain->hash("FABL_9") << endl;
+//     chain->createAccount("CDAD7786825_7990768648", 648);
+//     chain->createAccount("DCDA7547234_9919615552", 552);
+//     chain->createAccount("AACB1850545_7974534788", 788);
 //     cout << chain->databaseSize() << endl;
+//     chain->createAccount("CDBD5250777_1124276711", 711);
+//     chain->createAccount("ABCB8377155_06568085765", 575);
+//     chain->createAccount("CDBD5250777_11242765711", 7511);
+//     chain->createAccount("ABCB8377155_06568085785", 5765);
+//     chain->createAccount("CDBD5250777_11242765711", 7114);
+//     chain->createAccount("ABCB8377155_06568085875", 5755);
+//     chain->createAccount("CDBD5250777_11242765711", 71341);
+//     chain->createAccount("ABCB8377155_06568085755", 575654);
+//     chain->createAccount("CDBD5250777_11242767611", 711683);
+//     chain->createAccount("ABCB8377155_06568085575", 57565);
+//     vector<int> ans;
+//     ans = chain->getTopK(1);
+//     for (int i = 0; i < 1; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-//     cout << chain->doesExist("AAAZ_1") << endl;
-//     cout << chain->doesExist("FABL_9") << endl;
+//     chain->createAccount("CDDC3792028_3313680038", 38);
+//     chain->createAccount("CBBA9574444_7470182321", 321);
+//     chain->createAccount("DBCC4334636_8057544188", 188);
+//     ans = chain->getTopK(3);
+//     for (int i = 0; i < 3; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-//     cout << chain->getBalance("FABL_9") << endl;
-//     cout << chain->getBalance("AAAZ_1") << endl;   
-
-//     cout << chain->deleteAccount("AAAZ_1") << endl;
+//     chain->createAccount("BABD5741078_5109455304", 304);
+//     chain->createAccount("BCBA7529510_0817878868", 868);
 //     cout << chain->databaseSize() << endl;
+//     ans = chain->getTopK(1);
+//     for (int i = 0; i < 1; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-//     cout << chain->doesExist("AAAZ_1") << endl;
-//     cout << chain->doesExist("FABL_9") << endl;
+//     chain->addTransaction("BCBA7529510_0817878868", -860);
+//     cout << chain->getBalance("BCBA7529510_0817878868") << endl;
+//     ans = chain->getTopK(1);
+//     for (int i = 0; i < 1; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
-//     cout << chain->getBalance("FABL_9") << endl;
-//     cout << chain->getBalance("AAAZ_1") << endl;
+//     chain->addTransaction("DCDA7547234_9919615552", 592);
+//     ans = chain->getTopK(5);
+//     for (int i = 0; i < 5; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
 
+//     chain->deleteAccount("DCDA7547234_9919615552");
+//     ans = chain->getTopK(4);
+//     for (int i = 0; i < 4; i++)
+//     {
+//         cout << ans[i] << " ";
+//     }
+//     cout << endl;
+
+//     cout << chain->databaseSize() << endl;
 //     return 0;
 // }
