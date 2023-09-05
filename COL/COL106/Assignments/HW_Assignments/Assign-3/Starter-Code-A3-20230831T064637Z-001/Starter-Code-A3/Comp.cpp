@@ -1,5 +1,4 @@
 #include "Comp.h"
-#include <cassert>
 using namespace std;
 
 Comp::Comp()
@@ -172,3 +171,29 @@ int Comp::hash(std::string id)
 // Feel free to add any other helper functions you need
 // Good Luck!
 
+// int main()
+// {
+//     Comp *chain = new Comp();
+//     chain->createAccount("AAAZ_1", 899);
+//     // cout << chain->hash("AAAZ_1") << endl;
+//     chain->createAccount("FABL_9", 899);
+//     // cout << chain->hash("FABL_9") << endl;
+//     cout << chain->databaseSize() << endl;
+
+//     cout << chain->doesExist("AAAZ_1") << endl;
+//     cout << chain->doesExist("FABL_9") << endl;
+
+//     cout << chain->getBalance("FABL_9") << endl;
+//     cout << chain->getBalance("AAAZ_1") << endl;   
+
+//     cout << chain->deleteAccount("AAAZ_1") << endl;
+//     cout << chain->databaseSize() << endl;
+
+//     cout << chain->doesExist("AAAZ_1") << endl;
+//     cout << chain->doesExist("FABL_9") << endl;
+
+//     cout << chain->getBalance("FABL_9") << endl;
+//     cout << chain->getBalance("AAAZ_1") << endl;
+
+//     return 0;
+// }
