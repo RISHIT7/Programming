@@ -32,8 +32,5 @@ const int N = 1e5 + 2, MOD = 1e9 + 7;
 
 signed main()
 {
-    vector<int> bankStorage2d;
-    bankStorage2d(99991);
-    cout << bankStorage2d.size() << endl;
     return 0;
 }
