@@ -1,64 +1,23 @@
 #include <stdio.h>
 
-int setBits(int a)
-{
-    int count = 0;
-    while (a > 0)
-    {
-        if (a % 2 == 1)
-        {
-            count += 1;
-        }
-        a /= 2;
-    }
-
-    return count;
-}
-
-int coPrime(int a)
-{
-    int count = 0;
-    for (int i = 1; i < a; i++)
-    {
-        if (a % i != 0)
-        {
-            count += 1;
-        }
-    }
-    return count + 1;
-}
-
-int isMersenne(int a)
-{
-    a += 1;
-    while (a != 1)
-    {
-        if (a % 2 == 1)
-        {
-            return 0;
-        }
-        a /= 2;
-    }
-    return 1;
-}
-
 int main()
 {
-    int a;
-    scanf("%d", &a);
-    while (a != -1)
-    {
-        // all the stuff
-        if (a == 1)
-        {
-            printf("(%d, %d, %d)\n", 1, 0, 0);
-        }
-        else
-        {
-            printf("(%d, %d, %d)\n", setBits(a), coPrime(a), isMersenne(a));
-        }
-        scanf("%d", &a);
-    }
+    int x, y, z;
+    char xc, yc, zc;
 
+    x = 0xF0;xc = x; // x = 11110000
+    printf("x is: %d\n", x);
+    y = 0x8D; yc = y; // y = 10001101
+    printf("y is: %d\n", y);
+    printf("xc is: %d\n", xc);
+    z = x & y;
+    printf("x & y is: %d\n", z);
+    z = x | y;
+    printf("x | y is: %d\n", z);
+    z = (x >> 2); // 0011 1100, 3c
+    printf("x >> 2 is: %x\n", z); // %x is hex, %o is octal
+    z = (xc >> 2);
+    printf("xc >> 2 is: %x\n", z); // %x is hex, %o is octal
+    
     return 0;
 }
