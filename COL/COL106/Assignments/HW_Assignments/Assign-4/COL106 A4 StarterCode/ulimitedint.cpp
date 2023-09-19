@@ -98,15 +98,80 @@ UnlimitedInt::~UnlimitedInt()
     delete[] unlimited_int;
 }
 
+UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in the curr unlimited_int, not the way done here
+{
+    if (i1->get_sign() == -1 and i2->get_sign() == 1)
+    {
+        // part 1
+    }
+    else if (i2->get_sign() == -1 and i2->get_sign() == 1)
+    {
+        // part 2
+    }
+    else if (i1->get_sign() == -1 and i2->get_sign() == -1)
+    {
+        // part 3
+    }
+    else
+    {
+        // part 4
+    }
+}
 
+UnlimitedInt *UnlimitedInt::sub(UnlimitedInt *i1, UnlimitedInt *i2)
+{
+    i2->sign = -1;
+    unlimited_int = (i1, i2);
+    return unlimited_int;
+}
+
+UnlimitedInt *UnlimitedInt::mul(UnlimitedInt *i1, UnlimitedInt *i2)
+{
+    if ((i1->get_sign() == -1 and i2->get_sign() == 1) or (i1->get_sign() == 1 and i2->get_sign() == -1))
+    {
+        // part 1
+    }
+    else
+    {
+        // part 2
+    }
+}
+
+UnlimitedInt *UnlimitedInt::div(UnlimitedInt *i1, UnlimitedInt *i2)
+{
+    // no idea about this one
+}
+
+UnlimitedInt *UnlimitedInt::mod(UnlimitedInt *i1, UnlimitedInt *i2)
+{
+    // again no idea about this one
+}
+
+string UnlimitedInt::to_string()
+{
+    string result = "";
+    if (sign = -1)
+    {
+        result.append("-");
+    }
+    for (int i = 0; i < size; i++)
+    {
+        result.append(unlimited_int[i]);
+    }
+    return result;
+}
 
 int main()
 {
     UnlimitedInt *num_str = new UnlimitedInt("-1234567812345678");
-    UnlimitedInt *num_int = new UnlimitedInt(12345678);
+    // UnlimitedInt *num_int = new UnlimitedInt(12345678);
     cout << num_str->get_size() << endl;
     cout << num_str->get_sign() << endl;
-    cout << num_int->get_size() << endl;
-    cout << num_int->get_sign() << endl;
+    // cout << num_int->get_size() << endl;
+    // cout << num_int->get_sign() << endl;
+    UnlimitedInt *num_str_1 = new UnlimitedInt("1234567812345678");
+
+    num_str->add(num_str, num_str_1);
+    cout << num_str->get_sign() << endl;
     return EXIT_SUCCESS;
 }
