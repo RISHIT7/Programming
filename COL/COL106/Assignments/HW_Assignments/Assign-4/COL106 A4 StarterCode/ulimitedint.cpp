@@ -7,6 +7,15 @@ using namespace std;
 
 int isGreater(UnlimitedInt *n1, UnlimitedInt *n2)
 {
+    if (n1->get_size() > n2->get_size())
+    {
+        return 1; // greater than
+    }
+    else if (n1->get_size() < n2->get_size())
+    {
+        return 0; // less than
+    }
+
     int *n1_u = n1->get_array();
     int *n2_u = n2->get_array();
     for (int i = 0; i < n1->get_size(); i++)
@@ -140,16 +149,18 @@ UnlimitedInt::~UnlimitedInt()
 UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in the curr unlimited_int, not the way done her, leading zeros not handled, and hence size and capacity can be wrong
 {
     UnlimitedInt *i_2 = new UnlimitedInt(i2->get_array(), i2->get_capacity(), i2->get_sign(), i2->get_size());
+    UnlimitedInt *i_1 = new UnlimitedInt(i1->get_array(), i1->get_capacity(), i1->get_sign(), i1->get_size());
     UnlimitedInt *new_n = new UnlimitedInt();
-    if (i1->get_sign() == -1 and i_2->get_sign() == 1)
+    if (i_1->get_sign() == -1 and i_2->get_sign() == 1)
     {
 
         // perform subtraction
-        int i1_size = i1->get_size();
+        int i1_size = i_1->get_size();
         int i2_size = i_2->get_size();
 
         if (i1_size < i2_size)
         {
+            new_n->sign = 1;
             new_n->size = i2_size + 1;
             new_n->capacity = new_n->size;
             new_n->unlimited_int = new int[new_n->size];
@@ -163,52 +174,43 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
             {
                 new_n->unlimited_int[new_n->size - 1 - i] = temp[i2_size - i - 1];
             }
-            temp = i1->get_array();
-            for (int i = 0; i < i1_size; i++)
-            {
-                new_n->unlimited_int[new_n->size - i - 1] -= temp[i1_size - i - 1];
-                if (new_n->unlimited_int[new_n->size - i - 1] < 0)
-                {
-                    new_n->unlimited_int[new_n->size - i - 1] += 10;
-                    new_n->unlimited_int[new_n->size - i - 2] -= 1;
-                }
-            }
-            delete temp;
-
-            new_n->sign = 1;
-        }
-        else if (i1_size > i2_size)
-        {
-            new_n->size = i1_size + 1;
-            new_n->capacity = new_n->size;
-            new_n->unlimited_int = new int[new_n->size];
-            for (int i = 0; i < new_n->size; i++)
-            {
-                new_n->unlimited_int[i] = 0;
-            }
-
-            int *temp = i1->get_array();
-            for (int i = 0; i < i1_size; i++)
-            {
-                new_n->unlimited_int[new_n->size - 1 - i] = temp[i1_size - i - 1];
-            }
-            temp = i_2->get_array();
+            temp = i_1->get_array();
             for (int i = 0; i < i2_size; i++)
             {
-                new_n->unlimited_int[new_n->size - i - 1] -= temp[i2_size - i - 1];
-                if (new_n->unlimited_int[new_n->size - i - 1] < 0)
+
+                if (i < i1_size)
                 {
-                    new_n->unlimited_int[new_n->size - i - 1] += 10;
-                    new_n->unlimited_int[new_n->size - i - 2] -= 1;
+                    new_n->unlimited_int[new_n->size - i - 1] -= temp[i1_size - i - 1];
+                    if (new_n->unlimited_int[new_n->size - i - 1] < 0)
+                    {
+                        new_n->unlimited_int[new_n->size - i - 1] += 10;
+                        new_n->unlimited_int[new_n->size - i - 2] -= 1;
+                    }
+                }
+                else
+                {
+                    if (new_n->unlimited_int[new_n->size - i - 1] < 0 && new_n->size - i - 2 >= 0)
+                    {
+                        new_n->unlimited_int[new_n->size - i - 1] += 10;
+                        new_n->unlimited_int[new_n->size - i - 2] -= 1;
+                    }
                 }
             }
             delete temp;
-
-            new_n->sign = -1;
+        }
+        else if (i1_size > i2_size) // handle deletes
+        {
+            UnlimitedInt *Newi_2 = new UnlimitedInt(i2->get_array(), i2->get_capacity(), -1 * i2->get_sign(), i2->get_size());
+            UnlimitedInt *Newi_1 = new UnlimitedInt(i1->get_array(), i1->get_capacity(), -1 * i1->get_sign(), i1->get_size());
+            new_n = add(Newi_1, Newi_2);
+            delete Newi_1;
+            delete Newi_2;
+            new_n->sign *= -1;
+            return new_n;
         }
         else
         {
-            if (isGreater(i1, i_2) == -1)
+            if (isGreater(i_1, i_2) == -1)
             {
                 new_n->size = 1;
                 new_n->unlimited_int = new int[1];
@@ -216,36 +218,17 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
                 new_n->sign = 0;
                 new_n->capacity = 1;
             }
-            if (isGreater(i1, i_2) == 1)
+            if (isGreater(i_1, i_2) == 1)
             {
-                new_n->size = i1_size + 1;
-                new_n->capacity = new_n->size;
-                new_n->unlimited_int = new int[new_n->size];
-                for (int i = 0; i < new_n->size; i++)
-                {
-                    new_n->unlimited_int[i] = 0;
-                }
-
-                int *temp = i1->get_array();
-                for (int i = 0; i < i1_size; i++)
-                {
-                    new_n->unlimited_int[new_n->size - 1 - i] = temp[i1_size - i - 1];
-                }
-                temp = i_2->get_array();
-                for (int i = 0; i < i2_size; i++)
-                {
-                    new_n->unlimited_int[new_n->size - i - 1] -= temp[i2_size - i - 1];
-                    if (new_n->unlimited_int[new_n->size - i - 1] < 0)
-                    {
-                        new_n->unlimited_int[new_n->size - i - 1] += 10;
-                        new_n->unlimited_int[new_n->size - i - 2] -= 1;
-                    }
-                }
-                delete temp;
-
-                new_n->sign = -1;
+                UnlimitedInt *Newi_2 = new UnlimitedInt(i2->get_array(), i2->get_capacity(), -1 * i2->get_sign(), i2->get_size());
+                UnlimitedInt *Newi_1 = new UnlimitedInt(i1->get_array(), i1->get_capacity(), -1 * i1->get_sign(), i1->get_size());
+                new_n = add(Newi_1, Newi_2);
+                delete Newi_1;
+                delete Newi_2;
+                new_n->sign *= -1;
+                return new_n;
             }
-            if (isGreater(i1, i_2) == 0)
+            if (isGreater(i_1, i_2) == 0)
             {
                 new_n->size = i1_size + 1;
                 new_n->capacity = new_n->size;
@@ -260,14 +243,19 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
                 {
                     new_n->unlimited_int[new_n->size - 1 - i] = temp[i2_size - i - 1];
                 }
-                temp = i1->get_array();
+                temp = i_1->get_array();
                 for (int i = 0; i < i1_size; i++)
                 {
                     new_n->unlimited_int[new_n->size - i - 1] -= temp[i1_size - i - 1];
-                    if (new_n->unlimited_int[new_n->size - i - 1] < 0)
+                    if (new_n->unlimited_int[new_n->size - i - 1] < 0 && new_n->unlimited_int[new_n->size - i - 2] - 1 >= 0)
                     {
                         new_n->unlimited_int[new_n->size - i - 1] += 10;
                         new_n->unlimited_int[new_n->size - i - 2] -= 1;
+                    }
+                    else if (new_n->unlimited_int[new_n->size - i - 1] < 0)
+                    {
+                        new_n->unlimited_int[new_n->size - i - 1] *= -1;
+                        break;
                     }
                 }
                 delete temp;
@@ -276,20 +264,45 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
             }
         }
 
+        int i = 0;
+        while (new_n->unlimited_int[i] == 0)
+        {
+            i++;
+        }
+
+        if (i > 0)
+        {
+            new_n->size -= i;
+            if (new_n->size < 0)
+            {
+                new_n->size = 0;
+            }
+            new_n->capacity -= i;
+            int *new_arr = new int[new_n->size];
+            for (int j = 0; j < new_n->size; j++)
+            {
+                new_arr[j] = new_n->unlimited_int[j + i];
+            }
+
+            delete[] new_n->unlimited_int;
+
+            new_n->unlimited_int = new_arr;
+        }
+
         return new_n;
     }
-    else if (i1->get_sign() == 1 and i_2->get_sign() == -1)
+    else if (i_1->get_sign() == 1 and i_2->get_sign() == -1)
     {
-        return add(i_2, i1);
+        return add(i_2, i_1);
     }
-    else if (i1->get_sign() == -1 and i_2->get_sign() == -1)
+    else if (i_1->get_sign() == -1 and i_2->get_sign() == -1)
     {
 
         // part 3
         new_n->sign = -1;
 
         // perform addition
-        int i1_size = i1->get_size();
+        int i1_size = i_1->get_size();
         int i2_size = i_2->get_size();
 
         if (i1_size >= i2_size)
@@ -299,7 +312,7 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
             new_n->unlimited_int = new int[new_n->size];
             new_n->unlimited_int[0] = 0;
 
-            int *temp = i1->get_array();
+            int *temp = i_1->get_array();
             for (int i = 0; i < i1_size; i++)
             {
                 new_n->unlimited_int[i + 1] = temp[i];
@@ -329,7 +342,7 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
             {
                 new_n->unlimited_int[i + 1] = temp[i];
             }
-            temp = i1->get_array();
+            temp = i_1->get_array();
             for (int i = 0; i < i1_size; i++)
             {
                 new_n->unlimited_int[new_n->size - i - 1] += temp[i1_size - i - 1];
@@ -350,7 +363,7 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
         new_n->sign = 1;
 
         // perform addition
-        int i1_size = i1->get_size();
+        int i1_size = i_1->get_size();
         int i2_size = i_2->get_size();
 
         if (i1_size >= i2_size)
@@ -360,7 +373,7 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
             new_n->unlimited_int = new int[new_n->size];
             new_n->unlimited_int[0] = 0;
 
-            int *temp = i1->get_array();
+            int *temp = i_1->get_array();
             for (int i = 0; i < i1_size; i++)
             {
                 new_n->unlimited_int[i + 1] = temp[i];
@@ -396,7 +409,7 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
 
             delete temp;
 
-            temp = i1->get_array();
+            temp = i_1->get_array();
             for (int i = 0; i < i1_size; i++)
             {
                 new_n->unlimited_int[new_n->size - i - 1] += temp[i1_size - i - 1];
@@ -416,7 +429,8 @@ UnlimitedInt *UnlimitedInt::add(UnlimitedInt *i1, UnlimitedInt *i2) // store in 
 UnlimitedInt *UnlimitedInt::sub(UnlimitedInt *i1, UnlimitedInt *i2) // to be tested, also when the result is 0, sign <- 0, delete temp poiniterrs
 {
     UnlimitedInt *new_i2 = new UnlimitedInt(i2->unlimited_int, i2->capacity, -1 * i2->sign, i2->size);
-    UnlimitedInt *new_n = add(i1, new_i2);
+    UnlimitedInt *new_i1 = new UnlimitedInt(i1->unlimited_int, i1->capacity, i1->sign, i1->size);
+    UnlimitedInt *new_n = add(new_i1, new_i2);
     return new_n;
 }
 
@@ -507,26 +521,37 @@ UnlimitedInt *UnlimitedInt::mul(UnlimitedInt *i1, UnlimitedInt *i2) // bt regard
 
 UnlimitedInt *UnlimitedInt::div(UnlimitedInt *i1, UnlimitedInt *i2) // change everything here
 {
+    UnlimitedInt *one = new UnlimitedInt(1);
+    if (isGreater(i2, i1) == 1)
+    {
+        UnlimitedInt *zero = new UnlimitedInt(0);
+        return zero;
+    }
+    else if (isGreater(i2, i1) == -1)
+    {
+        UnlimitedInt *result = one;
+        result->sign = (i1->get_sign() * i2->get_sign());
+        return result;
+    }
     UnlimitedInt *result = new UnlimitedInt();
     UnlimitedInt *dividend = new UnlimitedInt(i1->unlimited_int, i1->capacity, 1, i1->size);
     UnlimitedInt *divisor = new UnlimitedInt(i2->unlimited_int, i2->capacity, 1, i2->size);
-    UnlimitedInt *t_rex = new UnlimitedInt();
-    UnlimitedInt *one = new UnlimitedInt(1);
+    // UnlimitedInt *t_rex = new UnlimitedInt();
 
     while (sub(dividend, divisor)->sign > 0)
     {
-        cout << "a" << endl;
-        t_rex = sub(dividend, divisor);
-        dividend = new UnlimitedInt(t_rex->unlimited_int, t_rex->capacity, t_rex->sign, t_rex->size);
+        // t_rex = sub(dividend, divisor);
+        // dividend = new UnlimitedInt(t_rex->unlimited_int, t_rex->capacity, t_rex->sign, t_rex->size);
+        dividend = sub(dividend, divisor);
+        result = add(result, one);
+    }
+
+    if ((i1->sign) * (i2->sign) == -1 && sub(dividend, divisor)->sign == -1)
+    {
         result = add(result, one);
     }
 
     if (sub(dividend, divisor)->sign == 0)
-    {
-        result = add(result, one);
-    }
-
-    if (sub(dividend, divisor)->sign == -1 && (i1->sign) * (i2->sign) == -1)
     {
         result = add(result, one);
     }
@@ -565,110 +590,4 @@ string UnlimitedInt::to_string()
         result.insert(result.begin(), '-');
     }
     return result;
-}
-
-int main()
-{
-    // UnlimitedInt *num_str = new UnlimitedInt("55555");
-
-    // for (int i = 0; i < num_str->get_size(); i++)
-    // {
-    //     cout << num_str->get_array()[i] << " ";
-    // }
-    // cout << endl;
-
-    // UnlimitedInt *num_int = new UnlimitedInt(12345678);
-    // cout << num_str->get_size() << endl;
-    // cout << num_str->get_sign() << endl;
-    // cout << num_int->get_size() << endl;
-    // cout << num_int->get_sign() << endl;
-    // UnlimitedInt *num_str_1 = new UnlimitedInt("-66666");
-
-    UnlimitedInt *n2 = new UnlimitedInt("50");
-    UnlimitedInt *n1 = new UnlimitedInt(-222);
-
-    UnlimitedInt *added = n1->add(n1, n2);
-    cout << added->to_string() << endl;
-
-    added = n1->add(added, n2);
-    cout << added->to_string() << endl;
-    added = n1->add(added, n2);
-    cout << added->to_string() << endl;
-    added = n1->add(added, n2);
-    cout << added->to_string() << endl;
-    added = n1->add(added, n2);
-    for (int i = 0; i < added->get_size(); i++)
-    {
-        cout << added->get_array()[i] << " ";
-    }
-    cout << endl;
-
-    cout << added->to_string() << endl; // trim the zeros
-
-    // UnlimitedInt *sub = n1->sub(n1, n2);
-
-    // for (int i = 0; i < n1->get_size(); i++)
-    // {
-    //     cout << n1->get_array()[i] << " ";
-    // }
-    // cout << endl;
-    // for (int i = 0; i < n2->get_size(); i++)
-    // {
-    //     cout << n2->get_array()[i] << " ";
-    // }
-    // cout << endl;
-
-    // UnlimitedInt *added = n1->add(n1, n2);
-
-    // n2 = new UnlimitedInt("50");
-    // n1 = new UnlimitedInt(222);
-
-    // for (int i = 0; i < n1->get_size(); i++)
-    // {
-    //     cout << n1->get_array()[i] << " ";
-    // }
-    // cout << endl;
-    // for (int i = 0; i < n2->get_size(); i++)
-    // {
-    //     cout << n2->get_array()[i] << " ";
-    // }
-    // cout << endl;
-
-    // UnlimitedInt *mul = n1->mul(n1, n2);
-
-    // n2 = new UnlimitedInt("50");
-    // n1 = new UnlimitedInt(222);
-
-    // for (int i = 0; i < n1->get_size(); i++)
-    // {
-    //     cout << n1->get_array()[i] << " ";
-    // }
-    // cout << endl;
-    // for (int i = 0; i < n2->get_size(); i++)
-    // {
-    //     cout << n2->get_array()[i] << " ";
-    // }
-    // cout << endl;
-
-    // UnlimitedInt *div = n1->div(n1, n2);
-
-    // n2 = new UnlimitedInt("50");
-    // n1 = new UnlimitedInt(222);
-
-    // for (int i = 0; i < n1->get_size(); i++)
-    // {
-    //     cout << n1->get_array()[i] << " ";
-    // }
-    // cout << endl;
-    // for (int i = 0; i < n2->get_size(); i++)
-    // {
-    //     cout << n2->get_array()[i] << " ";
-    // }
-    // cout << endl;
-
-    // cout << added->to_string() << endl;
-    // cout << mul->to_string() << endl;
-    // cout << sub->to_string() << endl;
-    // cout << div->to_string() << endl;
-    return EXIT_SUCCESS;
 }
