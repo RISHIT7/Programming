@@ -13,4 +13,5 @@ public:
     SymEntry();
     SymEntry(string k, UnlimitedRational* v);
     
+    ~SymEntry();
 };

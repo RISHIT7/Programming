@@ -1,9 +1,8 @@
 /* Do NOT add/remove any includes statements from this header file */
 /* unless EXPLICTLY clarified on Piazza. */
+
 // to be handled, cases with 0 sign values, when the output is 0
 #include "ulimitedint.h"
-#include <iostream>
-using namespace std;
 
 int isGreater(UnlimitedInt *n1, UnlimitedInt *n2)
 {
@@ -475,6 +474,31 @@ UnlimitedInt *UnlimitedInt::mul(UnlimitedInt *i1, UnlimitedInt *i2) // bt regard
             }
         }
 
+        int i = 0;
+        while (new_n->unlimited_int[i] == 0)
+        {
+            i++;
+        }
+
+        if (i > 0)
+        {
+            new_n->size -= i;
+            if (new_n->size < 0)
+            {
+                new_n->size = 0;
+            }
+            new_n->capacity -= i;
+            int *new_arr = new int[new_n->size];
+            for (int j = 0; j < new_n->size; j++)
+            {
+                new_arr[j] = new_n->unlimited_int[j + i];
+            }
+
+            delete[] new_n->unlimited_int;
+
+            new_n->unlimited_int = new_arr;
+        }
+
         return new_n;
     }
     else
@@ -515,17 +539,56 @@ UnlimitedInt *UnlimitedInt::mul(UnlimitedInt *i1, UnlimitedInt *i2) // bt regard
                 new_n->unlimited_int[i] %= 10;
             }
         }
+
+        int i = 0;
+        while (new_n->unlimited_int[i] == 0)
+        {
+            i++;
+        }
+
+        if (i > 0)
+        {
+            new_n->size -= i;
+            if (new_n->size < 0)
+            {
+                new_n->size = 0;
+            }
+            new_n->capacity -= i;
+            int *new_arr = new int[new_n->size];
+            for (int j = 0; j < new_n->size; j++)
+            {
+                new_arr[j] = new_n->unlimited_int[j + i];
+            }
+
+            delete[] new_n->unlimited_int;
+
+            new_n->unlimited_int = new_arr;
+        }
+
         return new_n;
     }
 }
 
 UnlimitedInt *UnlimitedInt::div(UnlimitedInt *i1, UnlimitedInt *i2) // change everything here
 {
-    UnlimitedInt *one = new UnlimitedInt(1);
-    if (isGreater(i2, i1) == 1)
+    if (i1->get_sign() == 0 && i2->get_sign() == 0)
     {
         UnlimitedInt *zero = new UnlimitedInt(0);
         return zero;
+    }
+    UnlimitedInt *one = new UnlimitedInt(1);
+    if (isGreater(i2, i1) == 1)
+    {
+        if ((i1->get_sign()) * (i2->get_sign()) != -1)
+        {
+            UnlimitedInt *zero = new UnlimitedInt(0);
+            return zero;
+        }
+        else
+        {
+            UnlimitedInt *minus_one = new UnlimitedInt(-1);
+            return minus_one;
+        }
     }
     else if (isGreater(i2, i1) == -1)
     {
@@ -562,7 +625,20 @@ UnlimitedInt *UnlimitedInt::div(UnlimitedInt *i1, UnlimitedInt *i2) // change ev
 
 UnlimitedInt *UnlimitedInt::mod(UnlimitedInt *i1, UnlimitedInt *i2)
 {
-    // again no idea about this one
+    // i1 = div*i2 + mod
+    UnlimitedInt *i_1 = new UnlimitedInt(i1->get_array(), i1->get_capacity(), i1->get_sign(), i1->get_size());
+    UnlimitedInt *i_2 = new UnlimitedInt(i2->get_array(), i2->get_capacity(), i2->get_sign(), i2->get_size());
+
+    UnlimitedInt *divided = div(i_1, i_2);
+    UnlimitedInt *temp = mul(divided, i_2);
+    UnlimitedInt *mod = sub(i_1, temp); // 5, 4
+
+    delete i_1;
+    delete i_2;
+    delete divided;
+    delete temp;
+
+    return mod;
 }
 
 string UnlimitedInt::to_string()
