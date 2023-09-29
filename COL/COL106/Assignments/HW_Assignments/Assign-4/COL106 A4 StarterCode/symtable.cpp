@@ -1,8 +1,6 @@
 /* Do NOT add/remove any includes statements from this header file */
 /* unless EXPLICTLY clarified on Piazza. */
 #include "symtable.h"
-#include <iostream>
-using namespace std;
 
 SymEntry *insert_node(SymEntry *node, string k, UnlimitedRational *v)
 {
