@@ -3,6 +3,8 @@
 #include "symtable.h"
 #include <vector>
 
+
+
 class Evaluator {
 public:
     vector<ExprTreeNode*> expr_trees;
@@ -23,5 +25,3 @@ public:
     // for a tree
     // Also populate the symbol tables
     void eval();
-
-};

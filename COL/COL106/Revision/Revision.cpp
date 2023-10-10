@@ -31,105 +31,152 @@ using namespace std;
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
 #include <iostream>
+#include <string>
+#include <vector>
 
-// Function to perform floor division of two number arrays
-void floorDivision(int num1[], int len1, int num2[], int len2, int result[], int &resultLen)
+using namespace std;
+
+// Define a TreeNode structure for the expression tree
+struct TreeNode
 {
-    int carry = 0;
-    int i = 0;
-    int j = 0, k  = 0; // Initialize j to 0
+    string value;
+    TreeNode *left;
+    TreeNode *right;
 
-    // Check if the divisor is zero
-    if (len2 == 1 && num2[0] == 0)
+    TreeNode(const string &val) : value(val), left(nullptr), right(nullptr) {}
+};
+
+// Function to check if a character is an operator
+bool isOperator(char c)
+{
+    return c == '+' || c == '-' || c == '*' || c == '/';
+}
+
+// Function to build the expression tree
+TreeNode *buildExpressionTree(const string &expression)
+{
+    vector<TreeNode *> nodeStack;
+    vector<char> operatorStack;
+
+    for (char c : expression)
     {
-        std::cout << "Division by zero is not allowed." << std::endl;
-        resultLen = 0;
-        return;
+        if (c == '(')
+        {
+            operatorStack.push_back(c);
+        }
+        else if (c == ')')
+        {
+            while (!operatorStack.empty() && operatorStack.back() != '(')
+            {
+                char op = operatorStack.back();
+                operatorStack.pop_back();
+
+                TreeNode *rightNode = nodeStack.back();
+                nodeStack.pop_back();
+                TreeNode *leftNode = nodeStack.back();
+                nodeStack.pop_back();
+
+                TreeNode *newNode = new TreeNode(string(1, op));
+                newNode->left = leftNode;
+                newNode->right = rightNode;
+                nodeStack.push_back(newNode);
+            }
+
+            if (!operatorStack.empty() && operatorStack.back() == '(')
+            {
+                operatorStack.pop_back();
+            }
+        }
+        else if (isOperator(c))
+        {
+            while (!operatorStack.empty() && operatorStack.back() != '(' &&
+                   ((c == '*' || c == '/') && (operatorStack.back() == '+' || operatorStack.back() == '-')))
+            {
+                char op = operatorStack.back();
+                operatorStack.pop_back();
+
+                TreeNode *rightNode = nodeStack.back();
+                nodeStack.pop_back();
+                TreeNode *leftNode = nodeStack.back();
+                nodeStack.pop_back();
+
+                TreeNode *newNode = new TreeNode(string(1, op));
+                newNode->left = leftNode;
+                newNode->right = rightNode;
+                nodeStack.push_back(newNode);
+            }
+            operatorStack.push_back(c);
+        }
+        else if (isalnum(c))
+        {
+            string operand = "";
+            int i = 0;
+            while (isalnum(c))
+            {
+                operand += c;
+                c = expression[++i];
+            }
+            nodeStack.push_back(new TreeNode(operand));
+        }
     }
 
-    // Remove leading zeros from the dividend
-    while (i < len1 && num1[i] == 0)
+    while (!operatorStack.empty())
     {
-        i++;
+        char op = operatorStack.back();
+        operatorStack.pop_back();
+
+        TreeNode *rightNode = nodeStack.back();
+        nodeStack.pop_back();
+        TreeNode *leftNode = nodeStack.back();
+        nodeStack.pop_back();
+
+        TreeNode *newNode = new TreeNode(string(1, op));
+        newNode->left = leftNode;
+        newNode->right = rightNode;
+        nodeStack.push_back(newNode);
     }
 
-    // Initialize the result array
-    resultLen = len1 - i;
-    for (int l = 0; l < resultLen; l++)
+    return nodeStack.back();
+}
+
+// Function to print the infix expression using parentheses
+void printInfix(TreeNode *root)
+{
+    if (root)
     {
-        result[l] = 0;
-    }
-
-    // Perform floor division
-    while (i < len1)
-    {
-        int currentDigit = num1[i] + carry * 10;
-
-        // Check if the divisor can be subtracted
-        if (j < len2 && currentDigit >= num2[j])
+        if (root->left || root->right)
         {
-            carry = currentDigit % num2[j];
-            currentDigit /= num2[j];
-            result[k++] = currentDigit; // Add the quotient to the result
+            cout << "(";
         }
-        else
+        printInfix(root->left);
+        cout << root->value;
+        printInfix(root->right);
+        if (root->left || root->right)
         {
-            // Append a zero to the result
-            result[k++] = 0; // Add a zero to the result
-            carry = currentDigit;
+            cout << ")";
         }
-
-        i++;
-        if (j < len2)
-        {
-            j++; // Increment j if it's within bounds
-        }
-        else
-        {
-            // Reset j to 0 if it goes beyond the bounds of num2
-            j = 0;
-        }
-    }
-
-    // Remove leading zeros from the result
-    while (resultLen > 0 && result[0] == 0)
-    {
-        for (int l = 0; l < resultLen - 1; l++)
-        {
-            result[l] = result[l + 1];
-        }
-        resultLen--;
     }
 }
 
-// Function to print an array of digits
-void printArray(int arr[], int len)
+void printPostfix(TreeNode *root)
 {
-    for (int i = 0; i < len; i++)
+    if (root == nullptr)
     {
-        std::cout << arr[i];
+        return;
     }
-    std::cout << std::endl;
+    printPostfix(root->left);
+    printPostfix(root->right);
+    cout << root->value << " ";
 }
 
 int main()
 {
-    // Define the arrays representing the numbers
-    int num1[] = {4, 0, 2, 8, 0};
-    int len1 = 5;
-    int num2[] = {4, 1};
-    int len2 = 2;
+    string expression = "((((a/b))*c)+q)";
+    TreeNode *root = buildExpressionTree(expression);
 
-    // Initialize the result array
-    int result[100]; // You can adjust the size as needed
-    int resultLen = 0;
-
-    // Perform floor division
-    floorDivision(num1, len1, num2, len2, result, resultLen);
-
-    // Output the result
-    std::cout << "Floor division result: ";
-    printArray(result, resultLen);
+    cout << "Infix Expression: ";
+    printPostfix(root);
+    cout << endl;
 
     return 0;
 }
