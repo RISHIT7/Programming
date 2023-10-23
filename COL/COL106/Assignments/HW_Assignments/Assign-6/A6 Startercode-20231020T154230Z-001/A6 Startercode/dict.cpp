@@ -153,23 +153,23 @@ void Dict::dump_dictionary(string filename)
     return;
 }
 
-int main()
-{
-    Dict test;
-    test.insert_sentence(102, 2, 1, 4, "I am happy.");
-    test.insert_sentence(10,2,1,4,"I am happy.");
-    test.insert_sentence(12,2,1,4,"I am happy.");
-    test.insert_sentence(1002,2,1,4,"I am happy.");
-    test.insert_sentence(1022,2,1,4,"I am happy.");
-    test.insert_sentence(1025,2,1,4,"I am happy.");
-    test.insert_sentence(122,2,1,4,"I am happy.");
-    test.insert_sentence(102,2,21,4,"I am happy.");
-    test.insert_sentence(192,2,1,4,"I am happy.");
-    test.insert_sentence(172,2,1,4,"I am happy.");
-    test.insert_sentence(1009,2,1,4,"I am happy.");
-    test.insert_sentence(102,2,11,4,"I am happy.");
-    test.insert_sentence(102,3,2,4,"I am happy.");
-    test.insert_sentence(102,1,4,4,"I am happy.");
-    cout << test.get_word_count("happy") << endl;
-    return 0;
-}
+// int main()
+// {
+//     Dict test;
+//     test.insert_sentence(102, 2, 1, 4, "I am happy.");
+//     test.insert_sentence(10,2,1,4,"I am happy.");
+//     test.insert_sentence(12,2,1,4,"I am happy.");
+//     test.insert_sentence(1002,2,1,4,"I am happy.");
+//     test.insert_sentence(1022,2,1,4,"I am happy.");
+//     test.insert_sentence(1025,2,1,4,"I am happy.");
+//     test.insert_sentence(122,2,1,4,"I am happy.");
+//     test.insert_sentence(102,2,21,4,"I am happy.");
+//     test.insert_sentence(192,2,1,4,"I am happy.");
+//     test.insert_sentence(172,2,1,4,"I am happy.");
+//     test.insert_sentence(1009,2,1,4,"I am happy.");
+//     test.insert_sentence(102,2,11,4,"I am happy.");
+//     test.insert_sentence(102,3,2,4,"I am happy.");
+//     test.insert_sentence(102,1,4,4,"I am happy.");
+//     cout << test.get_word_count("happy") << endl;
+//     return 0;
+// }
