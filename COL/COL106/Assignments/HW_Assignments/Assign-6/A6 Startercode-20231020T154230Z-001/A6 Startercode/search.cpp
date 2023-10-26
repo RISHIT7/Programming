@@ -59,7 +59,9 @@ vector<int> KMPSearch(string pat, string txt)
 
         if (j == M)
         {
-            printf("Found pattern at index %d\n", i - j);
+            printf("Found pattern at index %d\n", i - j); // to be removed
+            cout << "In the sentence\n\n"
+                 << txt << "\n\n";
             offset.push_back(i - j);
             j = lps[j - 1];
         }
@@ -126,10 +128,10 @@ void SearchEngine::insert_sentence(int book_code, int page, int paragraph, int s
     return;
 }
 
-Node *SearchEngine::search(string pattern, int &n_matches)
+Node *SearchEngine::search(string pattern, int &n_matches) // check for memory leaks
 {
     // Implement your function here
-    Node *nextnode = new Node(); // here
+    Node *nextnode = NULL; // here
     for (int i = 0; i < pattern.size(); i++)
     {
         if (pattern[i] >= 'A' and pattern[i] <= 'Z')
@@ -155,31 +157,38 @@ Node *SearchEngine::search(string pattern, int &n_matches)
             if (offsets.size() == 0)
             {
                 // pattern does not match
+                continue;
             }
             else
             {
                 // pattern matches
                 for (int i = 0; i < offsets.size(); i++)
                 {
-                    Node *new_node = new Node(sdi.first.book_code, sdi.first.page, sdi.first.paragraph, sdi.first.sentence_no, offsets[i]);
-                    new_node->right = nextnode;
-                    nextnode = new_node;
+                    // Node *new_node = new Node(sdi.first.book_code, sdi.first.page, sdi.first.paragraph, sdi.first.sentence_no, offsets[i]);
+                    // new_node->right = nextnode;
+                    // nextnode = new_node;
                 }
             }
-            /* for(int j = 0; j < b-a+1 ;j++){
-                string current = curr_sen.substr(j,j+a-1);
-                int hash1=hash_val(current);
-                if(hash!=hash1){
-                    continue;
-                }else{
-                    if(isequal(current,pattern)){
-                        Node* ans = new Node(sdi.first.book_code,sdi.first.page,sdi.first.paragraph,sdi.first.sentence_no,j);
-                        ans->right = nextnode;//here
-                        nextnode = ans;//here
-                    }
-                }
-            } */
         }
     }
-    return nullptr; // here
+    return nextnode; // here
+}
+
+int main()
+{
+    SearchEngine *choogle = new SearchEngine();
+    choogle->insert_sentence(2, 3, 4, 5, "I am who I am");
+    choogle->insert_sentence(2, 3, 4, 6, "I alskdjf aad fad");
+    choogle->insert_sentence(2, 3, 4, 7, "I kjlf ashd flsd fad adf");
+    choogle->insert_sentence(2, 3, 4, 8, "I  sdfla ldfas ddfja sld");
+    choogle->insert_sentence(2, 3, 4, 9, "I s hdkfka lf fladf asfd I s hdkfka lf fladf asfd");
+    choogle->insert_sentence(2, 3, 4, 873, "I s hdkfka lf fladf asfd hdkfka lf fladf asfd");
+    choogle->insert_sentence(2, 3, 4, 10, "I a sdfh asfhf asffa sd");
+    choogle->insert_sentence(2, 3, 4, 11, "I alksd fka fkd a df f");
+    choogle->insert_sentence(2, 3, 4, 12, "I kasd hfkah fd kha df f");
+
+    int matches = 0;
+    choogle->search("kfka lf fl", matches);
+
+    return 0;
 }
