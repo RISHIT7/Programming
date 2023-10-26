@@ -158,19 +158,3 @@ void Dict::dump_dictionary(string filename)
     output.close();
     return;
 }
-
-// int main()
-// {
-//     Dict *dictionary = new Dict();
-//     dictionary->insert_sentence(2, 1, 3, 4, "22");
-//     dictionary->insert_sentence(2, 1, 3, 5, "22");
-//     dictionary->insert_sentence(2, 1, 3, 6, "22");
-//     dictionary->insert_sentence(2, 1, 3, 7, "25");
-//     dictionary->insert_sentence(2, 1, 3, 8, "225");
-//     dictionary->insert_sentence(2, 1, 3, 9, "22345");
-//     dictionary->insert_sentence(2, 1, 3, 10, " 26th ");
-//     dictionary->insert_sentence(2, 1, 3, 11, "22abv");
-//     dictionary->insert_sentence(2, 1, 3, 12, "22 abv");
-//     dictionary->dump_dictionary("count.txt");
-//     return 0;
-// }

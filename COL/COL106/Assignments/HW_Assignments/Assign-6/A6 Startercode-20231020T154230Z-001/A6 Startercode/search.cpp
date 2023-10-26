@@ -47,7 +47,8 @@ void SearchEngine::insert_sentence(int book_code, int page, int paragraph, int s
         }
     }
 
-    sent curr(sentence, book_code, page, paragraph, sentence_no);
+    word_instance curr;
+    curr.add_instance(sentence, book_code, page, paragraph, sentence_no);
     int l = sentence.size();
     sd.push_back({curr, l});
     return;
@@ -65,31 +66,38 @@ Node *SearchEngine::search(string pattern, int &n_matches)
         }
     }
     int a = pattern.size();
-    int hash = hash_val(pattern);
-    for (auto sdi : sd)
-    {
-        int b = sdi.second;
-        string curr_sen = sdi.first.s;
-        if (a > b)
-        {
-            continue;
-        }
-        else
-        {
-            /* for(int j = 0; j < b-a+1 ;j++){
-                string current = curr_sen.substr(j,j+a-1);
-                int hash1=hash_val(current);
-                if(hash!=hash1){
-                    continue;
-                }else{
-                    if(isequal(current,pattern)){
-                        Node* ans = new Node(sdi.first.book_code,sdi.first.page,sdi.first.paragraph,sdi.first.sentence_no,j);
-                        ans->right = nextnode;//here
-                        nextnode = ans;//here
-                    }
-                }
-            } */
-        }
-    }
-    return nullptr; // here
+
+    // int hash = hash_val(pattern);
+
+    // for (auto sdi : sd)
+    // {
+    //     int b = sdi.second;
+    //     string curr_sen = sdi.first.s;
+    //     if (a > b)
+    //     {
+    //         continue;
+    //     }
+    //     else
+    //     {
+    //         for (int j = 0; j < b - a + 1; j++)
+    //         {
+    //             string current = curr_sen.substr(j, j + a - 1);
+    //             int hash1 = hash_val(current);
+    //             if (hash != hash1)
+    //             {
+    //                 continue;
+    //             }
+    //             else
+    //             {
+    //                 if (isequal(current, pattern))
+    //                 {
+    //                     Node *ans = new Node(sdi.first.book_code, sdi.first.page, sdi.first.paragraph, sdi.first.sentence_no, j);
+    //                     ans->right = nextnode; // here
+    //                     nextnode = ans;        // here
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    // return nullptr; // here
 }
