@@ -1,16 +1,23 @@
-// Do NOT add any other includes
 #include "dict.h"
-#include <iostream>
+
 #define SIZE 300023
+
+string separators = " .,-:!\"\'()?—[]“”‘’˙;@";
+bool is_separator(char c)
+{
+    for (char ch : separators)
+    {
+        if (ch == c)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 char to_lower(char c)
 {
     return c - 'A' + 'a';
-}
-
-char to_upper(char c)
-{
-    return c + 'A' - 'a';
 }
 
 int hash_val(string id)
@@ -30,30 +37,29 @@ int hash_val(string id)
 
 Dict::Dict()
 {
-    words_HashTable.resize(SIZE);
+    words_HashTable = new vector<pair<string, word_instance>>[SIZE];
 }
 
 Dict::~Dict()
 {
     // Implement your function here
+    delete[] words_HashTable;
 }
 
 void Dict::insert_sentence(int book_code, int page, int paragraph, int sentence_no, string sentence)
 {
     // Implement your function here
     int i = 0;
-    int cnt = 0;
     while (i < sentence.size())
     {
         string temp = "";
-        if (sentence[i] == ' ' or sentence[i] == '.')
+        if (is_separator(sentence[i]))
         {
             i++;
         }
         else
         {
-            cnt = i;
-            while (sentence[i] != ' ' and sentence[i] != '.')
+            while (!is_separator(sentence[i]) and i < sentence.size())
             {
                 if (sentence[i] >= 'A' and sentence[i] <= 'Z')
                 {
@@ -66,6 +72,7 @@ void Dict::insert_sentence(int book_code, int page, int paragraph, int sentence_
         if (temp != "")
         {
             int hash = hash_val(temp);
+
             bool flag = false; // to check if the word if present
 
             for (int j = 0; j < words_HashTable[hash].size(); j++)
@@ -73,7 +80,7 @@ void Dict::insert_sentence(int book_code, int page, int paragraph, int sentence_
                 if (words_HashTable[hash][j].first == temp)
                 {
                     // word is present
-                    words_HashTable[hash][j].second.add_instance(book_code, page, paragraph, sentence_no, cnt);
+                    words_HashTable[hash][j].second.add_instance(book_code, page, paragraph, sentence_no);
                     flag = true;
                 }
             }
@@ -82,7 +89,7 @@ void Dict::insert_sentence(int book_code, int page, int paragraph, int sentence_
                 // word isn't present
                 // create and insert
                 word_instance curr;
-                curr.add_instance(book_code, page, paragraph, sentence_no, cnt);
+                curr.add_instance(book_code, page, paragraph, sentence_no);
                 words_HashTable[hash].push_back({temp, curr});
 
                 // insert in sorted data structure
@@ -113,7 +120,6 @@ void Dict::insert_sentence(int book_code, int page, int paragraph, int sentence_
             }
         }
     }
-
     return;
 }
 
@@ -134,7 +140,7 @@ int Dict::get_word_count(string word)
         if (words_HashTable[hash][j].first == word)
         {
             // word is present
-            return words_HashTable[hash][j].second.offset.size();
+            return words_HashTable[hash][j].second.book_id.size();
         }
     }
     return -1;
@@ -155,21 +161,16 @@ void Dict::dump_dictionary(string filename)
 
 // int main()
 // {
-//     Dict test;
-//     test.insert_sentence(102, 2, 1, 4, "I am happy.");
-//     test.insert_sentence(10,2,1,4,"I am happy.");
-//     test.insert_sentence(12,2,1,4,"I am happy.");
-//     test.insert_sentence(1002,2,1,4,"I am happy.");
-//     test.insert_sentence(1022,2,1,4,"I am happy.");
-//     test.insert_sentence(1025,2,1,4,"I am happy.");
-//     test.insert_sentence(122,2,1,4,"I am happy.");
-//     test.insert_sentence(102,2,21,4,"I am happy.");
-//     test.insert_sentence(192,2,1,4,"I am happy.");
-//     test.insert_sentence(172,2,1,4,"I am happy.");
-//     test.insert_sentence(1009,2,1,4,"I am happy.");
-//     test.insert_sentence(102,2,11,4,"I am happy.");
-//     test.insert_sentence(102,3,2,4,"I am happy.");
-//     test.insert_sentence(102,1,4,4,"I am happy.");
-//     cout << test.get_word_count("happy") << endl;
+//     Dict *dictionary = new Dict();
+//     dictionary->insert_sentence(2, 1, 3, 4, "22");
+//     dictionary->insert_sentence(2, 1, 3, 5, "22");
+//     dictionary->insert_sentence(2, 1, 3, 6, "22");
+//     dictionary->insert_sentence(2, 1, 3, 7, "25");
+//     dictionary->insert_sentence(2, 1, 3, 8, "225");
+//     dictionary->insert_sentence(2, 1, 3, 9, "22345");
+//     dictionary->insert_sentence(2, 1, 3, 10, " 26th ");
+//     dictionary->insert_sentence(2, 1, 3, 11, "22abv");
+//     dictionary->insert_sentence(2, 1, 3, 12, "22 abv");
+//     dictionary->dump_dictionary("count.txt");
 //     return 0;
 // }
