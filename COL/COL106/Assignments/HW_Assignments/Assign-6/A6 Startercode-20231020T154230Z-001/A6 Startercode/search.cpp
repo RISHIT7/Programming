@@ -141,8 +141,6 @@ Node *SearchEngine::search(string pattern, int &n_matches) // check for memory l
     }
     int a = pattern.size();
 
-    // int hash = hash_val(pattern);
-
     for (auto sdi : sd)
     {
         int b = sdi.second;
