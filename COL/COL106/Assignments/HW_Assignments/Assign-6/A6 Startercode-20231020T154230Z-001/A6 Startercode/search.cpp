@@ -84,7 +84,8 @@ char to_lower(char c)
 
 SearchEngine::SearchEngine()
 {
-    sd = new sent[2000000];
+    sd = new sent[4];
+    tot_size = 2;
     curr_size = 0;
 }
 
@@ -102,6 +103,22 @@ void SearchEngine::insert_sentence(int book_code, int page, int paragraph, int s
         {
             sentence[i] = to_lower(sentence[i]);
         }
+    }
+
+    if (curr_size >= tot_size - 1)
+    {
+        tot_size *= 2;
+        sent *temp = new sent[tot_size];
+
+        for (int i = 0; i < curr_size; i++)
+        {
+            sent t_sent = sd[i];
+            temp[i] = t_sent;
+        }
+
+        delete[] sd;
+
+        sd = temp;
     }
 
     sent curr(sentence, book_code, page, paragraph, sentence_no);

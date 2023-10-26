@@ -108,3 +108,23 @@ signed main()
     KMPSearch(query, sentence);
     return 0;
 }
+
+int main()
+{
+    SearchEngine *choogle = new SearchEngine();
+
+    choogle->insert_sentence(2, 3, 4, 5, "I am who I am");
+    choogle->insert_sentence(2, 3, 4, 6, "I alskdjf aad fad");
+    choogle->insert_sentence(2, 3, 4, 7, "I kjlf ashd flsd fad adf");
+    choogle->insert_sentence(2, 3, 4, 8, "I  sdfla ldfas ddfja sld");
+    choogle->insert_sentence(2, 3, 4, 9, "I s hdkfka lf fladf asfd I s hdkfka lf fladf asfd");
+    choogle->insert_sentence(2, 3, 4, 873, "I s hdkfka lf fladf asfd hdkfka lf fladf asfd");
+    choogle->insert_sentence(2, 3, 4, 10, "I a sdfh asfhf asffa sd");
+    choogle->insert_sentence(2, 3, 4, 11, "I alksd fka fkd a df f");
+    choogle->insert_sentence(2, 3, 4, 12, "I kasd hfkah fd kha df f");
+
+    int matches = 0;
+    choogle->search("kfka lf fl", matches);
+
+    return 0;
+}
