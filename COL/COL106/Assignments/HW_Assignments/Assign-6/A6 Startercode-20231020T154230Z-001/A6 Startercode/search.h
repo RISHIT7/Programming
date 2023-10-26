@@ -9,27 +9,24 @@ class SearchEngine
 {
 private:
     // You can add attributes/helper functions here
-    class word_instance
+    class sent
     {
     public:
-        vector<int> book_id;
-        vector<int> page_no;
-        vector<int> paragraph_no;
-        vector<int> sent_no;
-        word_instance()
+        string s;
+        int book_code, page, paragraph, sentence_no;
+        sent(string s, int book_code, int page, int paragraph, int sentence_no)
         {
-        }
-
-        void add_instance(int b, int pg, int pgh, int snt)
-        {
-            book_id.push_back(b);
-            page_no.push_back(pg);
-            paragraph_no.push_back(pgh);
-            sent_no.push_back(snt);
+            this->book_code = book_code;
+            this->s = s;
+            this->page = page;
+            this->paragraph = paragraph;
+            this->sentence_no = sentence_no;
         }
     };
 
-    vector<pair<string, word_instance>> *words_HashTable;
+    vector<pair<sent, int>> sd;
+
+    Node *returnlist;
 
 public:
     /* Please do not touch the attributes and
