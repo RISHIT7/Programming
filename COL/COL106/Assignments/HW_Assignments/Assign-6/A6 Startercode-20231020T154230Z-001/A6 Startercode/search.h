@@ -1,35 +1,54 @@
 // Do NOT add any other includes
-#include <string>
+#include <string> 
 #include <vector>
 #include <iostream>
 #include "Node.h"
 using namespace std;
 
-class SearchEngine
-{
+class SearchEngine {
 private:
     // You can add attributes/helper functions here
-    class sent
-    {
+    class sent{
     public:
         string s;
-        int book_code, page, paragraph, sentence_no;
-        sent(string s, int book_code, int page, int paragraph, int sentence_no)
-        {
-            this->book_code = book_code;
-            this->s = s;
-            this->page = page;
-            this->paragraph = paragraph;
-            this->sentence_no = sentence_no;
+        int length;
+        int book_code,page,paragraph,sentence_no;
+        sent(){}
+        sent(string s,int book_code,int page,int paragraph,int sentence_no){
+            this->book_code=book_code;
+            this->s=s;
+            this->page=page;
+            this->paragraph=paragraph;
+            this->sentence_no=sentence_no;
+            length=s.size();
         }
     };
+    
+    sent* sd;
+    int curr_size; 
 
-    vector<pair<sent, int>> sd;
+    class list{
+    public:
+        Node* head;
+        list(){
+            head=NULL;
+        }
+        void insert_head(Node* n){
+            n->right=head;
+            if(head!=NULL){
+                head->left=n;
+            }
+            n->left=NULL;
+            head=n;
+        }
 
-    Node *returnlist;
-
-public:
-    /* Please do not touch the attributes and
+        ~list(){
+            
+            delete head;
+        }
+    };
+public: 
+    /* Please do not touch the attributes and 
     functions within the guard lines placed below  */
     /* ------------------------------------------- */
     SearchEngine();
@@ -38,7 +57,7 @@ public:
 
     void insert_sentence(int book_code, int page, int paragraph, int sentence_no, string sentence);
 
-    Node *search(string pattern, int &n_matches);
+    Node* search(string pattern, int& n_matches);
 
     /* -----------------------------------------*/
 };

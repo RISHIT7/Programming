@@ -1,8 +1,6 @@
 // Do NOT add any other includes
 #include "search.h"
 
-#define SIZE 300023;
-
 vector<int> computeLPSArray(string pat, int M, vector<int> lps)
 {
     int len = 0;
@@ -59,42 +57,25 @@ vector<int> KMPSearch(string pat, string txt)
 
         if (j == M)
         {
-            printf("Found pattern at index %d\n", i - j); // to be removed
-            cout << "In the sentence\n\n"
-                 << txt << "\n\n";
+
             offset.push_back(i - j);
             j = lps[j - 1];
         }
 
-        else if (i < N && pat[j] != txt[i])
+        else if (i < N and pat[j] != txt[i])
         {
             if (j != 0)
+            {
                 j = lps[j - 1];
+            }
             else
-                i = i + 1;
+            {
+                i++;
+            }
         }
     }
     return offset;
 }
-
-int hash_val(string id)
-{
-
-    int hashkey = 0;
-    int pow = 1;
-
-    for (char ch : id)
-    {
-        hashkey = (hashkey + ch * pow) % SIZE;
-        pow = (pow * 37) % SIZE;
-    }
-
-    return hashkey;
-}
-
-/* bool isequal(string x, string y){
-    return x==y;
-} */
 
 char to_lower(char c)
 {
@@ -103,12 +84,13 @@ char to_lower(char c)
 
 SearchEngine::SearchEngine()
 {
-    // Implement your function here
+    sd = new sent[2000000];
+    curr_size = 0;
 }
 
 SearchEngine::~SearchEngine()
 {
-    // Implement your function here
+    delete[] sd;
 }
 
 void SearchEngine::insert_sentence(int book_code, int page, int paragraph, int sentence_no, string sentence)
@@ -123,15 +105,16 @@ void SearchEngine::insert_sentence(int book_code, int page, int paragraph, int s
     }
 
     sent curr(sentence, book_code, page, paragraph, sentence_no);
-    int l = sentence.size();
-    sd.push_back({curr, l});
+    sd[curr_size] = curr;
+    curr_size++;
     return;
 }
 
 Node *SearchEngine::search(string pattern, int &n_matches) // check for memory leaks
 {
     // Implement your function here
-    Node *nextnode = NULL; // here
+    list return_list;
+
     for (int i = 0; i < pattern.size(); i++)
     {
         if (pattern[i] >= 'A' and pattern[i] <= 'Z')
@@ -141,10 +124,10 @@ Node *SearchEngine::search(string pattern, int &n_matches) // check for memory l
     }
     int a = pattern.size();
 
-    for (auto sdi : sd)
+    for (int i = 0; i < curr_size; i++)
     {
-        int b = sdi.second;
-        string curr_sen = sdi.first.s;
+        int b = sd[i].length;
+        string curr_sen = sd[i].s;
         if (a > b)
         {
             continue;
@@ -160,33 +143,14 @@ Node *SearchEngine::search(string pattern, int &n_matches) // check for memory l
             else
             {
                 // pattern matches
-                for (int i = 0; i < offsets.size(); i++)
+                for (int j = 0; j < offsets.size(); j++)
                 {
-                    // Node *new_node = new Node(sdi.first.book_code, sdi.first.page, sdi.first.paragraph, sdi.first.sentence_no, offsets[i]);
-                    // new_node->right = nextnode;
-                    // nextnode = new_node;
+                    Node *curr = new Node(sd[i].book_code, sd[i].page, sd[i].paragraph, sd[i].sentence_no, offsets[j]);
+                    return_list.insert_head(curr);
+                    n_matches++;
                 }
             }
         }
     }
-    return nextnode; // here
-}
-
-int main()
-{
-    SearchEngine *choogle = new SearchEngine();
-    choogle->insert_sentence(2, 3, 4, 5, "I am who I am");
-    choogle->insert_sentence(2, 3, 4, 6, "I alskdjf aad fad");
-    choogle->insert_sentence(2, 3, 4, 7, "I kjlf ashd flsd fad adf");
-    choogle->insert_sentence(2, 3, 4, 8, "I  sdfla ldfas ddfja sld");
-    choogle->insert_sentence(2, 3, 4, 9, "I s hdkfka lf fladf asfd I s hdkfka lf fladf asfd");
-    choogle->insert_sentence(2, 3, 4, 873, "I s hdkfka lf fladf asfd hdkfka lf fladf asfd");
-    choogle->insert_sentence(2, 3, 4, 10, "I a sdfh asfhf asffa sd");
-    choogle->insert_sentence(2, 3, 4, 11, "I alksd fka fkd a df f");
-    choogle->insert_sentence(2, 3, 4, 12, "I kasd hfkah fd kha df f");
-
-    int matches = 0;
-    choogle->search("kfka lf fl", matches);
-
-    return 0;
+    return return_list.head;
 }
