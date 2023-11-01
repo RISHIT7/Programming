@@ -16,3 +16,9 @@ tip: tip.o gd.o
 
 tip.o: tip.c gd.h
 	gcc tip.c -c
+
+# additional stuff
+clean:
+	rm -f *.o tip geom
+
+# -f means to force the removal of the files
