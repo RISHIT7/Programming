@@ -1,0 +1,1 @@
+double get_double(char* prompt, double max, double min);
