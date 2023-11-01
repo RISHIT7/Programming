@@ -1,8 +1,5 @@
 // Do NOT add any other includes
-#include <bits/stdc++.h>
 #include "search.h"
-
-#define FILENAME "mahatma-gandhi-collected-works-volume-1.txt"
 
 vector<int> computeLPSArray(string pat, int M, vector<int> lps)
 {
@@ -133,7 +130,7 @@ void SearchEngine::insert_sentence(int book_code, int page, int paragraph, int s
 Node *SearchEngine::search(string pattern, int &n_matches) // check for memory leaks
 {
     // Implement your function here
-    list return_list;
+    Node *head = NULL;
 
     for (int i = 0; i < pattern.size(); i++)
     {
@@ -166,81 +163,20 @@ Node *SearchEngine::search(string pattern, int &n_matches) // check for memory l
                 for (int j = 0; j < offsets.size(); j++)
                 {
                     Node *curr = new Node(sd[i].book_code, sd[i].page, sd[i].paragraph, sd[i].sentence_no, offsets[j]);
-                    return_list.insert_head(curr);
+                    if (head == NULL)
+                    {
+                        head = curr;
+                    }
+                    else
+                    {
+                        curr->right = head;
+                        head->left = curr;
+                        head = curr;
+                    }
                     n_matches++;
                 }
             }
         }
     }
-    return return_list.head;
-}
-
-int main()
-{
-    std::ifstream inputFile(FILENAME);
-
-    if (!inputFile.is_open())
-    {
-        std::cerr << "Error: Unable to open the input file." << std::endl;
-        return 1;
-    }
-
-    std::string tuple;
-    std::string sentence;
-
-    SearchEngine d;
-
-    while (std::getline(inputFile, tuple, ')') && std::getline(inputFile, sentence))
-    {
-        // Get a line in the sentence
-        tuple += ')';
-
-        std::vector<int> metadata;
-        std::istringstream iss(tuple);
-
-        // Temporary variables for parsing
-        std::string token;
-
-        // Ignore the first character (the opening parenthesis)
-        iss.ignore(1);
-
-        // Parse and convert the elements to integers
-        while (std::getline(iss, token, ','))
-        {
-            // Trim leading and trailing white spaces
-            size_t start = token.find_first_not_of(" ");
-            size_t end = token.find_last_not_of(" ");
-            if (start != std::string::npos && end != std::string::npos)
-            {
-                token = token.substr(start, end - start + 1);
-            }
-
-            // Check if the element is a number or a string
-            if (token[0] == '\'')
-            {
-                // Remove the single quotes and convert to integer
-                int num = std::stoi(token.substr(1, token.length() - 2));
-                metadata.push_back(num);
-            }
-            else
-            {
-                // Convert the element to integer
-                int num = std::stoi(token);
-                metadata.push_back(num);
-            }
-        }
-
-        // Now we have the string in sentence
-        // And the other info in metadata
-        // Add to the dictionary
-
-        // Insert in the dictionary
-        d.insert_sentence(metadata[0], metadata[1], metadata[2], metadata[3], sentence);
-    }
-
-    inputFile.close();
-
-
-
-    return 0;
+    return head;
 }

@@ -31,32 +31,6 @@ private:
     int curr_size;
     int tot_size;
 
-    class list
-    {
-    public:
-        Node *head;
-        list()
-        {
-            head = NULL;
-        }
-        void insert_head(Node *n)
-        {
-            n->right = head;
-            if (head != NULL)
-            {
-                head->left = n;
-            }
-            n->left = NULL;
-            head = n;
-        }
-
-        ~list()
-        {
-
-            delete head;
-        }
-    };
-
 public:
     /* Please do not touch the attributes and
     functions within the guard lines placed below  */
