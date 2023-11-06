@@ -1,0 +1,16 @@
+rustc, stands for rust compile
+println!, here println means print line, and ! is because this is a macro and not a funciton
+
+
+Cargo used to keep tract of different depedencies, and initialise a project
+Rustfmt helps you format the rust code
+
+toml -> Toms obvious minimal language
+Cargo.lock manages versions of the dependencies
+cd target/debug -> ./name will run this
+cargo run does all this for us
+cargo check would check for mistakes in the code, use when you dont want to compile but check compilabilitity
+
+rustfmt file_name.rs, will format the code for us
+
+In rust all variables defined are immutable
