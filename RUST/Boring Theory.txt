@@ -14,3 +14,5 @@ cargo check would check for mistakes in the code, use when you dont want to comp
 rustfmt file_name.rs, will format the code for us
 
 In rust all variables defined are immutable
+
+SCALAR and COMPOUND dtat types
