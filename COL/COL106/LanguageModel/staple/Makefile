@@ -16,3 +16,6 @@ ${EXEC}: ${OBJ}
 
 clean:
 	rm -f src/*.o ${EXEC}
+
+compile:
+	./staple compile test/first.stvm

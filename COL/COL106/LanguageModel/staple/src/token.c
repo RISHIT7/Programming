@@ -14,17 +14,34 @@ void token_destroy(Token *tok)
     free(tok);
 }
 
-void token_list_add(TokenList* list, Token* tok)
+void token_list_add(TokenList *list, Token *tok)
 {
     if (list->ptr >= list->size)
     {
         list->size *= 2;
-        list->data = (Token**) realloc(list->data, sizeof(Token**)* list->size);
+        list->data = (Token **)realloc(list->data, sizeof(Token **) * list->size);
     }
 
     list->data[list->ptr++] = tok;
 }
 
-Token* token_list_get(TokenList* list, int index) {
+void token_list_create(TokenList* list, int size)
+{
+    list->data = (Token**) malloc(sizeof(Token*) * size);
+    list->ptr = 0;
+    list->size = size;
+}
+
+Token *token_list_get(TokenList *list, int index)
+{
     return list->data[index];
+}
+
+void token_list_destroy(TokenList* list)
+{
+    for (int i = 0; i < list->ptr; i++)
+    {
+        free(list->data[i]);
+    }
+    free(list->data);
 }

@@ -19,24 +19,31 @@ ParserStatus parser_start(TokenList *list, const char *source)
         }
         lex[lexi] = '\0';
 
+        if (lex[0] == '\0')
+        {
+            break;
+        }
+
         // This is a numerical constant
         if (lex[0] == '#')
         {
             int num = parser_get_number(lex);
+            printf("NUMBER: %d\n", num);
             token_list_add(list, token_create(num, NUMBER, line));
         }
 
         // Must be an expression
         else
         {
-            int inst = parser_get_inst(lex);
+            TokenInst inst = parser_get_inst(lex);
             if (inst >= 0)
             {
+                printf("INST: %s\n", lex);
                 token_list_add(list, token_create(INST, inst, line));
             }
             else
             {
-                printf("Syntax error: no such instruction '%s'\n", lex);
+                printf("Syntax error: no such instruction '%s' \n", lex);
                 return PARSER_SYNTAX_ERROR;
             }
         }
@@ -55,8 +62,6 @@ ParserStatus parser_start(TokenList *list, const char *source)
         // Reset lex
         lexi = 0;
         i++;
-
-
     }
 
     return PARSER_SUCCESS;
@@ -73,6 +78,14 @@ TokenInst parser_get_inst(const char *buf)
     if (strcmp(buf, "push") == 0)
     {
         return PUSH;
+    }
+    else if (strcmp(buf, "add") == 0)
+    {
+        return ADD;
+    }
+    else if (strcmp(buf, "hlt") == 0)
+    {
+        return HLT;
     }
     return (TokenInst)-1;
 }

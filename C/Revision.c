@@ -1,23 +1,24 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int main()
+int main(int argc, char **argv)
 {
-    int x, y, z;
-    char xc, yc, zc;
+    char *path = "Text.txt";
+    FILE *file = fopen(path, "r");
+    if (!file)
+    {
+        printf("Could not open the file %s", path);
+    }
 
-    x = 0xF0;xc = x; // x = 11110000
-    printf("x is: %d\n", x);
-    y = 0x8D; yc = y; // y = 10001101
-    printf("y is: %d\n", y);
-    printf("xc is: %d\n", xc);
-    z = x & y;
-    printf("x & y is: %d\n", z);
-    z = x | y;
-    printf("x | y is: %d\n", z);
-    z = (x >> 2); // 0011 1100, 3c
-    printf("x >> 2 is: %x\n", z); // %x is hex, %o is octal
-    z = (xc >> 2);
-    printf("xc >> 2 is: %x\n", z); // %x is hex, %o is octal
+    fseek(file, 0, SEEK_END);
+    int size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char *buf = (char *)malloc(sizeof(char) * (size + 1)); // alloccating memory for the output file
+    fread(buf, 1, size, file);
+    buf[size] = '\n';
+
     
+
     return 0;
 }

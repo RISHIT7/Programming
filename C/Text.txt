@@ -1,0 +1,7 @@
+This is a test file
+in which we want to see how to take
+
+the input
+
+into a c file
+efficiently
