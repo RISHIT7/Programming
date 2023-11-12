@@ -5,6 +5,9 @@
 #include "../include/util.h"
 #include "../include/parser.h"
 #include "../include/token.h"
+#include "../include/compiler.h"
+#include "../include/bytecode.h"
+#include "../include/bytebuffer.h"
 
 // staple compile file.stvm
 
@@ -27,13 +30,17 @@ int main(int argc, char **argv)
             return 1;
         }
 
-        // Remove for debug!
-        // for (int i = 0; i < tokens.ptr; i++)
-        // {
-        //     Token *t = token_list_get(&tokens, i);
-        //     printf("%d, %d, %d\n", t->type, t->data, t->line);
-        // }
+        Compiler comp;
+        comp.tokens = &tokens;
+        compiler_start(&comp);
+        if (comp.status != COMPILER_SUCCESS)
+        {
+            return 1;
+        }
 
+        write_binary_file("out.stbc", comp.bytecode);
+
+        byte_buffer_destroy(comp.bytecode);
         token_list_destroy(&tokens);
         free(source);
     }

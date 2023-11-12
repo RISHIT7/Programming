@@ -1,6 +1,6 @@
 #include "../include/token.h"
 
-Token *token_create(int type, int data, int line)
+Token *token_create(int data, int type, int line)
 {
     Token *tok = (Token *)malloc(sizeof(Token));
     tok->type = type;

@@ -8,6 +8,9 @@ EXEC = staple
 
 all: ${SRC} ${OBJ} ${EXEC}
 
+debug: all
+debug: CFLAGS += -DEBUG
+
 ${EXEC}: ${OBJ}
 	${CC} ${LDFLAGS} $^ -o $@
 
@@ -17,5 +20,6 @@ ${EXEC}: ${OBJ}
 clean:
 	rm -f src/*.o ${EXEC}
 
+compile: all
 compile:
 	./staple compile test/first.stvm
