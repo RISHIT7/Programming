@@ -30,101 +30,62 @@ using namespace std;
 
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
-vector<int> computeLPSArray(string pat, int M, vector<int> lps)
+void solve()
 {
-    int len = 0;
+    int n;
+    cin >> n;
 
-    lps[0] = 0;
+    int arr[n];
+    rep(i, 0, n) cin >> arr[i];
 
-    int i = 1;
-    while (i < M)
+    map<int, int> freq;
+    for (auto i : arr)
+        freq[i]++;
+
+    vector<int> ans;
+    for (auto i : freq)
     {
-        if (pat[i] == pat[len])
+        if (i.second > 1)
+            ans.push_back(i.first);
+    }
+
+    if (ans.size() < 2)
+    {
+        cout << "-1\n";
+        return;
+    }
+
+    for (auto i : arr)
+    {
+        if (i == ans[0])
         {
-            len++;
-            lps[i] = len;
-            i++;
+            ans[0] = -1;
+            cout << "2"
+                 << " ";
+        }
+        else if (i == ans[1])
+        {
+            ans[1] = -1;
+            cout << "3"
+                 << " ";
         }
         else
         {
-            if (len != 0)
-            {
-                len = lps[len - 1];
-            }
-            else
-            {
-                lps[i] = 0;
-                i++;
-            }
+            cout << "1"
+                 << " ";
         }
     }
-
-    return lps;
-}
-
-void KMPSearch(string pat, string txt)
-{
-    int M = pat.size();
-    int N = txt.size();
-
-    vector<int> lps(M);
-
-    lps = computeLPSArray(pat, M, lps);    
-
-    int i = 0;
-    int j = 0;
-
-    while ((N - i) >= (M - j))
-    {
-        if (pat[j] == txt[i])
-        {
-            j++;
-            i++;
-        }
-
-        if (j == M)
-        {
-            printf("Found pattern at index %d\n", i - j);
-            j = lps[j - 1];
-        }
-
-        else if (i < N && pat[j] != txt[i])
-        {
-            if (j != 0)
-                j = lps[j - 1];
-            else
-                i = i + 1;
-        }
-    }
-}
-
-signed main()
-{
-    string sentence = "I am what I am";
-    int length_sentence = sentence.size();
-    string query = "I a";
-    int query_sentence = query.size();
-
-    KMPSearch(query, sentence);
-    return 0;
+    cout << "\n";
 }
 
 int main()
 {
-    SearchEngine *choogle = new SearchEngine();
-
-    choogle->insert_sentence(2, 3, 4, 5, "I am who I am");
-    choogle->insert_sentence(2, 3, 4, 6, "I alskdjf aad fad");
-    choogle->insert_sentence(2, 3, 4, 7, "I kjlf ashd flsd fad adf");
-    choogle->insert_sentence(2, 3, 4, 8, "I  sdfla ldfas ddfja sld");
-    choogle->insert_sentence(2, 3, 4, 9, "I s hdkfka lf fladf asfd I s hdkfka lf fladf asfd");
-    choogle->insert_sentence(2, 3, 4, 873, "I s hdkfka lf fladf asfd hdkfka lf fladf asfd");
-    choogle->insert_sentence(2, 3, 4, 10, "I a sdfh asfhf asffa sd");
-    choogle->insert_sentence(2, 3, 4, 11, "I alksd fka fkd a df f");
-    choogle->insert_sentence(2, 3, 4, 12, "I kasd hfkah fd kha df f");
-
-    int matches = 0;
-    choogle->search("kfka lf fl", matches);
-
+    fastio();
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        solve();
+    }
     return 0;
 }
