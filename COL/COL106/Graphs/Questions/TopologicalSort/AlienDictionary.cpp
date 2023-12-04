@@ -30,10 +30,15 @@ using namespace std;
 
 const int N = 1e5 + 2, MOD = 1e9 + 7;
 
-// red black trees
-/*
-Z = root -> chnge colour
-Z.uncle = red -> change colour
-Z.uncle = black && triangle -> line
-Z.uncle = balck && line -> rotate and re colour
-*/
+class Solution
+{
+    string alienOrder(vector<string> words)
+    {
+        
+    }
+}
+
+signed main()
+{
+    return 0;
+}
