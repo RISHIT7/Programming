@@ -13,3 +13,7 @@ _start:
 	@ Rotations 00000101 -> 10000010
 	@ ROR exists, ROL dosen't
 	ror r2, r1
+
+	@exit code
+	mov r7, #0x01
+	swi 0

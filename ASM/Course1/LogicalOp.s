@@ -14,3 +14,7 @@ _start:
 	
 	@might want to set the others to 0
 	and r0, r0, #0x000000ff
+
+	@exit code
+	mov r7, #0x01
+	swi 0
