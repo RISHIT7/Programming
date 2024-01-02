@@ -29,6 +29,9 @@ def main():
     # Example with binary input
     binary_multiplier = 0b0011001101000100 #"00110011.01000100"
     binary_multiplicand = 0b0010001000010001 #"00100010.00010001"
+    num_int_bits_multiplicand = 6
+    num_frac_bits_multiplicand = 8
+
 
     # Remove the dot and get the total number of bits
 
@@ -36,7 +39,7 @@ def main():
     multiplier = binary_multiplier
     multiplicand = binary_multiplicand
 
-    result = booths_multiplication(multiplier, multiplicand, 6, 8) # num of the multiplicand
+    result = booths_multiplication(multiplier, multiplicand, num_int_bits_multiplicand, num_frac_bits_multiplicand) # num of the multiplicand
 
     # Convert result back to binary fixed-point representation
     result_binary = bin(result)[2:].zfill(32)
