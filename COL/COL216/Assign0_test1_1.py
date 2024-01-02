@@ -11,7 +11,7 @@ def binary_fixed_point_multiply(a, b, num_frac_bits, num_int_bits):
         b >>= 1
 
 
-    return result >> 2
+    return result
 
 
 def main():
@@ -26,7 +26,7 @@ def main():
     multiplier = binary_multiplier
     multiplicand = binary_multiplicand
 
-    result = binary_fixed_point_multiply(multiplier, multiplicand, 8, 8)
+    result = binary_fixed_point_multiply(multiplier, multiplicand, 6, 8) # num of the multiplicand
 
     # Convert result back to binary fixed-point representation
     result_binary = bin(result)[2:].zfill(32)
