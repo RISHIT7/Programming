@@ -10,10 +10,8 @@ def binary_fixed_point_multiply(a, b, num_frac_bits, num_int_bits):
         # Right shift multiplier
         b >>= 1
 
-    # Adjust the result for the fractional bits
-    result = result >> num_frac_bits
 
-    return result
+    return result >> 2
 
 
 def main():
@@ -33,9 +31,9 @@ def main():
     # Convert result back to binary fixed-point representation
     result_binary = bin(result)[2:].zfill(32)
 
-    print(f"Binary Multiplier: {(bin(binary_multiplier)[2:].zfill(16))[:8]}.{(bin(binary_multiplier)[2:].zfill(16))[8:]}")
-    print(f"Binary Multiplicand: {(bin(binary_multiplicand)[2:].zfill(16))[:8]}.{(bin(binary_multiplicand)[2:].zfill(16))[8:]}")
-    print(f"Result (Binary) {result_binary[:16]}.{result_binary[16:]}")
+    print(f"Binary Multiplier: {(bin(binary_multiplier)[2:].zfill(16))[:8]}{(bin(binary_multiplier)[2:].zfill(16))[8:]} (Decimal : {binary_multiplier})")
+    print(f"Binary Multiplicand: {(bin(binary_multiplicand)[2:].zfill(16))[:8]}{(bin(binary_multiplicand)[2:].zfill(16))[8:]} (Decimal : {binary_multiplicand})")
+    print(f"Result (Binary) {result_binary[:16]}{result_binary[16:]} (Decimal : {result})")
 
 if __name__ == "__main__":
     main()
