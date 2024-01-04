@@ -8,33 +8,36 @@ entity FixedPointMultiplier is
         a : in STD_LOGIC_VECTOR(15 downto 0);  -- 16-bit input for multiplier
         b : in STD_LOGIC_VECTOR(15 downto 0);  -- 16-bit input for multiplicand
         result : out STD_LOGIC_VECTOR(31 downto 0)  -- 32-bit output result
+        clk : in STD_LOGIC;
+        rst : in STD_LOGIC;
     );
 end FixedPointMultiplier;
 
 architecture Behavioral of FixedPointMultiplier is
+    signal counter : INTEGER := 0;
 begin
-    process
+    process(clk, rst)
         variable result_var : INTEGER := 0;
-        variable num_frac_bits : INTEGER := 8;
-        variable num_int_bits : INTEGER := 8;
+        variable num_bits : INTEGER := 16;
     begin
-        for i in 0 to num_frac_bits + num_int_bits - 1 loop
-            -- Check if the least significant bit of multiplier is 1
-            result_var := result_var * 2;
-            if b(0) = '1' then
-                result_var := result_var + TO_INTEGER(SIGNED(a));
+        if rst = '1' then
+            result_var := 0;
+
+        elsif rising_edge(clk) then
+            if counter < 16 then
+                if b(0) = '1' then
+                    result_var := result_var + TO_INTEGER(UNSIGNED(a));
+                end if;
+
+                a <= a sl1 1; -- shift left
+                b <= shift_right(b, 1); -- shift right
+
+                counter <= counter + 1;
+
+            else 
+                -- Convert result to 32-bit binary fixed-point representation
+                result <= STD_LOGIC_VECTOR(TO_UNSIGNED(result_var, 32));
             end if;
-
-            -- Right shift multiplier
-            b := b(15 downto 1) & '0';
-
-        end loop;
-
-        -- Adjust the result for the fractional bits
-        result_var := result_var / 2**num_frac_bits;
-
-        -- Convert result to 32-bit binary fixed-point representation
-        result <= STD_LOGIC_VECTOR(TO_SIGNED(result_var, 32));
-
+        end if;
     end process;
 end Behavioral;
