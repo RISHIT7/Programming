@@ -18,8 +18,8 @@ def binary_fixed_point_multiply(a, b):
 def main():
             
     # Example with binary input
-    binary_multiplier = 0b0101110110111101 #"00110011.01000100"
-    binary_multiplicand = 0b0100110101101001 #"00100010.00010001"
+    binary_multiplier = 0b0011001101000100 #"00110011.01000100"
+    binary_multiplicand = 0b0010001000010001 #"00100010.00010001"
 
     # Remove the dot and get the total number of bits
 

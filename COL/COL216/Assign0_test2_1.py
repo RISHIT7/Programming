@@ -1,11 +1,11 @@
-def booths_multiplication(multiplier, multiplicand, num_int_bits, num_frac_bits):
+def booths_multiplication(multiplier, multiplicand):
     # Initialize variables
-    n = num_int_bits + num_frac_bits
+    n = 16
     result = 0 # 32 bit integer -> Ac | Q
     Q = multiplier
 
     result = (result << n) | multiplier
-
+    
     # Perform Booth's algorithm
     for i in range(n):
         # Check the least significant two bits of the multiplier
@@ -21,21 +21,22 @@ def booths_multiplication(multiplier, multiplicand, num_int_bits, num_frac_bits)
         Q >>= 1
         result >>= 1
     result <<= 1
+    
+    if (multiplier & 0b1 == 1):
+        result -= multiplicand
+    
 
     return result
 
 def main():
             
     # Example with binary input
-    binary_multiplier = 0b0101110110111101 #"00110011.01000100"
-    binary_multiplicand = 0b0100110101101001 #"00100010.00010001"
+    # binary_multiplier = 0b0000000011111111 #"00110011.01000100"
+    # binary_multiplicand = 0b0000011101001111 #"00100010.00010001"
     # binary_multiplier = 0b1011010100101011 #"00110011.01000100"
     # binary_multiplicand = 0b1000010111011000 #"00100010.00010001"
-    # binary_multiplier = 0b0011001101000100 #"00110011.01000100"
-    # binary_multiplicand = 0b0010001000010001 #"00100010.00010001"
-    num_int_bits_multiplicand = 7
-    num_frac_bits_multiplicand = 8
-
+    binary_multiplier = 0b0011001101000100 #"00110011.01000100"
+    binary_multiplicand = 0b0010001000010001 #"00100010.00010001"
 
     # Remove the dot and get the total number of bits
 
@@ -43,7 +44,7 @@ def main():
     multiplier = binary_multiplier
     multiplicand = binary_multiplicand
 
-    result = booths_multiplication(multiplier, multiplicand, num_int_bits_multiplicand, num_frac_bits_multiplicand) # num of the multiplicand
+    result = booths_multiplication(multiplier, multiplicand) # num of the multiplicand
 
     # Convert result back to binary fixed-point representation
     result_binary = bin(result)[2:].zfill(32)
