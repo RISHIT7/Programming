@@ -27,9 +27,13 @@ def booths_multiplication(multiplier, multiplicand, num_int_bits, num_frac_bits)
 def main():
             
     # Example with binary input
-    binary_multiplier = 0b0011001101000100 #"00110011.01000100"
-    binary_multiplicand = 0b0010001000010001 #"00100010.00010001"
-    num_int_bits_multiplicand = 6
+    binary_multiplier = 0b0101110110111101 #"00110011.01000100"
+    binary_multiplicand = 0b0100110101101001 #"00100010.00010001"
+    # binary_multiplier = 0b1011010100101011 #"00110011.01000100"
+    # binary_multiplicand = 0b1000010111011000 #"00100010.00010001"
+    # binary_multiplier = 0b0011001101000100 #"00110011.01000100"
+    # binary_multiplicand = 0b0010001000010001 #"00100010.00010001"
+    num_int_bits_multiplicand = 7
     num_frac_bits_multiplicand = 8
 
 
