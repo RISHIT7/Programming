@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="Booths_Multiplication_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="Booths_Multiplication" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="999,995 ps"></ZoomStartTime>
+      <ZoomEndTime time="1,000,000 ps"></ZoomEndTime>
+      <Cursor1Time time="1,000,000 ps"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="131"></NameColumnWidth>
+      <ValueColumnWidth column_width="161"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="9" />
+   <wvobject fp_name="/Booths_Multiplication/multiplicand" type="array">
+      <obj_property name="ElementShortName">multiplicand[15:0]</obj_property>
+      <obj_property name="ObjectShortName">multiplicand[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Booths_Multiplication/multiplier" type="array">
+      <obj_property name="ElementShortName">multiplier[15:0]</obj_property>
+      <obj_property name="ObjectShortName">multiplier[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Booths_Multiplication/counter" type="other">
+      <obj_property name="ElementShortName">counter</obj_property>
+      <obj_property name="ObjectShortName">counter</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Booths_Multiplication/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Booths_Multiplication/result" type="array">
+      <obj_property name="ElementShortName">result[31:0]</obj_property>
+      <obj_property name="ObjectShortName">result[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Booths_Multiplication/s" type="logic">
+      <obj_property name="ElementShortName">s</obj_property>
+      <obj_property name="ObjectShortName">s</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Booths_Multiplication/clock_num" type="other">
+      <obj_property name="ElementShortName">clock_num</obj_property>
+      <obj_property name="ObjectShortName">clock_num</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Booths_Multiplication/bin_literal" type="array">
+      <obj_property name="ElementShortName">bin_literal[15:0]</obj_property>
+      <obj_property name="ObjectShortName">bin_literal[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Booths_Multiplication/clock_period" type="other">
+      <obj_property name="ElementShortName">clock_period</obj_property>
+      <obj_property name="ObjectShortName">clock_period</obj_property>
+   </wvobject>
+</wave_config>

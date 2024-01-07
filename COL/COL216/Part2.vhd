@@ -14,8 +14,8 @@ END Booths_Multiplication;
 
 ARCHITECTURE Behavioral OF Booths_Multiplication IS
 
-    SIGNAL multiplicand : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110"; 
-    SIGNAL multiplier : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110";
+    SIGNAL multiplicand : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1111111111110110"; 
+    SIGNAL multiplier : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1100110011110011";
     signal counter : INTEGER := 0;
     SIGNAL clk : STD_LOGIC := '0';
     constant bin_literal : std_logic_vector(15 downto 0) := "0000000000000000";
@@ -45,6 +45,8 @@ BEGIN
 
                 s <= '0';
 
+                clock_num <= clock_num + 1;
+
             ELSIF (arr (0) = '0' AND s = '1') THEN
                 arr (31 DOWNTO 16) := arr (31 DOWNTO 16) + multiplier;
 
@@ -52,7 +54,9 @@ BEGIN
 
                 arr (30 DOWNTO 0) := arr (31 DOWNTO 1);
 
-            ELSIF (arr (0) = '1' AND s = '0') THEN
+                clock_num <= clock_num + 1;
+
+                ELSIF (arr (0) = '1' AND s = '0') THEN
 
                 arr (31 DOWNTO 16) := arr (31 DOWNTO 16) + NOT multiplier + 1;
 
