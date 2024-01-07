@@ -1,51 +1,50 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.numeric_std.ALL;
-use IEEE.std_logic_unsigned.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.numeric_std.ALL;
+USE IEEE.std_logic_unsigned.ALL;
 
-entity Multiplier is
---    Port (
---    a: in std_logic_vector(15 downto 0);
---    b: in std_logic_vector(15 downto 0);
---    c: out std_logic_vector(31 downto 0);
---    clock_cycle : out integer
---    );
-end Multiplier;
+ENTITY Multiplier IS
+    --    Port (
+    --    a: in std_logic_vector(15 downto 0);
+    --    b: in std_logic_vector(15 downto 0);
+    --    c: out std_logic_vector(31 downto 0);
+    --    clock_cycle : out integer
+    --    );
+END Multiplier;
 
-architecture Behavioral of Multiplier is
-    signal a : std_logic_vector(15 downto 0) := "1001001000101110";
-    signal b : std_logic_vector(15 downto 0) := "1001001000101110";
-    signal counter : INTEGER := 0;
-    signal clk : std_logic := '0';
-    signal multiplier : std_logic_vector(15 downto 0) := b;
-    signal multiplicand : std_logic_vector(15 downto 0):= a;
-    signal result : std_logic_vector(31 downto 0) := (others => '0');
-    signal clock_num : integer := 0;
-    signal result_var :INTEGER := 0;
-    constant clock_period : time  := 10ns;
-begin
-    process
-    begin
-        wait for clock_period/2;
-        clk <= not clk;
-    end process;
+ARCHITECTURE Behavioral OF Multiplier IS
+    SIGNAL a : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110";
+    SIGNAL b : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110";
+    SIGNAL counter : INTEGER := 0;
+    SIGNAL clk : STD_LOGIC := '0';
+    CONSTANT bin_literal : STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
+    SIGNAL multiplier : STD_LOGIC_VECTOR(15 DOWNTO 0) := b;
+    SIGNAL multiplicand : STD_LOGIC_VECTOR(31 DOWNTO 0) := bin_literal & a;
+    SIGNAL result : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL clock_num : INTEGER := 0;
+    CONSTANT clock_period : TIME := 10ns;
+BEGIN
+    PROCESS
+    BEGIN
+        WAIT FOR clock_period/2;
+        clk <= NOT clk;
+    END PROCESS;
 
-    process(clk)
-        variable temp_multiplicand : INTEGER := to_integer(unsigned(multiplicand));
-    begin
-        if rising_edge(clk) then
-            if counter < 16 then
-                if multiplier(0) = '1' then
-                    result_var <= result_var + temp_multiplicand;
+    PROCESS (clk)
+
+    BEGIN
+        IF rising_edge(clk) THEN
+            IF counter < 16 THEN
+                IF multiplier(0) = '1' THEN
+                    result <= STD_LOGIC_VECTOR(unsigned(result)) + STD_LOGIC_VECTOR(unsigned(multiplicand));
                     clock_num <= clock_num + 1;
-                end if;
-                temp_multiplicand := temp_multiplicand*2;
-                multiplier <= std_logic_vector(shift_right(unsigned(multiplier), 1));
+                END IF;
+                multiplicand <= STD_LOGIC_VECTOR(shift_left(unsigned(multiplicand), 1));
+                multiplier <= STD_LOGIC_VECTOR(shift_right(unsigned(multiplier), 1));
                 counter <= counter + 1;
-                
-            else
-                result <= std_logic_vector(TO_UNSIGNED(result_var, 32));
-            end if;
-        end if;
-    end process;
-end Behavioral;
+
+            ELSE
+            END IF;
+        END IF;
+    END PROCESS;
+END Behavioral;

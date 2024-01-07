@@ -4,24 +4,24 @@ USE IEEE.numeric_std.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 ENTITY Booths_Multiplication IS
---    Port (
---    a: in std_logic_vector(15 downto 0);
---    b: in std_logic_vector(15 downto 0);
---    c: out std_logic_vector(31 downto 0);
---    clock_cycle : out integer
---    );
+    --    Port (
+    --    a: in std_logic_vector(15 downto 0);
+    --    b: in std_logic_vector(15 downto 0);
+    --    c: out std_logic_vector(31 downto 0);
+    --    clock_cycle : out integer
+    --    );
 END Booths_Multiplication;
 
 ARCHITECTURE Behavioral OF Booths_Multiplication IS
 
-    SIGNAL multiplicand : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110"; 
+    SIGNAL multiplicand : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110";
     SIGNAL multiplier : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110";
-    signal counter : INTEGER := 0;
+    SIGNAL counter : INTEGER := 0;
     SIGNAL clk : STD_LOGIC := '0';
-    constant bin_literal : std_logic_vector(15 downto 0) := "0000000000000000";
+    CONSTANT bin_literal : STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
     SIGNAL result : STD_LOGIC_VECTOR(31 DOWNTO 0); --result of multipication can be at most 16 bits
     SIGNAL s : STD_LOGIC;
-    signal clock_num : integer := 0;
+    SIGNAL clock_num : INTEGER := 0;
     CONSTANT clock_period : TIME := 20 ns;
 BEGIN
     PROCESS
@@ -38,7 +38,7 @@ BEGIN
 
         IF (rising_edge(clk) AND counter < 17) THEN
 
-            IF (counter = 0) THEN 
+            IF (counter = 0) THEN
                 arr (15 DOWNTO 0) := multiplicand;
 
                 arr (31 DOWNTO 16) := bin_literal;
@@ -58,9 +58,9 @@ BEGIN
 
                 s <= arr (0); --Previous value is move down to result
 
-                arr (30 DOWNTO 0) := arr (31 DOWNTO 1); 
+                arr (30 DOWNTO 0) := arr (31 DOWNTO 1);
 
-            ELSE 
+            ELSE
 
                 s <= arr (0); --Previous value is move down to result
 
