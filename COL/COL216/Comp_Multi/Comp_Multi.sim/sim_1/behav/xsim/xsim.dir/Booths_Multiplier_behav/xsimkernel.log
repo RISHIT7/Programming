@@ -2,3 +2,6 @@ Running: xsim.dir/Booths_Multiplier_behav/xsimk.exe -simmode gui -wdb Booths_Mul
 Design successfully loaded
 Design Loading Memory Usage: 7912 KB (Peak: 7912 KB)
 Design Loading CPU Usage: 0 ms
+Simulation completed
+Simulation Memory Usage: 8520 KB (Peak: 8520 KB)
+Simulation CPU Usage: 0 ms

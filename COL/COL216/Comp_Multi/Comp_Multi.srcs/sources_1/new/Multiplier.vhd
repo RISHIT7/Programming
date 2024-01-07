@@ -17,7 +17,7 @@ architecture Behavioral of Multiplier is
     signal b : std_logic_vector(15 downto 0) := "1001001000101110";
     signal counter : INTEGER := 0;
     signal clk : std_logic := '0';
-    signal bin_literal : std_logic_vector(15 downto 0) := "0000000000000000";
+    constant bin_literal : std_logic_vector(15 downto 0) := "0000000000000000";
     signal multiplier : std_logic_vector(15 downto 0) := b;
     signal multiplicand : std_logic_vector(31 downto 0):= bin_literal & a;
     signal result : std_logic_vector(31 downto 0) := (others => '0');

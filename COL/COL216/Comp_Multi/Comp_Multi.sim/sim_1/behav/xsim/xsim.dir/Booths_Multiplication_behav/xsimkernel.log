@@ -1,0 +1,7 @@
+Running: xsim.dir/Booths_Multiplication_behav/xsimk.exe -simmode gui -wdb Booths_Multiplication_behav.wdb -simrunnum 0 -socket 63113
+Design successfully loaded
+Design Loading Memory Usage: 7984 KB (Peak: 7984 KB)
+Design Loading CPU Usage: 15 ms
+Simulation completed
+Simulation Memory Usage: 8500 KB (Peak: 8500 KB)
+Simulation CPU Usage: 30 ms
