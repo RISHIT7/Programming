@@ -74,7 +74,8 @@ BEGIN
 
             ELSE 
                 counter_var := counter ;
-                while not((counter_var = 0) or (arr(0) = '1' and s = '0') or (s = '1' and arr(0) = '0')) loop 
+--                while not((counter_var = 0) or (arr(0) = '1' and s = '0') or (s = '1' and arr(0) = '0')) loop 
+                while (arr(0) = s) loop 
                     s <= arr (0); --Previous value is move down to result
                     arr (30 DOWNTO 0) := arr (31 DOWNTO 1);
                     counter_var := counter_var + 1;

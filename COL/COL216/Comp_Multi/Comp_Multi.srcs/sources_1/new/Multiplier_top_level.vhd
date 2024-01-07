@@ -7,8 +7,8 @@ entity Multiplier_top_level is
 end Multiplier_top_level;
 
 architecture Behavioral of Multiplier_top_level is
-    signal a : std_logic_vector(15 downto 0) := "0000111011001111";
-    signal b : std_logic_vector(15 downto 0) := "0000111011001111";
+    signal a : std_logic_vector(15 downto 0) := "0100110111101011";
+    signal b : std_logic_vector(15 downto 0) := "0001000101000000";
     signal c_a : std_logic_vector(31 downto 0) := (others => '0');
     signal c_b : std_logic_vector(31 downto 0) := (others => '0');
     signal clock_cycles_a : integer := 0;

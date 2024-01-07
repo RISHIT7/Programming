@@ -5,32 +5,46 @@ def booths_multiplication(multiplier, multiplicand):
     Q = multiplier
     counter = 0
     
-    result = (result) | multiplier
+
     
     # Perform Booth's algorithm
-    for i in range(n):
+    while counter < 17:
         # Check the least significant two bits of the multiplier
         two_bits = (Q & 0b11)
-        
+        print(two_bits)
         # Based on the two bits, perform the corresponding operation
-        if two_bits == 0b01:
+        
+        if counter == 0:
+            result = (result) | multiplier
+            counter += 1
+
+        elif two_bits == 0b01:
             result += multiplicand << n
             counter += 1
+            Q >>= 1
+            result >>= 1
             
         elif two_bits == 0b10:
             result -= multiplicand << n
             counter += 1
+            Q >>= 1
+            result >>= 1
+
+        else:
+            while (two_bits % 11 != 0):
+                Q >>= 1
+                result >>= 1
+                counter += 1
+                two_bits = (Q & 0b11)
 
         print(result)
         # Arithmetic right shift the multiplier and the accumulator
-        Q >>= 1
-        result >>= 1
     result <<= 1
     
     if (multiplier & 0b1 == 1):
         result -= multiplicand
     
-    print(f"hehe lol {multiplicand << n}")
+    print(f"hehe lol {counter}")
     return result
 
 def main():
@@ -40,8 +54,8 @@ def main():
     # binary_multiplicand = 0b0000011101001111 #"00100010.00010001"
     # binary_multiplier = 0b1011010100101011 #"00110011.01000100"
     # binary_multiplicand = 0b1000010111011000 #"00100010.00010001"
-    binary_multiplier = 0b1001001000101110 #"00110011.01000100"
-    binary_multiplicand = 0b1001001000101110 #"00100010.00010001"
+    binary_multiplier = 0b0100110111101011 #"00110011.01000100"
+    binary_multiplicand = 0b0001000101000000 #"00100010.00010001"
 
     # Remove the dot and get the total number of bits
 
