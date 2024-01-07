@@ -1,2 +1,2 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/rishi/Desktop/Programming/COL/COL216/Comp_Multi/Comp_Multi.srcs/sources_1/new/Multiplier.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'Multiplier'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/rishi/Desktop/Programming/COL/COL216/Comp_Multi/Comp_Multi.srcs/sources_1/new/Booths_Multiplication.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'Booths_Multiplier'

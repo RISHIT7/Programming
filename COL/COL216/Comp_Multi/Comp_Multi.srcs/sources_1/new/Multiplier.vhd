@@ -17,11 +17,11 @@ architecture Behavioral of Multiplier is
     signal b : std_logic_vector(15 downto 0) := "1001001000101110";
     signal counter : INTEGER := 0;
     signal clk : std_logic := '0';
+    signal bin_literal : std_logic_vector(15 downto 0) := "0000000000000000";
     signal multiplier : std_logic_vector(15 downto 0) := b;
-    signal multiplicand : std_logic_vector(15 downto 0):= a;
+    signal multiplicand : std_logic_vector(31 downto 0):= bin_literal & a;
     signal result : std_logic_vector(31 downto 0) := (others => '0');
     signal clock_num : integer := 0;
-    signal result_var :INTEGER := 0;
     constant clock_period : time  := 10ns;
 begin
     process
@@ -31,20 +31,19 @@ begin
     end process;
 
     process(clk)
-        variable temp_multiplicand : INTEGER := to_integer(unsigned(multiplicand));
+    
     begin
         if rising_edge(clk) then
             if counter < 16 then
                 if multiplier(0) = '1' then
-                    result_var <= result_var + temp_multiplicand;
+                    result <= std_logic_vector(unsigned(result)) + std_logic_vector(unsigned(multiplicand));
                     clock_num <= clock_num + 1;
                 end if;
-                temp_multiplicand := temp_multiplicand*2;
+                multiplicand <= std_logic_vector(shift_left(unsigned(multiplicand), 1));
                 multiplier <= std_logic_vector(shift_right(unsigned(multiplier), 1));
                 counter <= counter + 1;
                 
             else
-                result <= std_logic_vector(TO_UNSIGNED(result_var, 32));
             end if;
         end if;
     end process;
