@@ -14,7 +14,7 @@ END Booths_Multiplication;
 
 ARCHITECTURE Behavioral OF Booths_Multiplication IS
 
-    SIGNAL multiplicand : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110"; --variables are 8 bits
+    SIGNAL multiplicand : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110"; 
     SIGNAL multiplier : STD_LOGIC_VECTOR(15 DOWNTO 0) := "1001001000101110";
     signal counter : INTEGER := 0;
     SIGNAL clk : STD_LOGIC := '0';
@@ -38,40 +38,37 @@ BEGIN
 
         IF (rising_edge(clk) AND counter < 17) THEN
 
-            IF (counter = 0) THEN --first level : initializing arr
+            IF (counter = 0) THEN 
                 arr (15 DOWNTO 0) := multiplicand;
 
                 arr (31 DOWNTO 16) := bin_literal;
 
                 s <= '0';
 
-            ELSIF (arr (0) = '0' AND s = '1') THEN --Based on table
+            ELSIF (arr (0) = '0' AND s = '1') THEN
                 arr (31 DOWNTO 16) := arr (31 DOWNTO 16) + multiplier;
 
                 s <= arr (0); --Previous value is move down to result
 
-                arr (30 DOWNTO 0) := arr (31 DOWNTO 1); --shift to right (it act like shift to left when we write
-                -- partical products in 8 row)
+                arr (30 DOWNTO 0) := arr (31 DOWNTO 1);
 
-            ELSIF (arr (0) = '1' AND s = '0') THEN --Based on table
+            ELSIF (arr (0) = '1' AND s = '0') THEN
 
-                arr (15 DOWNTO 8) := arr (15 DOWNTO 8) + NOT multiplier + 1;
-
-                s <= arr (0); --Previous value is move down to result
-
-                arr (14 DOWNTO 0) := arr (15 DOWNTO 1); --shift to right (it act like shift to left when we write
-                -- partical products in 8 row)
-
-            ELSE --Based on table
+                arr (31 DOWNTO 16) := arr (31 DOWNTO 16) + NOT multiplier + 1;
 
                 s <= arr (0); --Previous value is move down to result
 
-                arr (14 DOWNTO 0) := arr (15 DOWNTO 1); --shift to right (it act like shift to left when we write
-                -- partical products in 8 row)
+                arr (30 DOWNTO 0) := arr (31 DOWNTO 1); 
+
+            ELSE 
+
+                s <= arr (0); --Previous value is move down to result
+
+                arr (30 DOWNTO 0) := arr (31 DOWNTO 1);
 
             END IF;
 
-            counter <= counter + 1; --increasing counter
+            counter <= counter + 1; --incrementing counter
 
         END IF;
 
