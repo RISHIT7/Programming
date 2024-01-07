@@ -3,8 +3,9 @@ def booths_multiplication(multiplier, multiplicand):
     n = 16
     result = 0 # 32 bit integer -> Ac | Q
     Q = multiplier
-
-    result = (result << n) | multiplier
+    counter = 0
+    
+    result = (result) | multiplier
     
     # Perform Booth's algorithm
     for i in range(n):
@@ -14,9 +15,13 @@ def booths_multiplication(multiplier, multiplicand):
         # Based on the two bits, perform the corresponding operation
         if two_bits == 0b01:
             result += multiplicand << n
+            counter += 1
+            
         elif two_bits == 0b10:
             result -= multiplicand << n
-        
+            counter += 1
+
+        print(result)
         # Arithmetic right shift the multiplier and the accumulator
         Q >>= 1
         result >>= 1
@@ -25,7 +30,7 @@ def booths_multiplication(multiplier, multiplicand):
     if (multiplier & 0b1 == 1):
         result -= multiplicand
     
-
+    print(f"hehe lol {multiplicand << n}")
     return result
 
 def main():
@@ -35,8 +40,8 @@ def main():
     # binary_multiplicand = 0b0000011101001111 #"00100010.00010001"
     # binary_multiplier = 0b1011010100101011 #"00110011.01000100"
     # binary_multiplicand = 0b1000010111011000 #"00100010.00010001"
-    binary_multiplier = 0b0011001101000100 #"00110011.01000100"
-    binary_multiplicand = 0b0010001000010001 #"00100010.00010001"
+    binary_multiplier = 0b1001001000101110 #"00110011.01000100"
+    binary_multiplicand = 0b1001001000101110 #"00100010.00010001"
 
     # Remove the dot and get the total number of bits
 
