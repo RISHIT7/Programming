@@ -30,11 +30,9 @@ def booths_multiplication(multiplier, multiplicand):
                 result >>= 1
                 counter += 1
 
-        print(result)
         # Arithmetic right shift the multiplier and the accumulator
         clock_num += 1    
-    print(f"hehe lol {clock_num}")
-    return result
+    return result, clock_num
 
 def run(binary_multiplicand, binary_multiplier):
             
@@ -50,18 +48,46 @@ def run(binary_multiplicand, binary_multiplier):
     multiplier = binary_multiplier
     multiplicand = binary_multiplicand
 
-    result = booths_multiplication(multiplier, multiplicand) # num of the multiplicand
+    result, clock_num = booths_multiplication(multiplier, multiplicand) # num of the multiplicand
 
     # Convert result back to binary fixed-point representation
-    result_binary = bin(result)[2:].zfill(32)
+    # result_binary = bin(result)[2:].zfill(32)
 
-    print(f"Binary Multiplier: {(bin(binary_multiplier)[2:].zfill(16))[:8]}{(bin(binary_multiplier)[2:].zfill(16))[8:]} (Decimal : {binary_multiplier})")
-    print(f"Binary Multiplicand: {(bin(binary_multiplicand)[2:].zfill(16))[:8]}{(bin(binary_multiplicand)[2:].zfill(16))[8:]} (Decimal : {binary_multiplicand})")
-    print(f"Result (Binary) {result_binary[:16]}{result_binary[16:]} (Decimal : {result})")
+    # print(f"Binary Multiplier: {(bin(binary_multiplier)[2:].zfill(16))[:8]}{(bin(binary_multiplier)[2:].zfill(16))[8:]} (Decimal : {binary_multiplier})")
+    # print(f"Binary Multiplicand: {(bin(binary_multiplicand)[2:].zfill(16))[:8]}{(bin(binary_multiplicand)[2:].zfill(16))[8:]} (Decimal : {binary_multiplicand})")
+    # print(f"Result (Binary) {result_binary[:16]}{result_binary[16:]} (Decimal : {result})")
+    
+    return clock_num        
+
+def string_bin_to_int(input):
+    input = input[1:-1]
+    result = 0
+    i = 0
+    for char in input[::-1]:
+        if (char == "1"):
+            result += 2**i
+        i += 1
+    return result
 
 def main():
-    with open(r"C:\Users\rishi\Desktop\Programming\COL\COL216\a_and_b.txt", "w") as file:
-        pass
+    result_list = []
+    with open(r"C:\Users\rishi\Desktop\Programming\COL\COL216\a_and_b.txt", "r") as file:
+        para = file.read()
+        lines = para.split("\n")
+        lines = lines[:-1]
+        for line in lines:
+            binary_multiplicand = line.split(", ")[0]
+            binary_multiplier = line.split(", ")[1]
+            binary_multiplicand = string_bin_to_int(binary_multiplicand)
+            binary_multiplier = string_bin_to_int(binary_multiplier)
+            clock_num = run(binary_multiplicand, binary_multiplier)
+            result_list.append(clock_num)
+    file.close()
+    
+    with open(r"C:\Users\rishi\Desktop\Programming\COL\COL216\out_clock.txt", "w") as file:
+        for el in result_list:
+            file.write(str(el) + "\n")
+    file.close()
 
 if __name__ == "__main__":
     main()
