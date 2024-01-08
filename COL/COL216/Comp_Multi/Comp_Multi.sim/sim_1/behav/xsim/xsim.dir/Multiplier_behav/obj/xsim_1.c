@@ -57,15 +57,15 @@ extern int main(int, char**);
 IKI_DLLESPEC extern void execute_25(char*, char *);
 IKI_DLLESPEC extern void execute_26(char*, char *);
 IKI_DLLESPEC extern void vhdl_transfunc_eventcallback(char*, char*, unsigned, unsigned, unsigned, char *);
-IKI_DLLESPEC extern void transaction_3(char*, char*, unsigned, unsigned, unsigned);
-funcp funcTab[4] = {(funcp)execute_25, (funcp)execute_26, (funcp)vhdl_transfunc_eventcallback, (funcp)transaction_3};
+IKI_DLLESPEC extern void transaction_5(char*, char*, unsigned, unsigned, unsigned);
+funcp funcTab[4] = {(funcp)execute_25, (funcp)execute_26, (funcp)vhdl_transfunc_eventcallback, (funcp)transaction_5};
 const int NumRelocateId= 4;
 
 void relocate(char *dp)
 {
 	iki_relocate(dp, "xsim.dir/Multiplier_behav/xsim.reloc",  (void **)funcTab, 4);
-	iki_vhdl_file_variable_register(dp + 3760);
-	iki_vhdl_file_variable_register(dp + 3816);
+	iki_vhdl_file_variable_register(dp + 4056);
+	iki_vhdl_file_variable_register(dp + 4112);
 
 
 	/*Populate the transaction function pointer field in the whole net structure */

@@ -15,19 +15,17 @@ END Booths_Multiplication;
 
 ARCHITECTURE Behavioral OF Booths_Multiplication IS
 
---    signal    a:  std_logic_vector(15 downto 0) := "1001010011010001";
---    signal    b:  std_logic_vector(15 downto 0) := "1001010011010001";
+--    signal    a:  std_logic_vector(15 downto 0) := "0100110111101011";
+--    signal    b:  std_logic_vector(15 downto 0) := "0001000101000000";
 --    signal    c:  std_logic_vector(31 downto 0) := (others => '0');
 --    signal    clock_cycle :  integer := 0;
 
-    SIGNAL multiplicand : STD_LOGIC_VECTOR(15 DOWNTO 0) := a; 
-    SIGNAL multiplier : STD_LOGIC_VECTOR(15 DOWNTO 0) := b;
-    signal counter : INTEGER := 0;
+--    signal counter : INTEGER := 0;
 --    SIGNAL clk : STD_LOGIC := '0';
     constant bin_literal : std_logic_vector(15 downto 0) := "0000000000000000";
     SIGNAL result : STD_LOGIC_VECTOR(31 DOWNTO 0); --result of multipication can be at most 16 bits
     SIGNAL s : STD_LOGIC;
-    signal clock_num : integer := 0;
+    signal clock_sig : integer := 0;
 --    CONSTANT clock_period : TIME := 20 ns;
 BEGIN
 --    PROCESS
@@ -39,7 +37,8 @@ BEGIN
     PROCESS (clk)
 
         VARIABLE arr : STD_LOGIC_VECTOR(31 DOWNTO 0);
-        variable counter_var : integer := 0;
+        variable counter : integer := 0;
+        variable clock_num : integer := 0;
     BEGIN
 
         IF (rising_edge(clk) AND counter < 17) THEN
@@ -51,7 +50,7 @@ BEGIN
 
                 s <= '0';
                 
-                counter <= counter + 1;
+                counter := counter + 1;
 
             ELSIF (arr (0) = '0' AND s = '1') THEN
                 arr (31 DOWNTO 16) := arr (31 DOWNTO 16) + b;
@@ -60,7 +59,7 @@ BEGIN
 
                 arr (30 DOWNTO 0) := arr (31 DOWNTO 1);
                 
-                counter <= counter + 1;
+                counter := counter + 1;
                 
             ELSIF (arr (0) = '1' AND s = '0') THEN
 
@@ -70,27 +69,30 @@ BEGIN
 
                 arr (30 DOWNTO 0) := arr (31 DOWNTO 1);
                 
-                counter <= counter + 1; 
+                counter := counter + 1; 
 
             ELSE 
-                counter_var := counter ;
+--                counter := counter ;
 --                while not((counter_var = 0) or (arr(0) = '1' and s = '0') or (s = '1' and arr(0) = '0')) loop 
                 while (arr(0) = s) loop 
                     s <= arr (0); --Previous value is move down to result
                     arr (30 DOWNTO 0) := arr (31 DOWNTO 1);
-                    counter_var := counter_var + 1;
+                    counter := counter + 1;
                 end loop;
-                counter <= counter_var;
+--                counter := counter;
             END IF;
 
-            clock_num <= clock_num + 1; --incrementing counter
-
+            clock_num := clock_num + 1; --incrementing counter
+            clock_sig <= clock_sig + 1;
+            c <= arr; --result of multipication
+            result <= arr;
+            clock_cycle <= clock_num;
+               
         END IF;
 
-        c <= arr; --result of multipication
 
     END PROCESS;
 
-    clock_cycle <= clock_num;
+
 
 END Behavioral;

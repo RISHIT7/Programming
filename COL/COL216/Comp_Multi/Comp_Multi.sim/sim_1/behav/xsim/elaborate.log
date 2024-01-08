@@ -1,22 +1,8 @@
 Vivado Simulator v2023.2
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
-Running: C:/Xilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot Multiplier_top_level_behav xil_defaultlib.Multiplier_top_level -log elaborate.log 
+Running: C:/Xilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot Multiplier_behav xil_defaultlib.Multiplier -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
-WARNING: [VRFC 10-3813] value in initialization depends on signal 'a' [C:/Users/rishi/Desktop/Programming/COL/COL216/Comp_Multi/Comp_Multi.srcs/sources_1/new/Booths_Multiplication.vhd:23]
-WARNING: [VRFC 10-3813] value in initialization depends on signal 'b' [C:/Users/rishi/Desktop/Programming/COL/COL216/Comp_Multi/Comp_Multi.srcs/sources_1/new/Booths_Multiplication.vhd:24]
 Completed static elaboration
-Starting simulation data flow analysis
-Completed simulation data flow analysis
-Time Resolution for simulation is 1ps
-Compiling package std.standard
-Compiling package std.textio
-Compiling package ieee.std_logic_1164
-Compiling package ieee.numeric_std
-Compiling package ieee.std_logic_arith
-Compiling package ieee.std_logic_unsigned
-Compiling architecture behavioral of entity xil_defaultlib.Multiplier [multiplier_default]
-Compiling architecture behavioral of entity xil_defaultlib.Booths_Multiplication [booths_multiplication_default]
-Compiling architecture behavioral of entity xil_defaultlib.multiplier_top_level
-Built simulation snapshot Multiplier_top_level_behav
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel

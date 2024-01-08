@@ -14,6 +14,10 @@ ENTITY Multiplier IS
 END Multiplier;
 
 ARCHITECTURE Behavioral OF Multiplier IS
+--    signal    a:  std_logic_vector(15 downto 0) := "0100110111101011";
+--    signal    b:  std_logic_vector(15 downto 0) := "0001000101000000";
+--    signal    c:  std_logic_vector(31 downto 0) := (others => '0');
+--    signal    clock_cycle :  integer := 0;
     SIGNAL counter : INTEGER := 0;
 --    SIGNAL clk : STD_LOGIC := '0';
     CONSTANT bin_literal : STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
