@@ -4,35 +4,35 @@ USE IEEE.numeric_std.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 ENTITY Booths_Multiplication IS
---    Port (
---        a: in std_logic_vector(15 downto 0);
---        b: in std_logic_vector(15 downto 0);
---        clk : in std_logic;
---        c: out std_logic_vector(31 downto 0);
---        clock_cycle : out integer
---    );
+    Port (
+        a: in std_logic_vector(15 downto 0);
+        b: in std_logic_vector(15 downto 0);
+        clk : in std_logic;
+        c: out std_logic_vector(31 downto 0);
+        clock_cycle : out integer
+    );
 END Booths_Multiplication;
 
 ARCHITECTURE Behavioral OF Booths_Multiplication IS
 
-    signal    a:  std_logic_vector(15 downto 0) := "0100110111101001";
-    signal    b:  std_logic_vector(15 downto 0) := "0001000101000010";
-    signal    c:  std_logic_vector(31 downto 0) := (others => '0');
-    signal    clock_cycle :  integer := 0;
+--    signal    a:  std_logic_vector(15 downto 0) := "0100110111101011";
+--    signal    b:  std_logic_vector(15 downto 0) := "0001000101000000";
+--    signal    c:  std_logic_vector(31 downto 0) := (others => '0');
+--    signal    clock_cycle :  integer := 0;
 
 --    signal counter : INTEGER := 0;
-    SIGNAL clk : STD_LOGIC := '0';
+--    SIGNAL clk : STD_LOGIC := '0';
     constant bin_literal : std_logic_vector(15 downto 0) := "0000000000000000";
     SIGNAL result : STD_LOGIC_VECTOR(31 DOWNTO 0); --result of multipication can be at most 16 bits
     SIGNAL s : STD_LOGIC;
     signal clock_sig : integer := 0;
-    CONSTANT clock_period : TIME := 20 ns;
+--    CONSTANT clock_period : TIME := 20 ns;
 BEGIN
-    PROCESS
-    BEGIN
-        WAIT FOR clock_period/2;
-        clk <= NOT clk;
-    END PROCESS;
+--    PROCESS
+--    BEGIN
+--        WAIT FOR clock_period/2;
+--        clk <= NOT clk;
+--    END PROCESS;
 
     PROCESS (clk)
 

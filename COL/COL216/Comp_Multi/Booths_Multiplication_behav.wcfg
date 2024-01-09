@@ -11,43 +11,40 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="238.419 ns"></ZoomEndTime>
+      <ZoomEndTime time="401.303 ns"></ZoomEndTime>
       <Cursor1Time time="1,000.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="113"></NameColumnWidth>
-      <ValueColumnWidth column_width="127"></ValueColumnWidth>
+      <ValueColumnWidth column_width="117"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="7" />
-   <wvobject fp_name="/Multiplier/clock_num" type="other">
-      <obj_property name="ElementShortName">clock_num</obj_property>
-      <obj_property name="ObjectShortName">clock_num</obj_property>
+   <wvobject fp_name="/Multiplier/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
    <wvobject fp_name="/Multiplier/a" type="array">
       <obj_property name="ElementShortName">a[15:0]</obj_property>
       <obj_property name="ObjectShortName">a[15:0]</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/Multiplier/b" type="array">
       <obj_property name="ElementShortName">b[15:0]</obj_property>
       <obj_property name="ObjectShortName">b[15:0]</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/Multiplier/result" type="array">
-      <obj_property name="ElementShortName">result[31:0]</obj_property>
-      <obj_property name="ObjectShortName">result[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/Multiplier/c" type="array">
       <obj_property name="ElementShortName">c[31:0]</obj_property>
       <obj_property name="ObjectShortName">c[31:0]</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/Multiplier/clock_cycle" type="other">
       <obj_property name="ElementShortName">clock_cycle</obj_property>
       <obj_property name="ObjectShortName">clock_cycle</obj_property>
    </wvobject>
-   <wvobject fp_name="/Multiplier/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
+   <wvobject fp_name="/Multiplier/result" type="array">
+      <obj_property name="ElementShortName">result[31:0]</obj_property>
+      <obj_property name="ObjectShortName">result[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Multiplier/clock_num" type="other">
+      <obj_property name="ElementShortName">clock_num</obj_property>
+      <obj_property name="ObjectShortName">clock_num</obj_property>
    </wvobject>
 </wave_config>
