@@ -24,3 +24,8 @@ mapcons(X, [Y|R], [ [X|Y] | Z ]) :- mapcons(X, R, Z).
 /* powerI( S, P1): Here is an implementation of powerset of S */
 powerI([ ], [ [ ] ]) :- !.
 powerI([X|R], P) :- powerI(R, P1),  mapcons(X, P1, P2), append(P2, P1, P).
+
+/* interI(S1, S2, S3) */
+interI([], S2, []) :- !.
+interI(S1, [], []) :- !.
+interI([X|R], , ) :- interI(R, , ).

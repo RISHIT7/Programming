@@ -1,0 +1,6 @@
+    abcd  efghabc  defghab  cdefgha  bcdefgh
+
+abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh
+
+1111 -> f -> 15
+0111 -> 8 -> 8

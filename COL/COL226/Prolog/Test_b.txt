@@ -1,0 +1,16 @@
+unionI([], [1, 2, 3, 4, 5], [1, 2, 3, 5, 4]). -> false
+unionI([], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]). -> true
+unionI([1, 2, 3, 4, 5], [], [1, 2, 3, 4, 5]). -> true
+unionI([1, 17, 568], [34, 4, 3], [1, 568, 17, 34, 4, 3]). -> false
+unionI([1, 17, 568], [34, 4, 3], [1, 17, 568, 34, 4, 3]). -> true
+unionI([1, 17, 568], [34, 4, 4], [1, 17, 568, 34, 4]). -> false
+unionI([1, 17, 568], [34, 4, 4], [1, 17, 568, 34, 4, 4]). -> true
+# implements union on the assumption that the inputs are sets, and that the order remains the same, hence these are ordered sets
+
+powerI([1,2], [[], [1, 2], [1], [2]]). -> false
+powerI([1,2], [[1, 2], [1], [2], []].). -> true
+powerI([[]],  [[[]], []].). -> true
+powerI([3, 4, 4], Result).
+Result = [[3, 4, 4], [3, 4], [3, 4], [3], [4, 4], [4], [4], []].
+# implements power on the assumption that the inputs are sets, and that the order remains the same, hence these are ordered sets
+
