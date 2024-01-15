@@ -1,17 +1,30 @@
-.text
 .global _start
 _start:
-	# 's0', s1, s2, s3. s4  's6' s7, s8, s9, s10
-	li s1, 1237
-	li s2, 1235
-	li s3, 12357
-	li s4, 126
-	
-    li s7, 1235
-	li s8, 125
-	li s9, 12
-	li s10, 1523
+	mv s0, sp # address of num1
+	mv s1, sp # address of num2 
+	li t0, 24
+	sub s1, s1, t0 # create room of 6 registers
 
-int_manipulation:
-    li t0, 4
-    
+storing:
+	li t0, 1234
+	sw t0, 0(s0)
+	addi s0, s0, 4
+	sw t0, 0(s0)
+	addi s0, s0, 4
+	sw t0, 0(s0)
+	addi s0, s0, 4
+	sw t0, 0(s0)
+
+	li t0, 5678
+	sw t0, 0(s1)
+	addi s1, s1, 4
+	sw t0, 0(s1)
+	addi s1, s1, 4
+	sw t0, 0(s1)
+	addi s1, s1, 4
+	sw t0, 0(s1)
+
+end:
+	li a7, 93
+	li a0, 0
+	ecall

@@ -1,3 +1,8 @@
+/* Membership */
+mem(X, []) :- fail.
+mem(X, [X|_]) :- !.
+mem(X, [_|R]) :- mem(X, R).
+
 /*  del(X,L1,L2) -- delete element X from a list L1 to obtain L2 */ 
 del(X, [ ] , [ ]) :- !.
 del(X, [X|R], Z) :- del(X, R, Z), !.
@@ -27,5 +32,18 @@ powerI([X|R], P) :- powerI(R, P1),  mapcons(X, P1, P2), append(P2, P1, P).
 
 /* interI(S1, S2, S3) */
 interI([], S2, []) :- !.
-interI(S1, [], []) :- !.
-interI([X|R], , ) :- interI(R, , ).
+interI([X|R], S2, [X|Z]) :- mem(X, S2), !, interI(R, S2, Z).
+interI([X|R], S2, S3) :- interI(R, S2, S3).
+
+/* diffI(S1, S2, S3) */
+diffI([], S2, []) :- !.
+diffI([X|R], S2, [X|Z]) :- \+ mem(X, S2), !, diffI(R, S2, Z).
+diffI([X|R], S2, S3) :- diffI(R, S2, S3).
+
+/* cartesian(S1, S2, S3) */
+cartesianH(_, [], []) :- !.
+cartesianH(X, [Y|S], [[X|Y]|Z]) :- cartesianH(X, S, Z).
+
+cartesian([], _, []) :- !.
+cartesian(_, [], []) :- !.
+cartesian([X|R], S, Z) :- cartesianH(X, S, P), cartesian(R, S, R1), append(P, R1, Z).
