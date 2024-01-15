@@ -1,3 +1,7 @@
+.data
+	num1: .quad
+
+.text
 .global _start
 _start:
 	li s1, 8
@@ -7,26 +11,26 @@ _start:
 	
 	# store the 256 bit integer
 	li a0, 0xffff000e
-	sw a0, -0(sp)
-	sw a0, -4(sp)
-	sw a0, -8(sp)
-	sw a0, -12(sp)
-	sw a0, -16(sp)
-	sw a0, -20(sp)
-	sw a0, -24(sp)
 	sw a0, -28(sp)
+	sw a0, -24(sp)
+	sw a0, -20(sp)
+	sw a0, -16(sp)
+	sw a0, -12(sp)
+	sw a0, -8(sp)
+	sw a0, -4(sp)
+	sw x0, -0(sp)
 	
 	# Allocating space for second int
 	addi sp, sp, 36
 	li a0, 0xffff000c
-	sw a0, -0(sp)
-	sw a0, -4(sp)
-	sw a0, -8(sp)
-	sw a0, -12(sp)
-	sw a0, -16(sp)
-	sw a0, -20(sp)
-	sw a0, -24(sp)
 	sw a0, -28(sp)
+	sw a0, -24(sp)
+	sw a0, -20(sp)
+	sw a0, -16(sp)
+	sw a0, -12(sp)
+	sw a0, -8(sp)
+	sw a0, -4(sp)
+	sw x0, -0(sp)
 	
 	mv s0, sp
 	li t3, 0 # carry bit is set to 0 at the beginning
