@@ -3,13 +3,29 @@ _start:
 	li a7, 5
 	ecall
 	
-	
 	li a1, 1
 	li a2, 1
+	beqz a0, print_zero
+	beq a0, a1, print_one
+	
 	sub a0, a0, a1
 	
 	li t0, 0
 	j fib
+
+print_zero:
+	li a7, 1
+	mv a0, x0
+	ecall
+	
+	j end
+	
+print_one:
+	li a7, 1
+	li a0, 1
+	ecall
+	
+	j end
 
 fib:
 	add a3, a2, a1
