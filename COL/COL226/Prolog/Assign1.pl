@@ -91,6 +91,30 @@ cartesianI([], _, []) :- !.
 cartesianI(_, [], []) :- !.
 cartesianI([X|R], S, Z) :- cartesianH(X, S, P), cartesianI(R, S, R1), append(P, R1, Z).
 
+/* way of checking if power sets are equal */
+subset([], _).
+subset([X|Z], Set) :-
+    member(X, Set),
+    subset(Z, Set).
+
+s_eq(S1, S2) :-
+    subset(S1, S2),
+    subset(S2, S1),
+    length(S1, L),
+    length(S2, L), !.
+
+equal(Ss1, Ss2) :-
+    length(Ss1, L),
+    length(Ss2, L),
+    forall(member(S1, Ss1), (
+        member(S2, Ss2),
+        s_eq(S1, S2)
+    )),
+    forall(member(S2, Ss2), (
+        member(S1, Ss1),
+        s_eq(S1, S2)
+    )).
+
 /* --------------------------------------------Examples----------------------------------------------------- */
 
 /* ----------------------------- Union ----------------------------------
@@ -146,4 +170,8 @@ cartesianI([], [[]], R).
 cartesianI([[]], [[]], R).
 cartesianI([2, 3], [3, 2], R). -> R = [[2|3], [2|2], [3|3], [3|2]].
 
+------------------------- to check equal ----------------------------
+[[1, 2, 3], [1, 2], [1, 3], [1], [2, 3], [2], [3], []].
+[[2, 1, 3], [2, 1], [2, 3], [2], [1, 3], [1], [3], []].
+equal([[1, 2, 3], [1, 2], [1, 3], [1], [2, 3], [2], [3], []], [[2, 1, 3], [2, 1], [2, 3], [2], [1, 3], [1], [3], []])
 */

@@ -1,22 +1,27 @@
-% Symmetric closure
-symm([], []).
-symm([(X, Y)|R], [(X, Y), (Y, X)|S]) :- symm(R, S).
+% subset/2 checks if the first argument is a subset of the second argument
+subset([], _).
+subset([X|Xs], Set) :-
+    member(X, Set),
+    subset(Xs, Set).
 
-% Transitive closure
-tc(X, Y, _) :- connected(X, Y), !.
-tc(X, Y, Visited) :- connected(X, Z), \+ member(Z, Visited), tc(Z, Y, [Z | Visited]).
+% set_equal/2 checks if two sets are equal
+set_equal(Set1, Set2) :-
+    subset(Set1, Set2),
+    subset(Set2, Set1),
+    length(Set1, Length),
+    length(Set2, Length), !.
 
-% Union
-union([], L, L).
-union([H|T], L, Result) :- member(H, L), !, union(T, L, Result).
-union([H|T], L, [H|Result]) :- union(T, L, Result).
+set_of_sets_equal(Sets1, Sets2) :-
+    length(Sets1, Length),
+    length(Sets2, Length),
+    forall(member(Set1, Sets1), (
+        member(Set2, Sets2),
+        set_equal(Set1, Set2)
+    )),
+    forall(member(Set2, Sets2), (
+        member(Set1, Sets1),
+        set_equal(Set1, Set2)
+    )).
 
-% U(R^i U R^-i)
-ur_closure(X, Y, R) :- tc(X, Y, []), !.
-ur_closure(X, Y, R) :- symm(R, SymmetricR), tc(X, Y, [], SymmetricR).
-
-% Example usage
-connected(a, b).
-connected(b, c).
-\+ connected(c, d).
-connected(d, e).
+/*set_of_sets_equal([[1, 2, 3], [1, 2], [1, 3], [1], [2, 3], [2], [3], []],
+ [[2, 1, 3], [2, 1], [2, 3], [2], [1, 3], [1], [3], []]).*/
