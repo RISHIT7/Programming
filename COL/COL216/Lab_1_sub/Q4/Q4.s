@@ -8,29 +8,65 @@ _start:
 
 	# Allocating the space in stack
 	addi sp, sp, 36
-	
-	# store the 256 bit integer
+
+top_level:
+	#num1
 	li a0, 0xffff000e
+	li a1, 0xffff000e
+	li a2, 0xffff000e
+	li a3, 0xffff000e
+	li a4, 0xffff000e
+	li a5, 0xffff000e
+	li a6, 0xffff000e
+	li a7, 0xffff000e
+
+	#num2
+	li t0, 0xffff000e
+	li t1, 0xffff000e
+	li t2, 0xffff000e
+	li t3, 0xffff000e
+	li t4, 0xffff000e
+	li t5, 0xffff000e
+	li t6, 0xffff000e
+	li s3, 0xffff000e
+	
+store:
+	# store the 256 bit integer
+	or a0, x0, a0
 	sw a0, -28(sp)
-	sw a0, -24(sp)
-	sw a0, -20(sp)
-	sw a0, -16(sp)
-	sw a0, -12(sp)
-	sw a0, -8(sp)
-	sw a0, -4(sp)
-	sw x0, -0(sp)
+	or a1, x0, a1
+	sw a1, -24(sp)
+	or a2, x0, a2
+	sw a2, -20(sp)
+	or a3, x0, a3
+	sw a3, -16(sp)
+	or a4, x0, a4
+	sw a4, -12(sp)
+	or a5, x0, a5
+	sw a5, -8(sp)
+	or a6, x0, a6
+	sw a6, -4(sp)
+	or a7, x0, a7
+	sw a7, -0(sp)
 	
 	# Allocating space for second int
 	addi sp, sp, 36
-	li a0, 0xffff000c
-	sw a0, -28(sp)
-	sw a0, -24(sp)
-	sw a0, -20(sp)
-	sw a0, -16(sp)
-	sw a0, -12(sp)
-	sw a0, -8(sp)
-	sw a0, -4(sp)
-	sw x0, -0(sp)
+	or t0, x0, t0
+	sw t0, -28(sp)
+	or t1, x0, t1
+	sw t1, -24(sp)
+	or t2, x0, t2
+	sw t2, -20(sp)
+	or t3, x0, t3
+	sw t3, -16(sp)
+	or t4, x0, t4
+	sw t4, -12(sp)
+	or t5, x0, t5
+	sw t5, -8(sp)
+	or t6, x0, t6
+	sw t6, -4(sp)
+	or s3, x0, s3
+	sw s3, -0(sp)
 	
 	mv s0, sp
 	li t3, 0 # carry bit is set to 0 at the beginning
