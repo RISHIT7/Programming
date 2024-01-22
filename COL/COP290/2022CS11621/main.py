@@ -14,7 +14,7 @@ import seaborn as sns
 # ------------------------------------ generation of data frame --------------------------------------------
 def generate_dataframe(to_date, symbol):
     from jugaad_data.nse import stock_df
-    df = pd.DataFrame(stock_df(symbol=symbol[:-4], from_date=date(to_date,1,16), to_date=date(2023,1,16), series="EQ"))
+    df = pd.DataFrame(stock_df(symbol=symbol, from_date=date(to_date,1,16), to_date=date(2023,1,16), series="EQ"))
     df = df[[ "DATE", "OPEN", "CLOSE", "HIGH","LOW", "LTP", "VOLUME", "VALUE","NO OF TRADES"]]
     return df
 
@@ -216,9 +216,9 @@ def plotting_data(results, symbol):
 def main():
     to_date = 2023-int(sys.argv[2])
     argument = sys.argv[1]
-    symbol = argument + "_sol"
+    symbol = argument + ""
 
-    DATA = generate_dataframe(to_date, symbol)
+    DATA = generate_dataframe(to_date, argument)
     results = read_write_analysis(DATA, symbol)
     plotting_data(results, symbol)
 
