@@ -15,7 +15,7 @@
           .asciz "i",
           .asciz "a"
        null_string: .asciz "\n"
-
+# 2022CS11621 Rishit Jakharia
 .text
 .global _start
 _start:

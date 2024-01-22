@@ -1,3 +1,4 @@
+# 2022CS11621 Rishit Jakharia
 .global _start
 _start:
 	li t1, 10

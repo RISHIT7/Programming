@@ -1,6 +1,6 @@
 .data
 	num1: .quad
-
+# 2022CS11621 Rishit Jakharia
 .text
 .global _start
 _start:
