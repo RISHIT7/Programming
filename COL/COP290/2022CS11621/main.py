@@ -9,24 +9,25 @@ import pyarrow.orc as orc
 import fastavro
 import matplotlib.pyplot as plt
 import seaborn as sns
+from datetime import date
 # pyarrow, h5py, tables -> (pytables), feather-format -> (feather), fastavro -> (avro), seaborn, matplotlib
 
 # ------------------------------------ generation of data frame --------------------------------------------
 def generate_dataframe(to_date, symbol):
     from jugaad_data.nse import stock_df
-    df = pd.DataFrame(stock_df(symbol=symbol, from_date=date(to_date,1,16), to_date=date(2023,1,16), series="EQ"))
+    df = pd.DataFrame(stock_df(symbol=symbol, from_date=date(to_date.year-int(sys.argv[2]),to_date.month,to_date.day), to_date=date(to_date.year,to_date.month,to_date.day), series="EQ"))
     df = df[[ "DATE", "OPEN", "CLOSE", "HIGH","LOW", "LTP", "VOLUME", "VALUE","NO OF TRADES"]]
     return df
 
 # ----------------------------------------------- CSV --------------------------------------------------------
 def write_csv(DATA, symbol):
-    DATA.to_csv(path_or_buf = symbol + ".csv")
+    DATA.to_csv(path_or_buf = symbol + ".csv", index = False)
 def read_csv(symbol):
     return pd.read_csv(symbol + ".csv")
     
 # ----------------------------------------------- txt --------------------------------------------------------
 def write_txt(DATA, symbol):
-    DATA.to_csv(path_or_buf = symbol + ".txt" , sep = "\t")
+    DATA.to_csv(path_or_buf = symbol + ".txt" , sep = "\t", index = False)
 def read_txt(symbol):
     return pd.read_csv(symbol + ".txt", sep= "\t")
 
@@ -214,11 +215,11 @@ def plotting_data(results, symbol):
 
 # -------------------------------------------------------- MAIN -----------------------------------------------------------------------
 def main():
-    to_date = 2023-int(sys.argv[2])
+    today = date.today()
     argument = sys.argv[1]
     symbol = argument + ""
 
-    DATA = generate_dataframe(to_date, argument)
+    DATA = generate_dataframe(today, argument)
     results = read_write_analysis(DATA, symbol)
     plotting_data(results, symbol)
 
