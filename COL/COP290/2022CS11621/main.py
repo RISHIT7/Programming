@@ -91,18 +91,18 @@ def read_avro(symbol):
 
     return pd.DataFrame(avro_records)
 
-# ----------------------------------------------- ORC --------------------------------------------------------
-def write_orc(DATA, symbol):
-    table = pa.Table.from_pandas(DATA)
-    with pa.output_stream(symbol + ".orc") as sink:
-        orc.write_table(table, sink)
-    sink.close()
+# # ----------------------------------------------- ORC --------------------------------------------------------
+# def write_orc(DATA, symbol):
+#     table = pa.Table.from_pandas(DATA)
+#     with pa.output_stream(symbol + ".orc") as sink:
+#         orc.write_table(table, sink)
+#     sink.close()
     
-def read_orc(symbol):
-    with pa.input_stream(symbol + ".orc") as source:
-        table_read = orc.read_table(source)
+# def read_orc(symbol):
+#     with pa.input_stream(symbol + ".orc") as source:
+#         table_read = orc.read_table(source)
     
-    return table_read.to_pandas()
+#     return table_read.to_pandas()
 
 def read_write_analysis(DATA, symbol):
     write_times = []
@@ -173,16 +173,16 @@ def read_write_analysis(DATA, symbol):
     read_times.append(avg_avro_read_time)
     sizes.append(avg_avro_size/1000)
     
-    # ------------------------------------------------------ ORC ------------------------------------------------------------------
-    avg_orc_write_time = timeit.timeit(stmt=lambda: write_orc(DATA, symbol), number=10)
-    avg_orc_read_time = timeit.timeit(stmt=lambda: read_orc(symbol), number=10) # in sec
-    avg_orc_size = os.path.getsize(symbol + ".orc") # in 1000 kb 
-    write_times.append(avg_orc_write_time)
-    read_times.append(avg_orc_read_time)
-    sizes.append(avg_orc_size/1000)
+    # # ------------------------------------------------------ ORC ------------------------------------------------------------------
+    # avg_orc_write_time = timeit.timeit(stmt=lambda: write_orc(DATA, symbol), number=10)
+    # avg_orc_read_time = timeit.timeit(stmt=lambda: read_orc(symbol), number=10) # in sec
+    # avg_orc_size = os.path.getsize(symbol + ".orc") # in 1000 kb 
+    # write_times.append(avg_orc_write_time)
+    # read_times.append(avg_orc_read_time)
+    # sizes.append(avg_orc_size/1000)
     
     results = pd.DataFrame({
-        'variable' :  ['CSV', 'TXT', 'Pickle', 'Parquet', 'HDF5', 'Feather', 'JSON', 'AVRO', 'ORC'],
+        'variable' :  ['CSV', 'TXT', 'Pickle', 'Parquet', 'HDF5', 'Feather', 'JSON', 'AVRO'],
         'ReadTimes ': read_times,
         'WriteTimes ': write_times,
         'Sizes (kb)': sizes
