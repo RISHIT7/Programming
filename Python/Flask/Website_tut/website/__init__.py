@@ -25,5 +25,14 @@ def create_app():
         print("hi")
         db.create_all()
         
-        
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login' # where do we go if not logged in
+    login_manager.init_app(app) # telling the login manager, which app we are using
+    
+    # this is telling flask how we load a user
+    # and by default, it looks for the primary key, which is the int version of the id
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
+    
     return app

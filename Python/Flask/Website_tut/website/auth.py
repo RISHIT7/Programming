@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
+# this is why we needed UserMixin
+from flask_login import login_user, login_required, logout_user, current_user
 # Used for UI, and have all the URLs
 
 auth = Blueprint('auth', __name__)
@@ -18,6 +20,8 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
+                login_user(user, remember=True)
+                # this remembers the fact that the user is logged in
                 return redirect(url_for('views.home'))    
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -27,7 +31,10 @@ def login():
     return render_template("login.html")
 
 @auth.route('/logout')
+@login_required # we don't want to access this page unless logged in. so this...
 def logout():
+    logout_user()
+    flash('Logged out successfully!', category='success')
     return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods = ['GET', 'POST'])
@@ -60,6 +67,7 @@ def sign_up():
             db.session.add(new_user)
             db.session.commit()
             
+            login_user(user, remember=True)
             
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
