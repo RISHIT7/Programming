@@ -14,12 +14,21 @@ def login():
         email = request.form.get('email') # names
         password = request.form.get('password')
         
+        user = User.query.filter_by(email = email).first()
+        if user:
+            if check_password_hash(user.password, password):
+                flash('Logged in successfully!', category='success')
+                return redirect(url_for('views.home'))    
+            else:
+                flash('Incorrect password, try again.', category='error')
+        else:
+            flash('Email does not exist.', category='error')
         
     return render_template("login.html")
 
 @auth.route('/logout')
 def logout():
-    return "<p>Logout</p>"
+    return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods = ['GET', 'POST'])
 def sign_up():
@@ -34,6 +43,7 @@ def sign_up():
         
         if user:
             flash('Email already exists.', category='error')
+            return redirect(url_for('auth.login'))
         elif len(email) < 4:
             # message flashing
             flash('Email must be greater than 3 characters.', category='error')
