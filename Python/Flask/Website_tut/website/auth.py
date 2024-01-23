@@ -1,4 +1,7 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from .models import User
+from werkzeug.security import generate_password_hash, check_password_hash
+from . import db
 # Used for UI, and have all the URLs
 
 auth = Blueprint('auth', __name__)
@@ -27,7 +30,11 @@ def sign_up():
         password2 = request.form.get('password2')
         
         # now we want to check if the info is valid
-        if len(email) < 4:
+        user = User.query.filter_by(email = email).first()
+        
+        if user:
+            flash('Email already exists.', category='error')
+        elif len(email) < 4:
             # message flashing
             flash('Email must be greater than 3 characters.', category='error')
         elif len(first_name) < 2:
@@ -38,6 +45,13 @@ def sign_up():
             flash('Password must be greater than 6 characters.', category='error')
         else:
             # add user to database
+            new_user = User(email=email, first_name=first_name, password=generate_password_hash(
+                password1, method='pbkdf2:sha256'))            
+            db.session.add(new_user)
+            db.session.commit()
+            
+            
             flash('Account created!', category='success')
+            return redirect(url_for('views.home'))
         
     return render_template("sign_up.html")
