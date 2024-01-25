@@ -1,8 +1,6 @@
 # this file handels the frontend that is the home page
-from flask import Blueprint, jsonify, render_template, request, flash
+from flask import Blueprint, render_template
 from flask_login import login_required, current_user
-from . import db
-import json 
 
 views = Blueprint('views', __name__)
 
