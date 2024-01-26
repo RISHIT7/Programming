@@ -5,8 +5,6 @@ _start:
 	li t1, 1 # multiplier for conversion into decimal
 	li t2, 10 # to store the value 10 for mul
 	jal t3, atoi
-	
-	j end
 
 atoi:
 	li a7, 12
@@ -33,7 +31,6 @@ construct_int: # result stored in a1
 	add a1, a1, a0
 
 	bnez t0, construct_int
-	jr t3
 
 end:
 	li a7, 93
