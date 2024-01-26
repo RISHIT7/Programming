@@ -1,3 +1,4 @@
+# 2022CS11621, Rishit Jakharia
 .global _start
 _start:
 	mv s0, sp
