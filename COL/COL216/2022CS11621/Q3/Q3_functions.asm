@@ -1,6 +1,8 @@
 # 2022CS11621, Rishit Jakharia
 .global _start
 _start:
+	li a3, 45 # "-" sign
+
 	mv s0, sp
 	li t1, 1 # multiplier for conversion into decimal
 	li t2, 10 # to store the value 10 for mul
@@ -26,7 +28,17 @@ atoi:
 	li a7, 12
 	ecall
 	# now a0 has the character
-	
+
+	beq a0, a3, minus_sign
+	j atoi_cont
+
+minus_sign:
+	li a3, 1
+	li a7, 12
+	ecall
+
+atoi_cont:
+
 	# now to handle "\n" and " "
 	beq t2, a0, construct_int_n
 	beq t4, a0, construct_int_s
@@ -60,8 +72,20 @@ construct_int: # result stored in a1
 handle_num2:
 	addi s0, s0, -64
 	addi s9, s0, -64
+
+	# manage_sign
+	li t1, 1
+	beq a3,t1,negative_1
+	j handle_num2_cont
+
+negative_1:
+	li t1, -1
+	mul a1, a1, t1
+	
+handle_num2_cont:
 	sw a1, 0(s9)
 	li a1, 0
+	li a3, 45 # resetting sign bit
 	li t1, 1 # multiplier for conversion into decimal
 	li t2, 10 # to store the value 10 for mul
 	j atoi
@@ -71,7 +95,17 @@ end_parsing:
 	# at this point, we have one int in a1, another stored at address s9, and opperation at gp
 	lw a0, 0(s9)
 	lw a2, 0(gp)
-	
+
+	# manage sign
+	li t1, 1
+	beq a3,t1,negative_2
+	j end_parsing_cont
+
+negative_2:
+	li t1, -1
+	mul a1, a1, t1
+
+end_parsing_cont:
 	# a 97
 	li t0, 97
 	beq a2, t0, add_op

@@ -1,5 +1,7 @@
 .global _start
 _start:
+	li a2, 45 # "-" sign
+
 	mv s0, sp
 	li t0, 26
 	li t1, 1 # multiplier for conversion into decimal
@@ -10,7 +12,16 @@ atoi:
 	li a7, 12
 	ecall
 	# now a0 has the character
-	
+
+	beq a0, a2, minus_sign
+	j atoi_cont
+
+minus_sign:
+	li a2, 1
+	li a7, 12
+	ecall
+
+atoi_cont:
 	# now to handle "\n"
 	beq t2, a0, construct_int
 	
@@ -31,6 +42,15 @@ construct_int: # result stored in a1
 	add a1, a1, a0
 
 	bnez t0, construct_int
+
+manage_sign:
+	li t1, 1
+	beq a2,t1,negative
+	j end
+
+negative:
+	li t1, -1
+	mul a1, a1, t1
 
 end:
 	li a7, 93
