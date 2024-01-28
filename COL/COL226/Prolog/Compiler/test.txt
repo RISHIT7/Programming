@@ -1,0 +1,6 @@
+calculate(or(mybool(true), mybool(false)), R).
+calculate(and(mybool(true), mybool(false)), R).
+calculate(eq(numeral(3), numeral(2)), R).
+calculate(eq(numeral(3), numeral(3)), R).
+calculate(gt(numeral(3), numeral(2)), R).
+calculate(not(mybool(true)), R).
