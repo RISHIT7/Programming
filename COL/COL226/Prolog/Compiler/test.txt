@@ -4,3 +4,6 @@ calculate(eq(numeral(3), numeral(2)), R).
 calculate(eq(numeral(3), numeral(3)), R).
 calculate(gt(numeral(3), numeral(2)), R).
 calculate(not(mybool(true)), R).
+
+hastype([(x, intT), (y, intT)], plus(times(intT(2), varT(x)), times(varT(y), intT(2))), R).
+hastype([(x, intT), (y, intT)], gt(plus(times(intT(2), varT(x)), times(intT(3), intT(2))), times(varT(y), intT(2))), R).
