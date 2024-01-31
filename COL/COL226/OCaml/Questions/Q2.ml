@@ -1,3 +1,4 @@
+(* string compare *)
 let test x = match x with
 | "foo" -> 1
 | "dat" -> 2
