@@ -8,18 +8,50 @@ import plotly.graph_objs as go
 import pandas as pd
 
 views = Blueprint('views', __name__)
-PATH = "./website/DATA/DATA.pkl"
+PATH = "./website/data/DATA.pkl"
 
-def generate_candlestick_chart(PATH, symbol):
+def generate_candlestick_chart(PATH, symbol, button):
     df = pd.read_pickle(PATH)
+    if button == "m":
+        df['idx'] = df['DATE']
+        df.set_index('idx', inplace = True)
+        df = df.resample('M').last()
+    if button == "w":
+        df['idx'] = df['DATE']
+        df.set_index('idx', inplace = True)
+        df = df.resample('W').last()
     candlestick_trace = go.Candlestick(x=df['DATE'],
                                     open=df['OPEN'],
                                     high=df['HIGH'],
                                     low=df['LOW'],
                                     close=df['CLOSE'])
-
-    layout = go.Layout(title="Candlestick Chart", xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=600, xaxis_rangeslider_visible=False,dragmode='pan')
+    layout = go.Layout(title=symbol, xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800,dragmode='pan')
     figure = go.Figure(data=[candlestick_trace], layout=layout)
+    figure.update_layout(
+    xaxis=dict(
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1,
+                     label="1m",
+                     step="month",
+                     stepmode="backward"),
+                dict(count=6,
+                     label="6m",
+                     step="month",
+                     stepmode="backward"),
+                dict(count=1,
+                     label="1y",
+                     step="year",
+                     stepmode="backward"),
+                dict(step="all")
+                ])
+            ),
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        )
+    )
     return figure.to_html(full_html=False)
 
 @views.route('/', methods = ['GET', 'POST'])
@@ -27,7 +59,7 @@ def generate_candlestick_chart(PATH, symbol):
 def home():
 
     today = date.today()
-    last = today - relativedelta(years = 2)
+    last = today - relativedelta(years = 5)
     df = stock_df(symbol = "SBIN", from_date=last, to_date=today, series="EQ")
 
     if request.method=='POST':
@@ -52,13 +84,21 @@ def home():
 @views.route('/graph', methods = ['GET', 'POST'])
 @login_required
 def graph():
-    df = request.args.get('arg1')
+    PATH = request.args.get('arg1')
     symbol = request.args.get('arg2')
-    symbols = []
-    symbols.append(symbol)
-    if df:
-        candlestick_chart = generate_candlestick_chart(df, symbol)
-
-        return render_template("graph.html", user = current_user, candlestick_chart = candlestick_chart, symbols = symbols)
+    button = ""
+    if request.method == "POST":
+        button_daily = request.form.get('Daily')
+        button_weekly = request.form.get('Weekly')
+        button_monthly = request.form.get('Monthly')
+        if button_daily:
+            button = "d"
+        elif button_weekly:
+            button = "w"
+        elif button_monthly:
+            button = "m"
+    if PATH:
+        candlestick_chart = generate_candlestick_chart(PATH, symbol, button)
+        return render_template("graph.html", user = current_user, candlestick_chart = candlestick_chart)
 
     return redirect(url_for('views.home'))
