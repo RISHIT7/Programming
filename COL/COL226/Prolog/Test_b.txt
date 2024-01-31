@@ -9,7 +9,7 @@ unionI([1, 17, 568], [34, 4, 4], [1, 17, 568, 34, 4, 4]). -> true
 
 powerI([1,2], [[], [1, 2], [1], [2]]). -> false
 powerI([1,2], [[1, 2], [1], [2], []].). -> true
-powerI([[]],  [[[]], []].). -> true
+powerI([[]],  [[[]], []].).
 powerI([3, 4, 4], Result).
 Result = [[3, 4, 4], [3, 4], [3, 4], [3], [4, 4], [4], [4], []].
 # implements power on the assumption that the inputs are sets, and that the order remains the same, hence these are ordered sets
