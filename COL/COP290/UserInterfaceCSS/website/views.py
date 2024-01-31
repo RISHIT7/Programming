@@ -12,6 +12,7 @@ PATH = "./website/data/DATA.pkl"
 
 def generate_candlestick_chart(PATH, symbol, button):
     df = pd.read_pickle(PATH)
+    print(df)
     if button == "m":
         df['idx'] = df['DATE']
         df.set_index('idx', inplace = True)
@@ -57,13 +58,10 @@ def generate_candlestick_chart(PATH, symbol, button):
 @views.route('/', methods = ['GET', 'POST'])
 @login_required
 def home():
-
     today = date.today()
     last = today - relativedelta(years = 5)
     df = stock_df(symbol = "SBIN", from_date=last, to_date=today, series="EQ")
-
     if request.method=='POST':
-      
         if request.form.get('start'):
             today = request.form.get('start')
             today = datetime.strptime(today, '%Y-%m-%d').date()
