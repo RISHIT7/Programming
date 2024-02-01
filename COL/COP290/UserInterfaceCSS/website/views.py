@@ -10,9 +10,10 @@ import pandas as pd
 views = Blueprint('views', __name__)
 PATH = "./website/data/DATA.pkl"
 
+stock_lists=[]
+
 def generate_candlestick_chart(PATH, symbol, button):
     df = pd.read_pickle(PATH)
-    print(df)
     if button == "m":
         df['idx'] = df['DATE']
         df.set_index('idx', inplace = True)
@@ -58,10 +59,14 @@ def generate_candlestick_chart(PATH, symbol, button):
 @views.route('/', methods = ['GET', 'POST'])
 @login_required
 def home():
+
+    stock_lists=[]
     today = date.today()
     last = today - relativedelta(years = 5)
     df = stock_df(symbol = "SBIN", from_date=last, to_date=today, series="EQ")
+
     if request.method=='POST':
+      
         if request.form.get('start'):
             today = request.form.get('start')
             today = datetime.strptime(today, '%Y-%m-%d').date()
@@ -82,6 +87,7 @@ def home():
 @views.route('/graph', methods = ['GET', 'POST'])
 @login_required
 def graph():
+    stock_lists=[]
     PATH = request.args.get('arg1')
     symbol = request.args.get('arg2')
     button = ""
@@ -104,4 +110,23 @@ def graph():
 @views.route('/compare', methods = ['GET', 'POST'])
 @login_required
 def compare():
-    return render_template("compare.html", user = current_user)
+    if request.method == "POST":
+        if request.form.get('add-symbol'):
+            symbol = request.form.get('add-symbol')
+            today = date.today()
+            last = today - relativedelta(years = 5)
+            df = stock_df(symbol = symbol, from_date=last, to_date=today, series="EQ")
+            stock_lists.append(df)
+
+    trace_list=[]
+    for stock in stock_lists:
+        trace_list.append(go.Scatter(x=stock['DATE'],
+                                     y=stock['CLOSE'],
+                                     mode='lines',
+                                     name=stock['SYMBOL'][0]
+                                     ))
+    layout = go.Layout(title='COMPARISON CHART', xaxis=dict(title='Date'),yaxis=dict(title='Price'),xaxis_rangeslider=dict(visible=True),height=700)
+    figure = go.Figure(data=trace_list, layout=layout)
+    chart = figure.to_html(full_html=False)
+
+    return render_template("compare.html", user = current_user, compare_graph=chart)
