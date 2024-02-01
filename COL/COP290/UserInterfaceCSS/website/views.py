@@ -11,6 +11,7 @@ views = Blueprint('views', __name__)
 PATH = "./website/data/DATA.pkl"
 
 stock_lists=[]
+indicators = []
 
 def generate_macd_trace(df):
     pass
@@ -120,7 +121,7 @@ def graph():
     PATH = request.args.get('arg1')
     symbol = request.args.get('arg2')
     button = ""
-    indicators = []
+    print(indicators)
     
     if request.method == "POST":
         
@@ -148,6 +149,8 @@ def graph():
             indicators.append('s50')
         if button_SMA_100:
             indicators.append('s100')
+        if request.form.get('clear'):
+            indicators.clear()
         
     if PATH:
         candlestick_chart = generate_candlestick_chart(PATH, symbol, button, indicators)
