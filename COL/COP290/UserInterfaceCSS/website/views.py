@@ -14,7 +14,23 @@ stock_lists=[]
 indicators = []
 
 def generate_macd_trace(df):
-    pass
+    short_window = 12
+    long_window = 26
+    
+    short_ema = df['CLOSE'].ewm(span=short_window, adjust=False).mean()
+    long_ema = df['CLOSE'].ewm(span=long_window, adjust=False).mean()
+    
+    macd_line = short_ema - long_ema
+    
+    signal_window = 9
+    signal_line = macd_line.ewm(span=signal_window, adjust=False).mean()
+    
+    df['MACD'] = macd_line
+    df['Signal_line'] = signal_line
+    
+    macd_trace = go.Scatter(x = df['DATE'], y = df['MACD'], mode='lines', name='MACD line')
+    signal_trace = go.Scatter(x = df['DATE'], y = df['Signal_line'], mode='lines', name='Signal line')
+    return macd_trace, signal_trace
 
 def generate_rsi_trace(df):
     pass
@@ -45,11 +61,13 @@ def generate_candlestick_chart(PATH, symbol, button, indicators = ""):
                                     open=df['OPEN'],
                                     high=df['HIGH'],
                                     low=df['LOW'],
-                                    close=df['CLOSE'])
+                                    close=df['CLOSE'], name='Stock Data')
     trace_list.append(candlestick_trace)
 
     if 'm' in indicators:
-        macd_trace = generate_macd_trace(df)
+        macd_trace, signal_trace = generate_macd_trace(df)
+        trace_list.append(macd_trace)
+        trace_list.append(signal_trace)
     if 'r' in indicators:
         rsi_trace = generate_rsi_trace(df)
     if 's50' in indicators:
