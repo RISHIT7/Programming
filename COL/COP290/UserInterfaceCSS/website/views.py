@@ -12,7 +12,7 @@ PATH = "./website/data/DATA.pkl"
 
 stock_lists=[]
 
-def generate_candlestick_chart(PATH, symbol, button):
+def generate_candlestick_chart(PATH, symbol, button, indicators):
     df = pd.read_pickle(PATH)
     if button == "m":
         df['idx'] = df['DATE']
@@ -91,6 +91,8 @@ def graph():
     symbol = request.args.get('arg2')
     button = ""
     if request.method == "POST":
+        
+        # daily_weekly_monthly control
         button_daily = request.form.get('Daily')
         button_weekly = request.form.get('Weekly')
         button_monthly = request.form.get('Monthly')
@@ -100,8 +102,24 @@ def graph():
             button = "w"
         elif button_monthly:
             button = "m"
+            
+        # Indicators control
+        indicators = []
+        button_MACD = request.form.get('MACD')
+        button_RSI = request.form.get('RSI')
+        button_SMA_50 = request.form.get('SMA-50')
+        button_SMA_100 = request.form.get('SMA-100')
+        if button_MACD:
+            indicators.append('m')
+        if button_RSI:
+            indicators.append('r')
+        if button_SMA_50:
+            indicators.append('s50')
+        if button_SMA_100:
+            indicators.append('s100')
+        
     if PATH:
-        candlestick_chart = generate_candlestick_chart(PATH, symbol, button)
+        candlestick_chart = generate_candlestick_chart(PATH, symbol, button, indicators)
         return render_template("graph.html", user = current_user, candlestick_chart = candlestick_chart)
 
     return redirect(url_for('views.home'))
