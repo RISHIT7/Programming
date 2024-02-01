@@ -33,7 +33,26 @@ def generate_macd_trace(df):
     return macd_trace, signal_trace
 
 def generate_rsi_trace(df):
-    pass
+    df['Price Change'] = df['CLOSE'].diff()
+
+    # Define the period for calculating average gain and average loss
+    rsi_period = 14
+
+    # Calculate the average gain and average loss
+    df['Gain'] = df['Price Change'].apply(lambda x: x if x > 0 else 0)
+    df['Loss'] = df['Price Change'].apply(lambda x: abs(x) if x < 0 else 0)
+
+    df['Average Gain'] = df['Gain'].rolling(window=rsi_period, min_periods=1).mean()
+    df['Average Loss'] = df['Loss'].rolling(window=rsi_period, min_periods=1).mean()
+
+    # Calculate the relative strength (RS)
+    df['RS'] = df['Average Gain'] / df['Average Loss']
+
+    # Calculate the RSI
+    df['RSI'] = 100 - (100 / (1 + df['RS']))
+    
+    rsi_trace = go.Scatter(x = df['DATE'], y = df['RSI'], mode = 'lines', name='RSI line')
+    return rsi_trace
 
 def generate_s50_trace(df):
     pass
@@ -70,6 +89,7 @@ def generate_candlestick_chart(PATH, symbol, button, indicators = ""):
         trace_list.append(signal_trace)
     if 'r' in indicators:
         rsi_trace = generate_rsi_trace(df)
+        trace_list.append(rsi_trace)
     if 's50' in indicators:
         s50_trace = generate_s50_trace(df)
     if 's100' in indicators:
