@@ -22,13 +22,17 @@ def generate_candlestick_chart(PATH, symbol, button, indicators):
         df['idx'] = df['DATE']
         df.set_index('idx', inplace = True)
         df = df.resample('W').last()
+
+    trace_list = []
     candlestick_trace = go.Candlestick(x=df['DATE'],
                                     open=df['OPEN'],
                                     high=df['HIGH'],
                                     low=df['LOW'],
                                     close=df['CLOSE'])
+    trace_list.append(candlestick_trace)
+
     layout = go.Layout(title=symbol, xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800,dragmode='pan')
-    figure = go.Figure(data=[candlestick_trace], layout=layout)
+    figure = go.Figure(data=trace_list, layout=layout)
     figure.update_layout(
     xaxis=dict(
         rangeselector=dict(
