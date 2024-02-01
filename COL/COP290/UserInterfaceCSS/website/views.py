@@ -12,8 +12,24 @@ PATH = "./website/data/DATA.pkl"
 
 stock_lists=[]
 
-def generate_candlestick_chart(PATH, symbol, button, indicators):
+def generate_macd_trace(df):
+    pass
+
+def generate_rsi_trace(df):
+    pass
+
+def generate_s50_trace(df):
+    pass
+
+def generate_s100_trace(df):
+    pass
+
+def generate_candlestick_chart(PATH, symbol, button, indicators = ""):
     df = pd.read_pickle(PATH)
+    if button == "d":
+        df['idx'] = df['DATE']
+        df.set_index('idx', inplace = True)
+        df = df.resample('D').last()        
     if button == "m":
         df['idx'] = df['DATE']
         df.set_index('idx', inplace = True)
@@ -30,6 +46,15 @@ def generate_candlestick_chart(PATH, symbol, button, indicators):
                                     low=df['LOW'],
                                     close=df['CLOSE'])
     trace_list.append(candlestick_trace)
+
+    if 'm' in indicators:
+        macd_trace = generate_macd_trace(df)
+    if 'r' in indicators:
+        rsi_trace = generate_rsi_trace(df)
+    if 's50' in indicators:
+        s50_trace = generate_s50_trace(df)
+    if 's100' in indicators:
+        s100_trace = generate_s100_trace(df)
 
     layout = go.Layout(title=symbol, xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800,dragmode='pan')
     figure = go.Figure(data=trace_list, layout=layout)
@@ -90,10 +115,13 @@ def home():
 @views.route('/graph', methods = ['GET', 'POST'])
 @login_required
 def graph():
+    
     stock_lists.clear()
     PATH = request.args.get('arg1')
     symbol = request.args.get('arg2')
     button = ""
+    indicators = []
+    
     if request.method == "POST":
         
         # daily_weekly_monthly control
@@ -108,7 +136,6 @@ def graph():
             button = "m"
             
         # Indicators control
-        indicators = []
         button_MACD = request.form.get('MACD')
         button_RSI = request.form.get('RSI')
         button_SMA_50 = request.form.get('SMA-50')
