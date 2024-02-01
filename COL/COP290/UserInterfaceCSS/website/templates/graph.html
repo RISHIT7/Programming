@@ -2,9 +2,8 @@
 content%} {% if user.is_authenticated %}
 <div id="graph-cont">
   <div id="graph">{{ candlestick_chart | safe}}</div>
-  <div id="buttons">
-    <a href="/compare" class="submit-btn">Compare</a>
-    <a href="/" class="submit-btn">Search</a>
+  <div class = "stocks-list">
+    <button class="submit-btn" name = "Add">Add</button>
   </div>
 </div>
 <div class="graph-pane">

@@ -12,9 +12,13 @@
             /></br>
             <button type="submit" class = "compare-btn">Add</button>
         </form>
-
         <div class="comparison-graph">
             {{ compare_graph | safe }}
+            <form method = "POST">
+                <div>
+                    <button class="submit-btn" name = "clear" type = "submit" value="clear">Clear</button>
+                </div>
+            </form>
         </div>
 
     </div>

@@ -59,8 +59,7 @@ def generate_candlestick_chart(PATH, symbol, button):
 @views.route('/', methods = ['GET', 'POST'])
 @login_required
 def home():
-
-    stock_lists=[]
+    stock_lists.clear()
     today = date.today()
     last = today - relativedelta(years = 5)
     df = stock_df(symbol = "SBIN", from_date=last, to_date=today, series="EQ")
@@ -87,7 +86,7 @@ def home():
 @views.route('/graph', methods = ['GET', 'POST'])
 @login_required
 def graph():
-    stock_lists=[]
+    stock_lists.clear()
     PATH = request.args.get('arg1')
     symbol = request.args.get('arg2')
     button = ""
@@ -117,6 +116,8 @@ def compare():
             last = today - relativedelta(years = 5)
             df = stock_df(symbol = symbol, from_date=last, to_date=today, series="EQ")
             stock_lists.append(df)
+        if request.form.get('clear'):
+            stock_lists.clear()
 
     trace_list=[]
     for stock in stock_lists:
