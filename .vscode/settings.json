@@ -12,6 +12,6 @@
     "cmake.configureOnOpen": false,
     "ocaml.sandbox": {
         "kind": "custom",
-        "template": "$prog $args"
+        "template": "ocamlc -o $prog $args"
     }
 }
