@@ -36,7 +36,7 @@ let rec size e = match e with
 
 type values = N of int | B of bool;;
 
-let [@warning "-8"] rec interpret exp  rho = match exp with
+let [@warning "-8"] rec interpret exp rho = match exp with
 | Num n -> N n
 | Bl T -> B true
 | Bl F -> B false

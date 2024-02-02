@@ -9,5 +9,9 @@
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": true,
     "C_Cpp.errorSquiggles": "disabled",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "ocaml.sandbox": {
+        "kind": "custom",
+        "template": "$prog $args"
+    }
 }
