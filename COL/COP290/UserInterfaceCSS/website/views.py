@@ -34,11 +34,14 @@ def get_MC(symbol):
 def get_Price(symbol):
     symbol += ".NS"
     stock_data = yq.Ticker(symbol)
-    Price = stock_data.summary_detail[symbol]['previousClose']
+    Price = stock_data.history(period='1d')['close'].iloc[0]
     return Price
 
 def get_Volume(symbol):
-    pass
+    symbol += ".NS"
+    stock_data = yq.Ticker(symbol)
+    Volume = stock_data.history(period='1d')['volume'].iloc[0]
+    return Volume
 
 # ------------------------------------------------------------------------ list generators for each filter ----------------------------------------------------------------------------------------
 def list_PE():
@@ -59,15 +62,19 @@ def list_MC():
 
 def list_Price():
     result = []
-    NIFTY = ["ADANIENT","ADANIPORTS","APOLLOHOSP","ASIANPAINT","AXISBANK","BAJAJ-AUTO","BAJFINANCE","BAJAJFINSV","BPCL","BHARTIARTL","BRITANNIA","CIPLA","COALINDIA""DIVISLAB","DRREDDY","EICHERMOT","GRASIM","HCLTECH","HDFCBANK","HEROMOTOCO","HDFCLIFE","HINDALCO","HINDUNILVR","ICICIBANK","ITC","INDUSINDBK","INFY","JSWSTEEL","KOTAKBANK","LTIM""LT","MARUTI","NTPC","NESTLEIND""ONGC","POWERGRID","RELIANCE","SBIN","SUNPHARMA","TCS","TATACONSUM","TATAMOTORS","TATASTEEL", "TECHM","TITAN","UPL","ULTRACEMCO","WIPRO"]
+    NIFTY = ["ADANIENT","ADANIPORTS","APOLLOHOSP","ASIANPAINT","AXISBANK","BAJAJ-AUTO","BAJFINANCE","BAJAJFINSV","BPCL","BHARTIARTL","BRITANNIA","CIPLA","DIVISLAB","DRREDDY","EICHERMOT","GRASIM","HCLTECH","HDFCBANK","HEROMOTOCO","HDFCLIFE","HINDALCO","ICICIBANK","ITC","INFY","JSWSTEEL","KOTAKBANK","LT","MARUTI","NTPC","ONGC","POWERGRID","RELIANCE","SBIN","SUNPHARMA","TCS","TATACONSUM","TATAMOTORS", "TECHM","TITAN","ULTRACEMCO","WIPRO"]
     for symbol in NIFTY:
         result.append((symbol, get_Price(symbol)))
     
     return result
 
 def list_Volume():
-    return []
-
+    result = []
+    NIFTY = ["ADANIENT","ADANIPORTS","APOLLOHOSP","ASIANPAINT","AXISBANK","BAJAJ-AUTO","BAJFINANCE","BAJAJFINSV","BPCL","BHARTIARTL","BRITANNIA","CIPLA","DIVISLAB","DRREDDY","EICHERMOT","GRASIM","HCLTECH","HDFCBANK","HEROMOTOCO","HDFCLIFE","HINDALCO","ICICIBANK","ITC","INFY","JSWSTEEL","KOTAKBANK","LT","MARUTI","NTPC","ONGC","POWERGRID","RELIANCE","SBIN","SUNPHARMA","TCS","TATACONSUM","TATAMOTORS", "TECHM","TITAN","ULTRACEMCO","WIPRO"]
+    for symbol in NIFTY:
+        result.append((symbol, get_Volume(symbol)))
+    
+    return result
 # ----------------------------------------------------------------------- trace generator functions for indicators -------------------------------------------------------------------- 
 def generate_macd_trace(df):
     short_window = 12
@@ -317,15 +324,20 @@ def filter():
             if filter == 'PE Ratio':
                 list = list_PE()
                 list.sort(key = lambda x: x[1])
+                result = list[:number]
             elif filter == 'Market Cap':
                 list = list_MC()
                 list.sort(key = lambda x: x[1])
+                result = list[:number]
             elif filter == 'Price':
                 list = list_Price()
-                print(list)
+                list.sort(key = lambda x: x[1])
+                result = list[:number]
+                print(result)
             elif filter == 'Volume':
                 list = list_Volume()
-                print(list)
+                list.sort(key = lambda x: x[1])
+                result = list[:number]
             else:
                 flash("Filter Type Not Supported", category='error')
             return render_template("filter.html", user = current_user)
