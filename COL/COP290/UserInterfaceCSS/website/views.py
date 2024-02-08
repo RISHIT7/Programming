@@ -308,10 +308,12 @@ def filter():
         else:
             if filter == 'PE Ratio':
                 list = list_PE()
-                print(list)
+                list.sort(key = lambda x: x[1])
+                print(list[:number])
             elif filter == 'Market Cap':
                 list = list_MC()
-                print(list)
+                list.sort(key = lambda x: x[1])
+                print(list[:number])
             elif filter == 'Price':
                 list = list_Price()
                 print(list)
