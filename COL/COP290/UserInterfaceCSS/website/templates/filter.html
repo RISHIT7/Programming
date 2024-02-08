@@ -3,7 +3,12 @@
     
     <div class="filter-container">
       <form method="post">
-        <input type="text" class="search-field" id="filter" name="filter" placeholder="Enter Filter" /></br>
+        <input list ="filter_list" class="search-field" id="filter" name="filter" placeholder="Enter Filter" /><datalist id = "filter_list">
+          <option value = "PE Ratio">
+          <option value = "Market Cap">
+          <option value = "Price">
+          <option value = "Volume">
+        </datalist></br>
         <input type="number" class="search-field" id="number" name="number" placeholder="Enter no. of stocks" /></br>
         <br>
         <button type="submit" class="search-btn">Apply</button>
