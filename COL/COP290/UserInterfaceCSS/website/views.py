@@ -32,7 +32,10 @@ def get_MC(symbol):
     return MC
 
 def get_Price(symbol):
-    pass
+    symbol += ".NS"
+    stock_data = yq.Ticker(symbol)
+    Price = stock_data.summary_detail[symbol]['previousClose']
+    return Price
 
 def get_Volume(symbol):
     pass
@@ -55,7 +58,12 @@ def list_MC():
     return result
 
 def list_Price():
-    return []
+    result = []
+    NIFTY = ["ADANIENT","ADANIPORTS","APOLLOHOSP","ASIANPAINT","AXISBANK","BAJAJ-AUTO","BAJFINANCE","BAJAJFINSV","BPCL","BHARTIARTL","BRITANNIA","CIPLA","COALINDIA""DIVISLAB","DRREDDY","EICHERMOT","GRASIM","HCLTECH","HDFCBANK","HEROMOTOCO","HDFCLIFE","HINDALCO","HINDUNILVR","ICICIBANK","ITC","INDUSINDBK","INFY","JSWSTEEL","KOTAKBANK","LTIM""LT","MARUTI","NTPC","NESTLEIND""ONGC","POWERGRID","RELIANCE","SBIN","SUNPHARMA","TCS","TATACONSUM","TATAMOTORS","TATASTEEL", "TECHM","TITAN","UPL","ULTRACEMCO","WIPRO"]
+    for symbol in NIFTY:
+        result.append((symbol, get_Price(symbol)))
+    
+    return result
 
 def list_Volume():
     return []
@@ -309,11 +317,9 @@ def filter():
             if filter == 'PE Ratio':
                 list = list_PE()
                 list.sort(key = lambda x: x[1])
-                print(list[:number])
             elif filter == 'Market Cap':
                 list = list_MC()
                 list.sort(key = lambda x: x[1])
-                print(list[:number])
             elif filter == 'Price':
                 list = list_Price()
                 print(list)
