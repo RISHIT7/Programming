@@ -46,7 +46,7 @@ int main(int argv, char *argc[])
     order_file << "Date,Order_dir,Quantity,Price\n";
 
     long unsigned int len{data.size()};
-    double sma = 0, sd = 0, variance = 0;
+    double sma = 0, sd = 0, variance = 0, sumOfSquares = 0;
     int stocks{};
     double cashflow{};
 
@@ -55,24 +55,24 @@ int main(int argv, char *argc[])
         // the first n0 days we have no DMA so we can continue
         if (i < n0)
         {
-            sma += (data[i].second) / n0;
-            variance += (data[i].second * data[i].second) / n0;
+            sma += (data[i].second)/n0;
+            sumOfSquares += (data[i].second * data[i].second);
             continue;
         }
 
         // getting the first value of sma and sd
-        variance -= sma * sma;
+        variance = sumOfSquares/n0 - (sma*sma);
         sd = sqrt(variance);
 
         // implementing buy and sell
-        if (data[i].second > sma + (p * sd))
+        if ((data[i].second > sma + (p * sd)) and stocks < x)
         {
             // buy
             stocks++;
             order_file << data[i].first << ",BUY,1," << data[i].second << "\n";
             cashflow -= data[i].second;
         }
-        else if (data[i].second < sma - (p * sd))
+        else if ((data[i].second < sma - (p * sd)) and stocks > -x)
         {
             // sell
             stocks--;
@@ -81,8 +81,8 @@ int main(int argv, char *argc[])
         }
 
         // update sma and sd
-        sma = sma - (data[i - n0].second) / n0 + (data[i].second) / n0;
-        variance = variance - (data[i - n0].second * data[i - n0].second) / n0 + (data[i].second * data[i].second) / n0;
+        sma = sma + ((data[i].second-data[i-n0].second)/n0);
+        sumOfSquares = sumOfSquares + (((data[i].second*data[i].second) - (data[i-n0].second*data[i-n0].second)));
 
         // cash_file
         cash_file << data[i].first << "," << cashflow << "\n";
