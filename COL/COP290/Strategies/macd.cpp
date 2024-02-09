@@ -76,6 +76,7 @@ int main(int argv, char *argc[])
 
     for (int i = 0; i < len; i++)
     {
+        // macd implementations
         long_ewm = get_ewm(data, i, long_term, (double)2.0/(1+long_term));
         short_ewm = get_ewm(data, i, short_term, (double)2.0/(1+short_term));
         macd = short_ewm - long_ewm;
