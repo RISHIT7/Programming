@@ -88,7 +88,7 @@ int main(int argv, char *argc[])
         cash_file << data[i].first << "," << cashflow << "\n";
     }
 
-    double final_pnl{cashflow + (stocks*data[len].second)};
+    double final_pnl{cashflow + (stocks*data[len-1].second)};
     final_file << final_pnl << "\n";
 
     cash_file.close();
