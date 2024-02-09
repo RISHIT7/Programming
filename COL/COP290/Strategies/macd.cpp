@@ -8,7 +8,7 @@
 #include <string>
 using namespace std;
 
-std::map<std::tuple<int, int>, double> memo_ewm;
+map<std::tuple<int, int>, double> memo_ewm;
 
 double get_ewm(vector<pair<string, double>> data, int i, int n, double alpha)
 {
