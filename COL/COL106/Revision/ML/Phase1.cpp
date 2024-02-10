@@ -12,7 +12,6 @@ bool inverseMatrix(const std::vector<std::vector<double>> &matrix, std::vector<s
         return false;
     }
 
-    // Augment the matrix with an identity matrix
     std::vector<std::vector<double>> augmentedMatrix(n, std::vector<double>(2 * n, 0.0));
     for (int i = 0; i < n; ++i)
     {
@@ -23,7 +22,6 @@ bool inverseMatrix(const std::vector<std::vector<double>> &matrix, std::vector<s
         }
     }
 
-    // Perform Gaussian elimination
     for (int i = 0; i < n; ++i)
     {
         if (augmentedMatrix[i][i] == 0.0)
@@ -45,7 +43,6 @@ bool inverseMatrix(const std::vector<std::vector<double>> &matrix, std::vector<s
         }
     }
 
-    // Normalize the inverse matrix
     for (int i = 0; i < n; ++i)
     {
         double pivot = augmentedMatrix[i][i];
@@ -55,7 +52,6 @@ bool inverseMatrix(const std::vector<std::vector<double>> &matrix, std::vector<s
         }
     }
 
-    // Extract the inverse matrix
     result.resize(n, std::vector<double>(n));
     for (int i = 0; i < n; ++i)
     {
