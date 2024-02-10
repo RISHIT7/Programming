@@ -1,112 +1,92 @@
-#include <iostream>
-#include <cmath>
-#include <set>
 #include <vector>
+#include <list>
+#include <iostream>
 #include <map>
-#include <unordered_map>
-#include <queue>
-#include <stack>
-#include <algorithm>
+#include <tuple>
 #include <string>
 using namespace std;
 
-// #define int long long
-#define ll long long int
-#define vi vector<int>
-#define pii pair<int, int>
-#define vii vector<pii>
-#define rep(i, a, b) for (int i = a; i < b; i++)
-#define ff first
-#define ss second
-#define setBits(x) builtin_popcount(x)
-#define fastio()                      \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL);
-#define print_any(vec)     \
-    for (auto value : vec) \
-        cout << value << " ";
-#define next_line cout << endl;
+// calculate a moving average
+double calcMA(double previousAverage, unsigned int previousNumDays, double newStock)
+{
+    auto rslt = previousNumDays * previousAverage + newStock;
+    return rslt / (previousNumDays + 1.0);
+}
 
-const int N = 1e5 + 2, MOD = 1e9 + 7;
+// calculate an exponential moving average
+double calcEMA(double previousAverage, int timePeriod, double newStock)
+{
+    auto mult = 2.0 / (timePeriod + 1.0);
+    auto rslt = (newStock - previousAverage) * mult + previousAverage;
+    return rslt;
+}
 
-struct node{
-    int data;
-    struct node* right ;
-    struct node* left ;
-    node(int val){
-        data = val;
-        left = NULL;
-        right = NULL;
-    }    
+map<std::tuple<int, int>, double> memo_ewm;
+
+double get_ewm(vector<pair<string, double>> data, int i, int n, double alpha)
+{
+    if (i == 0)
+    {
+        return data[0].second;
+    }
+
+    auto key = std::make_tuple(i, n);
+    if (memo_ewm.find(key) != memo_ewm.end())
+    {
+        return memo_ewm[key];
+    }
+    double prev_ewm = get_ewm(data, i - 1, n, alpha);
+    double ewm = (alpha * (data[i].second - prev_ewm)) + prev_ewm;
+
+    memo_ewm[key] = ewm;
+    return ewm;
+}
+
+class Trade
+{
+    unsigned int timePeriod_ = 5;
+    double lastMA_ = 0.0;
+    std::list<double> stockPrices_;
+
+public:
+    void addStock(double newStock)
+    {
+        stockPrices_.push_back(newStock);
+        auto num_days = stockPrices_.size();
+
+        if (num_days <= timePeriod_)
+            lastMA_ = calcMA(lastMA_, num_days - 1, newStock);
+        else
+            lastMA_ = calcEMA(lastMA_, num_days - 1, newStock);
+    }
+
+    double getAverage() const { return lastMA_; }
 };
 
-void swap(int* a, int* b ){
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void calcPointers(node* root, node** first, node** mid, node** last, node** prev){
-    if(root==NULL){
-        return ;
+// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+int main()
+{
+    std::vector<double> stocks =
+        {1000, 1100, 1200, 1300, 1400, 1500,
+         1400, 1300, 1200, 1100, 1000};
+    vector<pair<string, double>> stocks_line;
+    for (int i = 0; i < stocks.size(); i++)
+    {
+        stocks_line.push_back({to_string(i), stocks[i]});
     }
-    calcPointers(root->left, first, mid, last, prev);
 
-    if(prev && root->data < (*prev)->data){
-        if(!*first){
-            *first = *prev;
-            *mid=root;
-        }
-    else{
-        *last = root;
+    double ewm;
+    for (int i = 0; i < stocks.size(); i++)
+    {
+        ewm = get_ewm(stocks_line, i, 4, 2.0/(1+4));
+        cout << ewm << endl;
     }
+
+    Trade trade;
+    for (auto stock : stocks)
+    {
+        trade.addStock(stock);
+        std::cout << "Average: " << trade.getAverage() << std::endl;
     }
-    *prev = root;
-
-    calcPointers(root->right, first, mid, last, prev);
-
-}
-
-void RestoreBST(node* root){
-    node* first=NULL;
-    node* mid=NULL;
-    node* last=NULL;
-    node* prev=NULL;
-    
-    calcPointers(root, &first, &mid, &last, &prev);
-
-    if(first && last){
-        swap(&(first->data), &(last->data));
-    }
-    else if(first && mid){
-        swap(&(first->data), &(mid->data));
-    }
-}
-
-void inorder(node* root){
-    if(root==NULL){
-        return ;
-    }
-    inorder(root->left);
-    cout<<root->data<<" ";
-    inorder(root->right);
-}
-
-int main(){
-    node* root = new node(6);
-    root->left = new node(9);
-    root->right = new node(3);
-    root->left->left = new node(1);
-    root->left->right = new node(4);
-    root->right->right = new node(13);
-
-    inorder(root);
-    cout<<endl;
-    RestoreBST(root);
-    
-    inorder(root);
-    cout<<endl;
-
     return 0;
 }
