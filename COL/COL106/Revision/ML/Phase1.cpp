@@ -137,8 +137,52 @@ int main()
         {1, 1, 5, 3},
         {1, 4, 77, 6},
         {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
+        {1, 4, 4, 4},
+        {1, 1, 5, 3},
+        {1, 4, 77, 6},
+        {1, 7, 134, 9},
         {1, 4, 4, 4}};
-    vector<vector<double>> y = {{1, 2, 3, 5}};
+    vector<vector<double>> y = {{1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5}};
     vector<vector<double>> params;
 
     vector<vector<double>> x_transpose;
@@ -149,8 +193,8 @@ int main()
     // Calculate the transpose
     x_transpose = transposeMatrix(matrix);
     x_transpose_x = crossMultiply(x_transpose, matrix);
-    x_transpose_y = crossMultiply(x_transpose, y);
     print(x_transpose_x);
+    x_transpose_y = crossMultiply(x_transpose, y);
     inverseMatrix(x_transpose_x, result);
     params = crossMultiply(result, x_transpose_y);
     print(params);
