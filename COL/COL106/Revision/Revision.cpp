@@ -1,92 +1,143 @@
-#include <vector>
-#include <list>
 #include <iostream>
-#include <map>
-#include <tuple>
-#include <string>
-using namespace std;
+#include <vector>
 
-// calculate a moving average
-double calcMA(double previousAverage, unsigned int previousNumDays, double newStock)
+// Function to print a matrix
+void printMatrix(const std::vector<std::vector<double>> &matrix)
 {
-    auto rslt = previousNumDays * previousAverage + newStock;
-    return rslt / (previousNumDays + 1.0);
+    for (const auto &row : matrix)
+    {
+        for (double element : row)
+        {
+            std::cout << element << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
-// calculate an exponential moving average
-double calcEMA(double previousAverage, int timePeriod, double newStock)
+// Function to calculate the cofactor of a matrix element
+void getCofactor(const std::vector<std::vector<double>> &matrix, std::vector<std::vector<double>> &temp, int p, int q, int n)
 {
-    auto mult = 2.0 / (timePeriod + 1.0);
-    auto rslt = (newStock - previousAverage) * mult + previousAverage;
-    return rslt;
+    int i = 0, j = 0;
+
+    for (int row = 0; row < n; ++row)
+    {
+        for (int col = 0; col < n; ++col)
+        {
+            if (row != p && col != q)
+            {
+                temp[i][j++] = matrix[row][col];
+
+                if (j == n - 1)
+                {
+                    j = 0;
+                    ++i;
+                }
+            }
+        }
+    }
 }
 
-map<std::tuple<int, int>, double> memo_ewm;
-
-double get_ewm(vector<pair<string, double>> data, int i, int n, double alpha)
+// Function to calculate the determinant of a matrix
+double determinant(const std::vector<std::vector<double>> &matrix, int n)
 {
-    if (i == 0)
+    if (n == 1)
     {
-        return data[0].second;
+        return matrix[0][0];
     }
 
-    auto key = std::make_tuple(i, n);
-    if (memo_ewm.find(key) != memo_ewm.end())
-    {
-        return memo_ewm[key];
-    }
-    double prev_ewm = get_ewm(data, i - 1, n, alpha);
-    double ewm = (alpha * (data[i].second - prev_ewm)) + prev_ewm;
+    double det = 0.0;
+    std::vector<std::vector<double>> temp(n - 1, std::vector<double>(n - 1, 0.0));
+    int sign = 1;
 
-    memo_ewm[key] = ewm;
-    return ewm;
+    for (int i = 0; i < n; ++i)
+    {
+        getCofactor(matrix, temp, 0, i, n);
+        det += sign * matrix[0][i] * determinant(temp, n - 1);
+        sign = -sign;
+    }
+
+    return det;
 }
 
-class Trade
+// Function to calculate the adjoint of a matrix
+void adjoint(const std::vector<std::vector<double>> &matrix, std::vector<std::vector<double>> &adj)
 {
-    unsigned int timePeriod_ = 5;
-    double lastMA_ = 0.0;
-    std::list<double> stockPrices_;
-
-public:
-    void addStock(double newStock)
+    int n = matrix.size();
+    if (n == 0 || matrix[0].size() != n)
     {
-        stockPrices_.push_back(newStock);
-        auto num_days = stockPrices_.size();
-
-        if (num_days <= timePeriod_)
-            lastMA_ = calcMA(lastMA_, num_days - 1, newStock);
-        else
-            lastMA_ = calcEMA(lastMA_, num_days - 1, newStock);
+        std::cerr << "Invalid matrix dimensions." << std::endl;
+        return;
     }
 
-    double getAverage() const { return lastMA_; }
-};
+    if (n == 1)
+    {
+        adj[0][0] = 1;
+        return;
+    }
 
-// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+    int sign = 1;
+    std::vector<std::vector<double>> temp(n - 1, std::vector<double>(n - 1, 0.0));
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+        {
+            getCofactor(matrix, temp, i, j, n);
+            sign = ((i + j) % 2 == 0) ? 1 : -1;
+            adj[j][i] = (sign) * (determinant(temp, n - 1));
+        }
+    }
+}
+
+// Function to calculate the inverse of a matrix
+void inverse(const std::vector<std::vector<double>> &matrix, std::vector<std::vector<double>> &inv)
+{
+    int n = matrix.size();
+    if (n == 0 || matrix[0].size() != n)
+    {
+        std::cerr << "Invalid matrix dimensions." << std::endl;
+        return;
+    }
+
+    double det = determinant(matrix, n);
+    if (det == 0)
+    {
+        std::cerr << "Inverse does not exist, determinant is zero." << std::endl;
+        return;
+    }
+
+    std::vector<std::vector<double>> adj(n, std::vector<double>(n, 0.0));
+    adjoint(matrix, adj);
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+        {
+            inv[i][j] = adj[i][j] / det;
+        }
+    }
+}
+
 int main()
 {
-    std::vector<double> stocks =
-        {1000, 1100, 1200, 1300, 1400, 1500,
-         1400, 1300, 1200, 1100, 1000};
-    vector<pair<string, double>> stocks_line;
-    for (int i = 0; i < stocks.size(); i++)
-    {
-        stocks_line.push_back({to_string(i), stocks[i]});
-    }
+    // Example usage
+    std::vector<std::vector<double>> matrix = {
+        {3, 12, 273, 18},
+        {12, 66, 1479, 90},
+        {273, 1479, 35937, 2025},
+        {18, 90, 2025, 126},
+    };
 
-    double ewm;
-    for (int i = 0; i < stocks.size(); i++)
-    {
-        ewm = get_ewm(stocks_line, i, 4, 2.0/(1+4));
-        cout << ewm << endl;
-    }
+    int n = matrix.size();
 
-    Trade trade;
-    for (auto stock : stocks)
-    {
-        trade.addStock(stock);
-        std::cout << "Average: " << trade.getAverage() << std::endl;
-    }
+    std::cout << "Matrix:" << std::endl;
+    printMatrix(matrix);
+
+    std::vector<std::vector<double>> inv(n, std::vector<double>(n, 0.0));
+    inverse(matrix, inv);
+
+    std::cout << "\nInverse Matrix:" << std::endl;
+    printMatrix(inv);
+
     return 0;
 }
