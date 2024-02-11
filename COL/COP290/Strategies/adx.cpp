@@ -53,7 +53,11 @@ int main(int argv, char *argc[])
     string line;
     while (getline(file, line))
     {
-        string date, close, high, low, prevClose;
+        string date;
+        string close;
+        string high;
+        string low;
+        string prevClose;
         stringstream ss(line);
         getline(ss, date, ',');
         getline(ss, close, ',');
