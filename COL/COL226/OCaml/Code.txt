@@ -1,0 +1,6 @@
+fn add(x){return (x.first + 1, x.second + 2);
+}
+
+let x = (2, 4);
+let y = add(x);
+let () = print_endline(y);
