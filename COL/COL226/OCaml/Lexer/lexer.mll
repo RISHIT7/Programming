@@ -3,9 +3,9 @@
 }
 
 rule token = parse
-   | [''']['a'-'z' '_' '0'-'9']+ as lxm
+   | [''']+ as lxm
         { Illegal(lxm) }
-   | ['A'-'Z']['a'-'z' '_' '0'-'9' 'A'-'Z']+ as lxm
+   | ['A'-'Z']+ as lxm
         { Illegal(lxm) }
    | [' ' '\t']+
         { token lexbuf }
@@ -13,8 +13,6 @@ rule token = parse
         { NewLine }
    | ['+']
         { Plus }
-   | [''']
-        { InvertedComma }
    | ['"']
         { DoubleInvertedComma }
    | [':']
