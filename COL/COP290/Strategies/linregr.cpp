@@ -5,17 +5,6 @@
 #include <vector>
 using namespace std;
 
-void print_mat(vector<vector<double>> result)
-{
-    for (int i = 0; i < result.size(); i++)
-    {
-        for (int j = 0; j < result[0].size(); j++)
-        {
-            cout << result[i][j] << " ";
-        }
-        cout << "\n";
-    }
-}
 // --------------------------------------------------------------- LINEAR_REGRESSOR ----------------------------------------------------------------------
 bool inverseMatrix(const vector<std::vector<double>> &matrix, vector<std::vector<double>> &result)
 {
