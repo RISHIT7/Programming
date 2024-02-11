@@ -27,8 +27,6 @@ run: main.out
 	@rm -f *.out
 	@rm -f Stocks/*
 
-
-
 main.out: main.cpp
 	@g++ main.cpp -o main.out
 
