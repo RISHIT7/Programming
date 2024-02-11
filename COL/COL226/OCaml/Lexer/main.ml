@@ -10,6 +10,7 @@ let get_token_list lexbuf =
 
 let tokens_matching = function
   | Plus -> "plus"
+  | Percentage -> "percentage"
   | Minus -> "minus"
   | Asterisk -> "asterisk"
   | Hashtags -> "hashtag"

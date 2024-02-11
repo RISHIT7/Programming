@@ -12,6 +12,7 @@ type t =
 | Plus
 | Minus
 | Asterisk
+| Percentage
 | Slash
 (* Bool Operators *)
 | Or

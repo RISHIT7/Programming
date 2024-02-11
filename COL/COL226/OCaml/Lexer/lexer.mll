@@ -17,6 +17,8 @@ rule token = parse
         { DoubleInvertedComma }
    | [':']
         { Colon }
+   | ['%']
+        { Percentage }
    | ['-']
         { Minus }
    | ['*']
