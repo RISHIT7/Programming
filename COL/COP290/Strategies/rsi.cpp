@@ -17,7 +17,7 @@ int main(int argv, char *argc[])
 
     vector<pair<string, double>> data;
 
-    ifstream file("Stocks/" + symbol + ".csv");
+    ifstream file(symbol + ".csv");
     if (!file.is_open())
     {
         cerr << "Error opening file." << endl;
@@ -39,36 +39,39 @@ int main(int argv, char *argc[])
     }
     file.close();
 
-    ofstream cash_file("results/daily_cashflow.csv");
-    ofstream order_file("results/order_statistics.csv");
-    ofstream final_file("results/final_pnl.txt");
+    ofstream cash_file("daily_cashflow.csv");
+    ofstream order_file("order_statistics.csv");
+    ofstream final_file("final_pnl.txt");
 
     cash_file << "Date,Cashflow\n"
               << data[0].first << ",0\n";
     order_file << "Date,Order_dir,Quantity,Price\n";
 
     long unsigned int len{data.size()};
-    double rsi{}, rs{}, gain_n{}, loss_n{};
+    double rsi{}, rs{}, gain_n{}, loss_n{}, sum_loss_n{}, sum_gain_n{};
     int stocks{};
     double cashflow{};
+    int windowSize = 14;
 
     for (int i = 1; i < len; i++)
     {
-        gain_n += max((data[i].second - data[i - 1].second), 0.0) / n;
-        loss_n += max((data[i - 1].second - data[i].second), 0.0) / n;
-
+        sum_gain_n += max((data[i].second - data[i - 1].second), 0.0);
+        sum_loss_n += max((data[i - 1].second - data[i].second), 0.0);
         if (i < n)
         {
             cash_file << data[i].first << "," << cashflow << "\n";
             continue;
         }
-
-        gain_n -= max((data[i - n + 1].second - data[i - n].second), 0.0) / n;
-        loss_n -= max((data[i - n].second - data[i - n + 1].second), 0.0) / n;
+        if (i > n)
+        {
+            sum_gain_n -= max((data[i - n].second - data[i - 1 - n].second), 0.0);
+            sum_loss_n -= max((data[i - n - 1].second - data[i - n].second), 0.0);
+        }
+        gain_n = sum_gain_n / windowSize;
+        loss_n = sum_loss_n / windowSize;
 
         rs = gain_n / loss_n;
-        rsi = 100.0 - 100.0 / (1.0 + rs);
-
+        rsi = 100.0 - (100.0 / (1.0 + rs));
         if (rsi <= oversold_threshold and stocks < x)
         {
             stocks++;
@@ -86,7 +89,7 @@ int main(int argv, char *argc[])
     }
 
     double final_pnl{cashflow + (stocks * data[len - 1].second)};
-    final_file << "Final pnl : " << final_pnl << "\n";
+    final_file << final_pnl;
 
     cash_file.close();
     order_file.close();
