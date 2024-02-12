@@ -1,143 +1,91 @@
 #include <iostream>
-#include <vector>
+#include <cmath>
+using namespace std;
 
-// Function to print a matrix
-void printMatrix(const std::vector<std::vector<double>> &matrix)
+const int N = 8;
+
+void print(double matrix[N][N], int rows, int cols)
 {
-    for (const auto &row : matrix)
+    for (int i = 0; i < rows; ++i)
     {
-        for (double element : row)
+        for (int j = 0; j < cols; ++j)
         {
-            std::cout << element << " ";
+            std::cout << matrix[i][j] << "\t";
         }
         std::cout << std::endl;
     }
 }
 
-// Function to calculate the cofactor of a matrix element
-void getCofactor(const std::vector<std::vector<double>> &matrix, std::vector<std::vector<double>> &temp, int p, int q, int n)
+void gaussianElimination(double A[N][N], double I[N][N])
 {
-    int i = 0, j = 0;
-
-    for (int row = 0; row < n; ++row)
+    // Forward elimination
+    for (int i = 0; i < N; ++i)
     {
-        for (int col = 0; col < n; ++col)
+        double pivot = A[i][i];
+        if (pivot == 0)
         {
-            if (row != p && col != q)
-            {
-                temp[i][j++] = matrix[row][col];
+            cout << "Matrix not invertible" << endl;
+            return;
+        }
 
-                if (j == n - 1)
+        // Normalize the pivot row
+        for (int j = 0; j < N; ++j)
+        {
+            if (A[i][j] != 0)
+            {
+                A[i][j] /= pivot;
+            }
+            if (I[i][j] != 0)
+            {
+                I[i][j] /= pivot;
+            }
+        }
+
+        // Eliminate other rows
+        for (int k = 0; k < N; ++k)
+        {
+            if (k != i)
+            {
+                double factor = A[k][i];
+                for (int j = 0; j < N; ++j)
                 {
-                    j = 0;
-                    ++i;
+                    A[k][j] -= factor * A[i][j];
+                    I[k][j] -= factor * A[i][j];
                 }
             }
         }
     }
 }
 
-// Function to calculate the determinant of a matrix
-double determinant(const std::vector<std::vector<double>> &matrix, int n)
-{
-    if (n == 1)
-    {
-        return matrix[0][0];
-    }
-
-    double det = 0.0;
-    std::vector<std::vector<double>> temp(n - 1, std::vector<double>(n - 1, 0.0));
-    int sign = 1;
-
-    for (int i = 0; i < n; ++i)
-    {
-        getCofactor(matrix, temp, 0, i, n);
-        det += sign * matrix[0][i] * determinant(temp, n - 1);
-        sign = -sign;
-    }
-
-    return det;
-}
-
-// Function to calculate the adjoint of a matrix
-void adjoint(const std::vector<std::vector<double>> &matrix, std::vector<std::vector<double>> &adj)
-{
-    int n = matrix.size();
-    if (n == 0 || matrix[0].size() != n)
-    {
-        std::cerr << "Invalid matrix dimensions." << std::endl;
-        return;
-    }
-
-    if (n == 1)
-    {
-        adj[0][0] = 1;
-        return;
-    }
-
-    int sign = 1;
-    std::vector<std::vector<double>> temp(n - 1, std::vector<double>(n - 1, 0.0));
-
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            getCofactor(matrix, temp, i, j, n);
-            sign = ((i + j) % 2 == 0) ? 1 : -1;
-            adj[j][i] = (sign) * (determinant(temp, n - 1));
-        }
-    }
-}
-
-// Function to calculate the inverse of a matrix
-void inverse(const std::vector<std::vector<double>> &matrix, std::vector<std::vector<double>> &inv)
-{
-    int n = matrix.size();
-    if (n == 0 || matrix[0].size() != n)
-    {
-        std::cerr << "Invalid matrix dimensions." << std::endl;
-        return;
-    }
-
-    double det = determinant(matrix, n);
-    if (det == 0)
-    {
-        std::cerr << "Inverse does not exist, determinant is zero." << std::endl;
-        return;
-    }
-
-    std::vector<std::vector<double>> adj(n, std::vector<double>(n, 0.0));
-    adjoint(matrix, adj);
-
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            inv[i][j] = adj[i][j] / det;
-        }
-    }
-}
-
 int main()
 {
-    // Example usage
-    std::vector<std::vector<double>> matrix = {
-        {3, 12, 273, 18},
-        {12, 66, 1479, 90},
-        {273, 1479, 35937, 2025},
-        {18, 90, 2025, 126},
+    double matrix[N][N] = {
+        {4, 5, 6, 7, 8, 9, 6},
+        {5, 6, 7, 8, 9, 6, 5},
+        {7, 8, 6, 45, 7, 7, 6},
+        {67, 8, 7, 6, 7, 8, 9},
+        {4, 6, 7, 8, 8, 66, 345},
+        {8, 6, 6, 7, 8, 8, 66},
+        {7, 8, 345, 76, 7, 8, 8}
     };
 
-    int n = matrix.size();
+    double identity[N][N];
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+        {
+            identity[i][j] = (i == j) ? 1.0 : 0.0;
+        }
+    }
 
-    std::cout << "Matrix:" << std::endl;
-    printMatrix(matrix);
+    std::cout << "Original Matrix:" << std::endl;
+    printMatrix(matrix, N, N);
 
-    std::vector<std::vector<double>> inv(n, std::vector<double>(n, 0.0));
-    inverse(matrix, inv);
+    // Apply Gaussian elimination
+    gaussianElimination(matrix, identity);
 
     std::cout << "\nInverse Matrix:" << std::endl;
-    printMatrix(inv);
+    print(identity, N, N);
 
     return 0;
 }

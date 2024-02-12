@@ -94,7 +94,7 @@ int main(int argv, char *argc[])
     else if (strategy == "BEST_OF_ALL")
     {
         system("g++ bestall.cpp -o bestall.out");
-        command = "./bestall.out ";
+        command = "./bestall.out " + symbol + " " + start_date + " " + end_date;
         system(command.c_str());
     }
     else if (strategy == "PAIRS")

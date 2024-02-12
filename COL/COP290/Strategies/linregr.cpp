@@ -5,16 +5,22 @@
 #include <vector>
 using namespace std;
 
+void print(vector<vector<double>> mat)
+{
+    for (int i = 0; i < mat.size(); i++)
+    {
+        for (int j = 0; j < mat[0].size(); j++)
+        {
+            cout << mat[i][j] << " ";
+        }
+        cout << "\n";
+    }
+}
+
 // --------------------------------------------------------------- LINEAR_REGRESSOR ----------------------------------------------------------------------
 bool inverseMatrix(const vector<std::vector<double>> &matrix, vector<std::vector<double>> &result)
 {
     int n = matrix.size();
-    if (n == 0 || matrix[0].size() != n)
-    {
-        std::cerr << "Invalid matrix dimensions." << std::endl;
-        return false;
-    }
-
     std::vector<std::vector<double>> augmentedMatrix(n, std::vector<double>(2 * n, 0.0));
     for (int i = 0; i < n; ++i)
     {
@@ -27,12 +33,6 @@ bool inverseMatrix(const vector<std::vector<double>> &matrix, vector<std::vector
 
     for (int i = 0; i < n; ++i)
     {
-        if (augmentedMatrix[i][i] == 0.0)
-        {
-            std::cerr << "Matrix is not invertible." << std::endl;
-            return false;
-        }
-
         for (int j = 0; j < n; ++j)
         {
             if (i != j)
@@ -55,6 +55,8 @@ bool inverseMatrix(const vector<std::vector<double>> &matrix, vector<std::vector
         }
     }
 
+    print(augmentedMatrix);
+
     result.resize(n, std::vector<double>(n));
     for (int i = 0; i < n; ++i)
     {
@@ -66,6 +68,8 @@ bool inverseMatrix(const vector<std::vector<double>> &matrix, vector<std::vector
 
     return true;
 }
+
+
 vector<vector<double>> crossMultiply_1(const vector<vector<double>> matrix1, const vector<vector<double>> matrix2)
 {
     vector<double> result(matrix1.size(), 0);
@@ -124,10 +128,16 @@ vector<vector<double>> solve(vector<vector<double>> x_matrix, vector<vector<doub
     // XTy
     vector<vector<double>> x_transpose_y = crossMultiply_1(x_transpose, y_matrix);
     // (XTX)^-1
-    vector<vector<double>> result;
-    inverseMatrix(x_transpose_x, result);
+
+    cout << "----------------" <<endl;
+    vector<vector<double>> inverse;
+    inverseMatrix(x_transpose_x, inverse);
     // (XTX)^-1 * (XTy)
-    vector<vector<double>> params = crossMultiply_1(result, x_transpose_y);
+    vector<vector<double>> test = crossMultiply(x_transpose_x, inverse);
+    print(test);
+    cout << "----------------" <<endl;
+
+    vector<vector<double>> params = crossMultiply_1(inverse, x_transpose_y);
 
     return params;
 }
@@ -195,7 +205,7 @@ int main(int argv, char *argc[])
     // finding the params
     vector<vector<double>> params = solve(x_matrix, y_matrix);
 
-    // finally getting to the byuing and selling part
+    // finally getting to the buying and selling part
     // loading test data
     ifstream file1("Stocks/" + symbol + ".csv");
     if (!file1.is_open())
