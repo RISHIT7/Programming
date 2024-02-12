@@ -273,7 +273,6 @@ int main(int argv, char *argc[])
         // cash_file
         cash_file << data[i].first << "," << cashflow << "\n";
     }
-
     double final_pnl{cashflow + (stocks * data[len - 1].second[0])};
     final_file << "Final pnl : " << final_pnl << "\n";
 

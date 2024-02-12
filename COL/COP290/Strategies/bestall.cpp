@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 #include <omp.h>
 
 using namespace std;
 
 void generate_data(string strategy, string symbol, string start_date, string end_date, string x, string train_start_date, string train_end_date)
-{   
+{
     string command = "";
     // --------------- generate data -------------------------- //
     if (strategy == "LINEAR_REGRESSION")
@@ -69,23 +70,39 @@ void generate_data(string strategy, string symbol, string start_date, string end
 int main(int argv, char *argc[])
 {
 
-    vector<string> strategies = {"BASIC", "DMA", "DMA++", "MACD", "RSI", "ADX"};
+    vector<pair<string, double>> strategies = {{"BASIC", 0}, {"DMA", 0}, {"DMA++", 0}, {"MACD", 0}, {"RSI", 0}, {"ADX", 0}, {"LINEAR_REGRESSION", 0}};
     string symbol = argc[1];
     string start_date = argc[2];
     string end_date = argc[3];
     string x = "5";
 
-    char year = start_date[start_date.size() - 1];
-    string train_year = to_string((int)year - 1);
-    string train_start_date = start_date.substr(0, 8) + train_year;
-    string train_end_date = end_date.substr(0, 8) + train_year;
+    string year = start_date.substr(6, 4);
+    string train_year = to_string(stoi(year) - 1);
+    string train_start_date = start_date.substr(0, 6) + train_year;
+    string train_end_date = end_date.substr(0, 6) + train_year;
 
-
-    #pragma omp parallel for
+#pragma omp parallel for
     for (int i = 0; i < strategies.size(); i++)
     {
-        generate_data(strategies[i], symbol, start_date, end_date, x, train_start_date, train_end_date);
-        cout << "------------->" << strategies[i] << "\n";
+        generate_data(strategies[i].first, symbol, start_date, end_date, x, train_start_date, train_end_date);
+
+        ifstream file("results/final_pnl.txt");
+        if (!file.is_open())
+        {
+            cerr << "Error opening file." << endl;
+            return 1;
+        }
+
+        string outcome;
+        getline(file, outcome);
+        double symbol_pnl = stod(outcome.substr(11));
+        strategies[i].second = symbol_pnl;
     }
+
+    for (int i = 0; i < strategies.size(); i++)
+    {
+        cout << strategies[i].first << " " << strategies[i].second << endl;
+    }
+
     return 0;
 }
