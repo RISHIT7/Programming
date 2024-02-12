@@ -1,23 +1,33 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 using namespace std;
 
 const int N = 8;
 
-void print(double matrix[N][N], int rows, int cols)
+void print(vector<vector<double>> matrix)
 {
-    for (int i = 0; i < rows; ++i)
+    for (int i = 0; i < matrix.size(); ++i)
     {
-        for (int j = 0; j < cols; ++j)
+        for (int j = 0; j < matrix[0].size(); ++j)
         {
-            std::cout << matrix[i][j] << "\t";
+            cout << matrix[i][j] << "\t";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 }
 
-void gaussianElimination(double A[N][N], double I[N][N])
+vector<vector<double>> gaussianElimination(vector<vector<double>> A)
 {
+    vector<double> temp(N, 0);
+    vector<vector<double>> I(N, temp);
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+        {
+            I[i][j] = (i == j) ? 1.0 : 0.0;
+        }
+    }
     // Forward elimination
     for (int i = 0; i < N; ++i)
     {
@@ -25,7 +35,7 @@ void gaussianElimination(double A[N][N], double I[N][N])
         if (pivot == 0)
         {
             cout << "Matrix not invertible" << endl;
-            return;
+            return {{}};
         }
 
         // Normalize the pivot row
@@ -55,37 +65,29 @@ void gaussianElimination(double A[N][N], double I[N][N])
             }
         }
     }
+    return I;
 }
 
 int main()
 {
-    double matrix[N][N] = {
-        {4, 5, 6, 7, 8, 9, 6},
-        {5, 6, 7, 8, 9, 6, 5},
-        {7, 8, 6, 45, 7, 7, 6},
-        {67, 8, 7, 6, 7, 8, 9},
-        {4, 6, 7, 8, 8, 66, 345},
-        {8, 6, 6, 7, 8, 8, 66},
-        {7, 8, 345, 76, 7, 8, 8}
-    };
+    vector<vector<double>> matrix = {
+        {1, 4, 5, 6, 7, 8, 9, 6},
+        {15, 5, 6, 7, 8, 9, 6, 5},
+        {12, 7, 8, 6, 45, 7, 7, 6},
+        {435, 67, 8, 7, 6, 7, 8, 9},
+        {12, 4, 6, 7, 8, 8, 66, 345},
+        {234, 8, 6, 6, 7, 8, 8, 66},
+        {123, 7, 8, 345, 76, 7, 8, 8},
+        {4, 5, 3, 6, 7, 2, 1, 3}};
 
-    double identity[N][N];
-    for (int i = 0; i < N; ++i)
-    {
-        for (int j = 0; j < N; ++j)
-        {
-            identity[i][j] = (i == j) ? 1.0 : 0.0;
-        }
-    }
-
-    std::cout << "Original Matrix:" << std::endl;
-    printMatrix(matrix, N, N);
+    cout << "Original Matrix:" << endl;
+    print(matrix);
 
     // Apply Gaussian elimination
-    gaussianElimination(matrix, identity);
+    vector<vector<double>> identity = gaussianElimination(matrix);
 
-    std::cout << "\nInverse Matrix:" << std::endl;
-    print(identity, N, N);
+    cout << "\nInverse Matrix:" << endl;
+    print(identity);
 
     return 0;
 }

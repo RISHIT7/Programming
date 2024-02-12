@@ -18,57 +18,57 @@ void print(vector<vector<double>> mat)
 }
 
 // --------------------------------------------------------------- LINEAR_REGRESSOR ----------------------------------------------------------------------
-bool inverseMatrix(const vector<std::vector<double>> &matrix, vector<std::vector<double>> &result)
+vector<vector<double>> gaussianElimination(vector<vector<double>> A)
 {
-    int n = matrix.size();
-    std::vector<std::vector<double>> augmentedMatrix(n, std::vector<double>(2 * n, 0.0));
-    for (int i = 0; i < n; ++i)
+    const int N = 8;
+    vector<double> temp(N, 0);
+    vector<vector<double>> I(N, temp);
+    for (int i = 0; i < N; ++i)
     {
-        augmentedMatrix[i][i + n] = 1.0;
-        for (int j = 0; j < n; ++j)
+        for (int j = 0; j < N; ++j)
         {
-            augmentedMatrix[i][j] = matrix[i][j];
+            I[i][j] = (i == j) ? 1.0 : 0.0;
         }
     }
-
-    for (int i = 0; i < n; ++i)
+    // Forward elimination
+    for (int i = 0; i < N; ++i)
     {
-        for (int j = 0; j < n; ++j)
+        double pivot = A[i][i];
+        if (pivot == 0)
         {
-            if (i != j)
+            cout << "Matrix not invertible" << endl;
+            return {{}};
+        }
+
+        // Normalize the pivot row
+        for (int j = 0; j < N; ++j)
+        {
+            if (A[i][j] != 0)
             {
-                double ratio = augmentedMatrix[j][i] / augmentedMatrix[i][i];
-                for (int k = 0; k < 2 * n; ++k)
+                A[i][j] /= pivot;
+            }
+            if (I[i][j] != 0)
+            {
+                I[i][j] /= pivot;
+            }
+        }
+
+        // Eliminate other rows
+        for (int k = 0; k < N; ++k)
+        {
+            if (k != i)
+            {
+                double factor = A[k][i];
+                for (int j = 0; j < N; ++j)
                 {
-                    augmentedMatrix[j][k] -= ratio * augmentedMatrix[i][k];
+                    A[k][j] -= factor * A[i][j];
+                    I[k][j] -= factor * A[i][j];
                 }
             }
         }
     }
-
-    for (int i = 0; i < n; ++i)
-    {
-        double pivot = augmentedMatrix[i][i];
-        for (int j = 0; j < 2 * n; ++j)
-        {
-            augmentedMatrix[i][j] /= pivot;
-        }
-    }
-
-    print(augmentedMatrix);
-
-    result.resize(n, std::vector<double>(n));
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            result[i][j] = augmentedMatrix[i][j + n];
-        }
-    }
-
-    return true;
+    return I;
 }
-
 
 vector<vector<double>> crossMultiply_1(const vector<vector<double>> matrix1, const vector<vector<double>> matrix2)
 {
@@ -129,16 +129,10 @@ vector<vector<double>> solve(vector<vector<double>> x_matrix, vector<vector<doub
     vector<vector<double>> x_transpose_y = crossMultiply_1(x_transpose, y_matrix);
     // (XTX)^-1
 
-    cout << "----------------" <<endl;
     vector<vector<double>> inverse;
-    inverseMatrix(x_transpose_x, inverse);
+    inverse = gaussianElimination(x_transpose_x);
     // (XTX)^-1 * (XTy)
-    vector<vector<double>> test = crossMultiply(x_transpose_x, inverse);
-    print(test);
-    cout << "----------------" <<endl;
-
     vector<vector<double>> params = crossMultiply_1(inverse, x_transpose_y);
-
     return params;
 }
 
