@@ -1,4 +1,4 @@
-test_file := def
+test_file := Test1
 
 all:
 	@ocamlbuild main.native
