@@ -82,20 +82,17 @@ int main(int argv, char *argc[])
     for (int i = 0; i < len; i++)
     {
         spread = (data1[i].second - data2[i].second);
-        int windowSize = min(i + 1, n0);
-        sumOfSquares += spread*spread;
-        sum += spread;
-        if (i >= n0)
+        if (i < n0)
         {
-            sum -= (data1[i - n0].second - data2[i - n0].second);
-            sumOfSquares -= ((data1[i - n0].second - data2[i - n0].second) * (data1[i - n0].second - data2[i - n0].second));
+            sum += spread;
+            roll_mean = sum / (i + 1);
+            sumOfSquares += spread * spread;
+            variance = sumOfSquares / (i + 1) - (roll_mean * roll_mean);
         }
-        roll_mean = sum / windowSize;
-        variance = (sumOfSquares - (sum * sum) / windowSize) / (windowSize - 1);
-
         sd = sqrt(variance);
 
         z_score = (spread - roll_mean) / sd;
+
         if (z_score > threshold and stocks > -x)
         {
             // sell
@@ -138,12 +135,20 @@ int main(int argv, char *argc[])
             }
         }
 
+        if (i >= n0)
+        {
+            double past_spread = data1[i - n0].second - data2[i - n0].second;
+            sum += (spread) - (past_spread);
+            roll_mean = sum / n0;
+            sumOfSquares += (spread * spread) - (past_spread * past_spread);
+            variance = sumOfSquares / n0 - (roll_mean * roll_mean);
+        }
         // cash_file
         cash_file << data1[i].first << "," << cashflow << "\n";
     }
 
     double final_pnl{cashflow + (stocks * data1[len - 1].second) - (stocks * data2[len - 1].second)};
-    final_file << final_pnl << "\n";
+    final_file <<final_pnl;
 
     cash_file.close();
     order_file1.close();

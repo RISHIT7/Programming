@@ -5,71 +5,67 @@
 #include <vector>
 using namespace std;
 
-void print(vector<vector<double>> mat)
-{
-    for (int i = 0; i < mat.size(); i++)
-    {
-        for (int j = 0; j < mat[0].size(); j++)
-        {
-            cout << mat[i][j] << " ";
-        }
-        cout << "\n";
-    }
-}
-
 // --------------------------------------------------------------- LINEAR_REGRESSOR ----------------------------------------------------------------------
-vector<vector<double>> gaussianElimination(vector<vector<double>> A)
+bool inverseMatrix(const vector<std::vector<double>> &matrix, vector<std::vector<double>> &result)
 {
-    const int N = 8;
-    vector<double> temp(N, 0);
-    vector<vector<double>> I(N, temp);
-    for (int i = 0; i < N; ++i)
+    int n = matrix.size();
+    if (n == 0 || matrix[0].size() != n)
     {
-        for (int j = 0; j < N; ++j)
+        std::cerr << "Invalid matrix dimensions." << std::endl;
+        return false;
+    }
+
+    std::vector<std::vector<double>> augmentedMatrix(n, std::vector<double>(2 * n, 0.0));
+    for (int i = 0; i < n; ++i)
+    {
+        augmentedMatrix[i][i + n] = 1.0;
+        for (int j = 0; j < n; ++j)
         {
-            I[i][j] = (i == j) ? 1.0 : 0.0;
+            augmentedMatrix[i][j] = matrix[i][j];
         }
     }
-    // Forward elimination
-    for (int i = 0; i < N; ++i)
+
+    for (int i = 0; i < n; ++i)
     {
-        double pivot = A[i][i];
-        if (pivot == 0)
+        if (augmentedMatrix[i][i] == 0.0)
         {
-            cout << "Matrix not invertible" << endl;
-            return {{}};
+            std::cerr << "Matrix is not invertible." << std::endl;
+            return false;
         }
 
-        // Normalize the pivot row
-        for (int j = 0; j < N; ++j)
+        for (int j = 0; j < n; ++j)
         {
-            if (A[i][j] != 0)
+            if (i != j)
             {
-                A[i][j] /= pivot;
-            }
-            if (I[i][j] != 0)
-            {
-                I[i][j] /= pivot;
-            }
-        }
-
-        // Eliminate other rows
-        for (int k = 0; k < N; ++k)
-        {
-            if (k != i)
-            {
-                double factor = A[k][i];
-                for (int j = 0; j < N; ++j)
+                double ratio = augmentedMatrix[j][i] / augmentedMatrix[i][i];
+                for (int k = 0; k < 2 * n; ++k)
                 {
-                    A[k][j] -= factor * A[i][j];
-                    I[k][j] -= factor * A[i][j];
+                    augmentedMatrix[j][k] -= ratio * augmentedMatrix[i][k];
                 }
             }
         }
     }
-    return I;
-}
 
+    for (int i = 0; i < n; ++i)
+    {
+        double pivot = augmentedMatrix[i][i];
+        for (int j = 0; j < 2 * n; ++j)
+        {
+            augmentedMatrix[i][j] /= pivot;
+        }
+    }
+
+    result.resize(n, std::vector<double>(n));
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+        {
+            result[i][j] = augmentedMatrix[i][j + n];
+        }
+    }
+
+    return true;
+}
 vector<vector<double>> crossMultiply_1(const vector<vector<double>> matrix1, const vector<vector<double>> matrix2)
 {
     vector<double> result(matrix1.size(), 0);
@@ -128,11 +124,11 @@ vector<vector<double>> solve(vector<vector<double>> x_matrix, vector<vector<doub
     // XTy
     vector<vector<double>> x_transpose_y = crossMultiply_1(x_transpose, y_matrix);
     // (XTX)^-1
-
-    vector<vector<double>> inverse;
-    inverse = gaussianElimination(x_transpose_x);
+    vector<vector<double>> result;
+    inverseMatrix(x_transpose_x, result);
     // (XTX)^-1 * (XTy)
-    vector<vector<double>> params = crossMultiply_1(inverse, x_transpose_y);
+    vector<vector<double>> params = crossMultiply_1(result, x_transpose_y);
+
     return params;
 }
 
@@ -152,7 +148,7 @@ int main(int argv, char *argc[])
     vector<vector<double>> y_matrix;
 
     // loading train data
-    ifstream file("Stocks/" + symbol + "_train.csv");
+    ifstream file(symbol + "_train.csv");
     if (!file.is_open())
     {
         cerr << "Error opening file." << endl;
@@ -199,7 +195,7 @@ int main(int argv, char *argc[])
     // finding the params
     vector<vector<double>> params = solve(x_matrix, y_matrix);
 
-    // finally getting to the buying and selling part
+    // finally getting to the byuing and selling part
     // loading test data
     ifstream file1("Stocks/" + symbol + ".csv");
     if (!file1.is_open())
@@ -229,9 +225,9 @@ int main(int argv, char *argc[])
     }
     file1.close();
 
-    ofstream cash_file("results/daily_cashflow.csv");
-    ofstream order_file("results/order_statistics.csv");
-    ofstream final_file("results/final_pnl.txt");
+    ofstream cash_file("daily_cashflow.csv");
+    ofstream order_file("order_statistics.csv");
+    ofstream final_file("final_pnl.txt");
 
     cash_file << "Date,Cashflow\n";
     order_file << "Date,Order_dir,Quantity,Price\n";
@@ -273,6 +269,7 @@ int main(int argv, char *argc[])
         // cash_file
         cash_file << data[i].first << "," << cashflow << "\n";
     }
+
     double final_pnl{cashflow + (stocks * data[len - 1].second[0])};
     final_file << "Final pnl : " << final_pnl << "\n";
 

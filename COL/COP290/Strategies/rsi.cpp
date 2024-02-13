@@ -16,6 +16,12 @@ int main(int argv, char *argc[])
     double overbought_threshold{stod(argc[5])};
 
     vector<pair<string, double>> data;
+    ifstream f("help.txt");
+    string text;
+    getline(f, text);
+    double prev{stod(text)};
+    f.close();
+    data.push_back({"-1", prev});
 
     ifstream file(symbol + ".csv");
     if (!file.is_open())
@@ -43,8 +49,7 @@ int main(int argv, char *argc[])
     ofstream order_file("order_statistics.csv");
     ofstream final_file("final_pnl.txt");
 
-    cash_file << "Date,Cashflow\n"
-              << data[0].first << ",0\n";
+    cash_file << "Date,Cashflow\n";
     order_file << "Date,Order_dir,Quantity,Price\n";
 
     long unsigned int len{data.size()};
