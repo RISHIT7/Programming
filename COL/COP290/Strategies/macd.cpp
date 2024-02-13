@@ -65,6 +65,7 @@ int main(int argv, char *argc[])
         macd_line.push_back({data[i].first, macd});
         signal = get_ewm(macd_line, i, signal_term, (double)2.0/(1+signal_term));
 
+        cout << long_ewm << endl;
         // implementing buy and sell
         if ((macd > signal) and stocks < x)
         {
