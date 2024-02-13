@@ -25,8 +25,8 @@ int main(int argv, char *argc[])
     vector<pair<string, double>> data1;
     vector<pair<string, double>> data2;
 
-    ifstream file1("Stocks/" + symbol1 + ".csv");
-    ifstream file2("Stocks/" + symbol2 + ".csv");
+    ifstream file1(symbol1 + ".csv");
+    ifstream file2(symbol2 + ".csv");
 
     if (!file1.is_open() or !file2.is_open())
     {
@@ -60,10 +60,10 @@ int main(int argv, char *argc[])
     file1.close();
     file2.close();
 
-    ofstream cash_file("results/daily_cashflow.csv");
-    ofstream order_file1("results/order_statistics_1.csv");
-    ofstream order_file2("results/order_statistics_2.csv");
-    ofstream final_file("results/final_pnl.txt");
+    ofstream cash_file("daily_cashflow.csv");
+    ofstream order_file1("order_statistics_1.csv");
+    ofstream order_file2("order_statistics_2.csv");
+    ofstream final_file("final_pnl.txt");
     cash_file << "Date,Cashflow\n";
     order_file1 << "Date,Order_dir,Quantity,Price\n";
     order_file2 << "Date,Order_dir,Quantity,Price\n";
@@ -82,17 +82,20 @@ int main(int argv, char *argc[])
     for (int i = 0; i < len; i++)
     {
         spread = (data1[i].second - data2[i].second);
-        if (i < n0)
+        int windowSize = min(i + 1, n0);
+        sumOfSquares += spread*spread;
+        sum += spread;
+        if (i >= n0)
         {
-            sum += spread;
-            roll_mean = sum / (i + 1);
-            sumOfSquares += spread * spread;
-            variance = sumOfSquares / (i + 1) - (roll_mean * roll_mean);
+            sum -= (data1[i - n0].second - data2[i - n0].second);
+            sumOfSquares -= ((data1[i - n0].second - data2[i - n0].second) * (data1[i - n0].second - data2[i - n0].second));
         }
+        roll_mean = sum / windowSize;
+        variance = (sumOfSquares - (sum * sum) / windowSize) / (windowSize - 1);
+
         sd = sqrt(variance);
 
         z_score = (spread - roll_mean) / sd;
-
         if (z_score > threshold and stocks > -x)
         {
             // sell
@@ -135,20 +138,12 @@ int main(int argv, char *argc[])
             }
         }
 
-        if (i >= n0)
-        {
-            double past_spread = data1[i - n0].second - data2[i - n0].second;
-            sum += (spread) - (past_spread);
-            roll_mean = sum / n0;
-            sumOfSquares += (spread * spread) - (past_spread * past_spread);
-            variance = sumOfSquares / n0 - (roll_mean * roll_mean);
-        }
         // cash_file
         cash_file << data1[i].first << "," << cashflow << "\n";
     }
 
     double final_pnl{cashflow + (stocks * data1[len - 1].second) - (stocks * data2[len - 1].second)};
-    final_file << "Final pnl : " << final_pnl << "\n";
+    final_file << final_pnl << "\n";
 
     cash_file.close();
     order_file1.close();
