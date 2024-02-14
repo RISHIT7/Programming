@@ -110,6 +110,7 @@ int main(int argv, char *argc[])
         dx_line.push_back({data[i].first, dx});
 
         adx = get_ewm(dx_line, i, n, (2.0 / (1 + n)), "adx", memo);
+        cout << adx << endl;
         if (adx > adx_threshold and stocks < x)
         {
             stocks++;

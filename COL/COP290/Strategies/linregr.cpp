@@ -2,10 +2,11 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <cmath>
 #include <vector>
 using namespace std;
 
-void print(vector<vector<double>> mat)
+void print(vector<vector<long double>> mat)
 {
     for (int i = 0; i < mat.size(); i++)
     {
@@ -17,31 +18,86 @@ void print(vector<vector<double>> mat)
     }
 }
 
+// ------------------------------------------------- DETERMINANT ---------------------------------------------------------
+long double get_determinant(vector<vector<long double>> matrix)
+{
+    int size = matrix.size();
+
+    // Base case: if the matrix is 1x1, return its only element
+    if (size == 1)
+    {
+        return matrix[0][0];
+    }
+
+    // Initialize determinant
+    long double det = 0;
+
+    // Recursive expansion along the first row
+    for (int col = 0; col < size; col++)
+    {
+        // Calculate the minor matrix (matrix without the current row and column)
+        vector<vector<long double>> minorMatrix(size - 1, vector<long double>(size - 1, 0));
+        for (int i = 1; i < size; i++)
+        {
+            for (int j = 0, k = 0; j < size; j++)
+            {
+                if (j != col)
+                {
+                    minorMatrix[i - 1][k++] = matrix[i][j];
+                }
+            }
+        }
+
+        // Add or subtract the determinant of the minor matrix multiplied by the current element
+        det += (col % 2 == 0 ? 1 : -1) * matrix[0][col] * get_determinant(minorMatrix);
+    }
+
+    return det;
+}
+
 // --------------------------------------------------------------- LINEAR_REGRESSOR ----------------------------------------------------------------------
-vector<vector<double>> gaussianElimination(vector<vector<double>> A)
+vector<vector<long double>> gaussianElimination(const vector<vector<long double>> mat)
 {
     const int N = 8;
-    vector<double> temp(N, 0);
-    vector<vector<double>> I(N, temp);
-    for (int i = 0; i < N; ++i)
+    vector<vector<long double>> I(N, vector<long double>(N, 0));
+    vector<vector<long double>> A = mat;
+    for (int i = 0; i < N; i++)
     {
-        for (int j = 0; j < N; ++j)
+        for (int j = 0; j < N; j++)
         {
             I[i][j] = (i == j) ? 1.0 : 0.0;
         }
     }
+    // print(mat);
+    // cout << "-----------------" << endl;
+    // print(I);
+    // cout << "-----------------" << endl;
     // Forward elimination
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N; i++)
     {
-        double pivot = A[i][i];
+        long double pivot = A[i][i];
         if (pivot == 0)
         {
             cout << "Matrix not invertible" << endl;
             return {{}};
         }
 
+
+        // Eliminate other rows
+        for (int k = 0; k < N; k++)
+        {
+            if (k != i)
+            {
+                long double factor = A[k][i]/pivot;
+                for (int j = 0; j < N; j++)
+                {
+                    A[k][j] -= factor * A[i][j];
+                    I[k][j] -= factor * I[i][j];
+                }
+            }
+        }
         // Normalize the pivot row
-        for (int j = 0; j < N; ++j)
+        for (int j = 0; j < N; j++)
         {
             if (A[i][j] != 0)
             {
@@ -52,46 +108,36 @@ vector<vector<double>> gaussianElimination(vector<vector<double>> A)
                 I[i][j] /= pivot;
             }
         }
-
-        // Eliminate other rows
-        for (int k = 0; k < N; ++k)
-        {
-            if (k != i)
-            {
-                double factor = A[k][i];
-                for (int j = 0; j < N; ++j)
-                {
-                    A[k][j] -= factor * A[i][j];
-                    I[k][j] -= factor * A[i][j];
-                }
-            }
-        }
+        // print(A);
+        // cout << "-----------------" << endl;
+        // print(I);
+        // cout << "-----------------" << endl;
     }
     return I;
 }
 
-vector<vector<double>> crossMultiply_1(const vector<vector<double>> matrix1, const vector<vector<double>> matrix2)
+vector<vector<long double>> crossMultiply_1(const vector<vector<long double>> matrix1, const vector<vector<long double>> matrix2)
 {
-    vector<double> result(matrix1.size(), 0);
+    vector<long double> result(matrix1.size(), 0);
     for (int i = 0; i < matrix1.size(); i++)
     {
         for (int j = 0; j < matrix1[0].size(); j++)
         {
-            result[i] += matrix1[i][j] * matrix2[0][j];
+            result[i] += matrix1[i][j] * matrix2[0][i];
         }
     }
 
     return {result};
 }
 
-vector<vector<double>> crossMultiply(const vector<vector<double>> matrix1, const vector<vector<double>> matrix2)
+vector<vector<long double>> crossMultiply(const vector<vector<long double>> matrix1, const vector<vector<long double>> matrix2)
 {
-    vector<double> tempb(matrix2[0].size(), 0);
-    vector<vector<double>> result(matrix1.size(), tempb);
+    vector<long double> tempb(matrix2[0].size(), 0);
+    vector<vector<long double>> result(matrix1.size(), tempb);
 
-    for (int i = 0; i < matrix1.size(); ++i)
+    for (int i = 0; i < matrix1.size(); i++)
     {
-        for (int j = 0; j < matrix1.size(); ++j)
+        for (int j = 0; j < matrix1.size(); j++)
         {
             for (int k = 0; k < matrix1[0].size(); k++)
             {
@@ -102,14 +148,14 @@ vector<vector<double>> crossMultiply(const vector<vector<double>> matrix1, const
     return result;
 }
 
-vector<vector<double>> transposeMatrix(vector<vector<double>> mat)
+vector<vector<long double>> transposeMatrix(vector<vector<long double>> mat)
 {
-    vector<double> tempa(mat.size(), 0);
-    vector<vector<double>> x_transpose(mat[0].size(), tempa);
+    vector<long double> tempa(mat.size(), 0);
+    vector<vector<long double>> x_transpose(mat[0].size(), tempa);
 
-    for (int i = 0; i < mat.size(); ++i)
+    for (int i = 0; i < mat.size(); i++)
     {
-        for (int j = 0; j < mat[0].size(); ++j)
+        for (int j = 0; j < mat[0].size(); j++)
         {
             x_transpose[j][i] = mat[i][j];
         }
@@ -118,21 +164,23 @@ vector<vector<double>> transposeMatrix(vector<vector<double>> mat)
 }
 
 // -------------------------------------------------------------------------- PARAMS -------------------------------------------------------------------
-vector<vector<double>> solve(vector<vector<double>> x_matrix, vector<vector<double>> y_matrix)
+vector<vector<long double>> solve(vector<vector<long double>> x_matrix, vector<vector<long double>> y_matrix)
 {
 
     // Calculate the transpose
-    vector<vector<double>> x_transpose = transposeMatrix(x_matrix);
+    vector<vector<long double>> x_transpose = transposeMatrix(x_matrix);
     // XTX
-    vector<vector<double>> x_transpose_x = crossMultiply(x_transpose, x_matrix);
+    vector<vector<long double>> x_transpose_x = crossMultiply(x_transpose, x_matrix);
     // XTy
-    vector<vector<double>> x_transpose_y = crossMultiply_1(x_transpose, y_matrix);
+    vector<vector<long double>> x_transpose_y = crossMultiply_1(x_transpose, y_matrix);
     // (XTX)^-1
-
-    vector<vector<double>> inverse;
+    vector<vector<long double>> inverse;
     inverse = gaussianElimination(x_transpose_x);
     // (XTX)^-1 * (XTy)
-    vector<vector<double>> params = crossMultiply_1(inverse, x_transpose_y);
+
+    vector<vector<long double>> temp = crossMultiply(inverse, x_transpose_x);
+
+    vector<vector<long double>> params = crossMultiply_1(inverse, x_transpose_y);
     return params;
 }
 
@@ -147,9 +195,9 @@ int main(int argv, char *argc[])
     string train_end_date{argc[5]};
 
     // data files initiation
-    vector<pair<string, vector<double>>> data;
-    vector<vector<double>> x_matrix;
-    vector<vector<double>> y_matrix;
+    vector<pair<string, vector<long double>>> data;
+    vector<vector<long double>> x_matrix;
+    vector<vector<long double>> y_matrix;
 
     // loading train data
     ifstream file(symbol + "_train.csv");
@@ -185,7 +233,7 @@ int main(int argv, char *argc[])
 
     // adjusting the time according to the linear regression requirements
     y_matrix.erase(y_matrix.begin());
-    vector<double> open;
+    vector<long double> open;
     for (int i = 1; i < x_matrix.size(); i++)
     {
         open.push_back(x_matrix[i][2]);
@@ -195,10 +243,9 @@ int main(int argv, char *argc[])
     {
         x_matrix[i][7] = open[i];
     }
-
     // finding the params
-    vector<vector<double>> params = solve(x_matrix, y_matrix);
-
+    vector<vector<long double>> params = solve(x_matrix, y_matrix);
+    print(y_matrix);
     // finally getting to the buying and selling part
     // loading test data
     ifstream file1(symbol + ".csv");
@@ -237,24 +284,23 @@ int main(int argv, char *argc[])
     order_file << "Date,Order_dir,Quantity,Price\n";
 
     long unsigned int len{data.size()};
-    double predicted_close{}, cashflow{};
+    long double predicted_close{}, cashflow{};
     int stocks{};
 
     for (int i = 1; i < len; i++)
     {
         // naming data for convenience
-        double prev_close = data[i - 1].second[0];
-        double prev_open = data[i - 1].second[1];
-        double prev_vwap = data[i - 1].second[2];
-        double prev_low = data[i - 1].second[3];
-        double prev_high = data[i - 1].second[4];
-        double prev_noOfTrades = data[i - 1].second[5];
-        double open = data[i].second[1];
-        double close = data[i].second[0];
+        long double prev_close = data[i - 1].second[0];
+        long double prev_open = data[i - 1].second[1];
+        long double prev_vwap = data[i - 1].second[2];
+        long double prev_low = data[i - 1].second[3];
+        long double prev_high = data[i - 1].second[4];
+        long double prev_noOfTrades = data[i - 1].second[5];
+        long double open = data[i].second[1];
+        long double close = data[i].second[0];
 
         // prediction
         predicted_close = params[0][0] + params[0][1] * prev_close + params[0][2] * prev_open + params[0][3] * prev_vwap + params[0][4] * prev_low + params[0][5] * prev_high + params[0][6] * prev_noOfTrades + params[0][7] * open;
-
         if ((predicted_close > close + (p / 100)) and stocks < x)
         {
             // buy
@@ -273,7 +319,7 @@ int main(int argv, char *argc[])
         // cash_file
         cash_file << data[i].first << "," << cashflow << "\n";
     }
-    double final_pnl{cashflow + (stocks * data[len - 1].second[0])};
+    long double final_pnl{cashflow + (stocks * data[len - 1].second[0])};
     final_file << "Final pnl : " << final_pnl << "\n";
 
     cash_file.close();
