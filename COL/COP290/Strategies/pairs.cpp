@@ -1,9 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <cmath>
-#include <string>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -24,6 +19,22 @@ int main(int argv, char *argc[])
 
     vector<pair<string, double>> data1;
     vector<pair<string, double>> data2;
+    vector<double> spread_n;
+
+    ifstream file("help.txt");
+    string first_line;
+    getline(file, first_line);
+    string line;
+    while (getline(file, line))
+    {
+        string sp;
+        stringstream ss(line);
+        getline(ss, sp, '\n');
+        spread_n.push_back(stod(sp));
+    }
+    file.close();
+
+    reverse(spread_n.begin(), spread_n.end());
 
     ifstream file1(symbol1 + ".csv");
     ifstream file2(symbol2 + ".csv");
@@ -73,6 +84,11 @@ int main(int argv, char *argc[])
     double cashflow{};
     double sum{};
     double sumOfSquares{};
+    for (int i = 0; i < n0; i++)
+    {
+        sum += spread_n[i];
+        sumOfSquares += (spread_n[i] * spread_n[i]);
+    }
     double roll_mean{};
     double sd{};
     double z_score{};
@@ -82,16 +98,21 @@ int main(int argv, char *argc[])
     for (int i = 0; i < len; i++)
     {
         spread = (data1[i].second - data2[i].second);
-        int windowSize = min(i + 1, n0);
-        sumOfSquares += spread*spread;
+        int windowSize = n0;
+        sumOfSquares += spread * spread;
         sum += spread;
         if (i >= n0)
         {
             sum -= (data1[i - n0].second - data2[i - n0].second);
             sumOfSquares -= ((data1[i - n0].second - data2[i - n0].second) * (data1[i - n0].second - data2[i - n0].second));
         }
-        roll_mean = sum/windowSize;
-        variance = (sumOfSquares - (sum * sum) / windowSize) / (windowSize - 1);
+        else if (i < n0)
+        {
+            sum -= spread_n[i];
+            sumOfSquares -= (spread_n[i] * spread_n[i]);
+        }
+        roll_mean = sum / windowSize;
+        variance = (sumOfSquares - (sum * sum) / windowSize) / (windowSize);
         sd = sqrt(variance);
 
         z_score = (spread - roll_mean) / sd;
@@ -138,11 +159,11 @@ int main(int argv, char *argc[])
             }
         }
         // cash_file
-        cash_file << data1[i].first << "," << cashflow << "\n";
+        cash_file << data1[i].first << "," << fixed << setprecision(2) << cashflow << "\n";
     }
 
     double final_pnl{cashflow + (stocks * data1[len - 1].second) - (stocks * data2[len - 1].second)};
-    final_file <<final_pnl;
+    final_file << final_pnl;
 
     cash_file.close();
     order_file1.close();
