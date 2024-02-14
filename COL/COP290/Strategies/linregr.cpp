@@ -18,43 +18,6 @@ void print(vector<vector<long double>> mat)
     }
 }
 
-// ------------------------------------------------- DETERMINANT ---------------------------------------------------------
-long double get_determinant(vector<vector<long double>> matrix)
-{
-    int size = matrix.size();
-
-    // Base case: if the matrix is 1x1, return its only element
-    if (size == 1)
-    {
-        return matrix[0][0];
-    }
-
-    // Initialize determinant
-    long double det = 0;
-
-    // Recursive expansion along the first row
-    for (int col = 0; col < size; col++)
-    {
-        // Calculate the minor matrix (matrix without the current row and column)
-        vector<vector<long double>> minorMatrix(size - 1, vector<long double>(size - 1, 0));
-        for (int i = 1; i < size; i++)
-        {
-            for (int j = 0, k = 0; j < size; j++)
-            {
-                if (j != col)
-                {
-                    minorMatrix[i - 1][k++] = matrix[i][j];
-                }
-            }
-        }
-
-        // Add or subtract the determinant of the minor matrix multiplied by the current element
-        det += (col % 2 == 0 ? 1 : -1) * matrix[0][col] * get_determinant(minorMatrix);
-    }
-
-    return det;
-}
-
 // --------------------------------------------------------------- LINEAR_REGRESSOR ----------------------------------------------------------------------
 vector<vector<long double>> gaussianElimination(const vector<vector<long double>> mat)
 {
@@ -68,10 +31,6 @@ vector<vector<long double>> gaussianElimination(const vector<vector<long double>
             I[i][j] = (i == j) ? 1.0 : 0.0;
         }
     }
-    // print(mat);
-    // cout << "-----------------" << endl;
-    // print(I);
-    // cout << "-----------------" << endl;
     // Forward elimination
     for (int i = 0; i < N; i++)
     {
@@ -82,13 +41,11 @@ vector<vector<long double>> gaussianElimination(const vector<vector<long double>
             return {{}};
         }
 
-
-        // Eliminate other rows
         for (int k = 0; k < N; k++)
         {
             if (k != i)
             {
-                long double factor = A[k][i]/pivot;
+                long double factor = A[k][i] / pivot;
                 for (int j = 0; j < N; j++)
                 {
                     A[k][j] -= factor * A[i][j];
@@ -96,7 +53,6 @@ vector<vector<long double>> gaussianElimination(const vector<vector<long double>
                 }
             }
         }
-        // Normalize the pivot row
         for (int j = 0; j < N; j++)
         {
             if (A[i][j] != 0)
@@ -108,26 +64,26 @@ vector<vector<long double>> gaussianElimination(const vector<vector<long double>
                 I[i][j] /= pivot;
             }
         }
-        // print(A);
-        // cout << "-----------------" << endl;
-        // print(I);
-        // cout << "-----------------" << endl;
     }
     return I;
 }
 
-vector<vector<long double>> crossMultiply_1(const vector<vector<long double>> matrix1, const vector<vector<long double>> matrix2)
+vector<vector<long double>> crossMultiply_1(vector<vector<long double>> A, vector<vector<long double>> B)
 {
-    vector<long double> result(matrix1.size(), 0);
-    for (int i = 0; i < matrix1.size(); i++)
-    {
-        for (int j = 0; j < matrix1[0].size(); j++)
-        {
-            result[i] += matrix1[i][j] * matrix2[0][i];
-        }
-    }
+    int m = A.size();    // 8
+    int n = A[0].size(); // N
+    int p = B[0].size(); // 1
 
-    return {result};
+    vector<vector<long double>> C(m, vector<long double>(p, 0)); // 8*1
+    // Perform matrix multiplication
+    for (int i = 0; i < m; i++) {
+        vector<long double>val = {0};
+        for (int j = 0; j < n; j++) {
+            val[0] += A[i][j] * B[j][0];
+        }
+        C[i] = val;
+    }
+    return C;
 }
 
 vector<vector<long double>> crossMultiply(const vector<vector<long double>> matrix1, const vector<vector<long double>> matrix2)
@@ -166,6 +122,7 @@ vector<vector<long double>> transposeMatrix(vector<vector<long double>> mat)
 // -------------------------------------------------------------------------- PARAMS -------------------------------------------------------------------
 vector<vector<long double>> solve(vector<vector<long double>> x_matrix, vector<vector<long double>> y_matrix)
 {
+    // cout << y_matrix.size() << " " << y_matrix[0].size() << endl
 
     // Calculate the transpose
     vector<vector<long double>> x_transpose = transposeMatrix(x_matrix);
@@ -177,11 +134,9 @@ vector<vector<long double>> solve(vector<vector<long double>> x_matrix, vector<v
     vector<vector<long double>> inverse;
     inverse = gaussianElimination(x_transpose_x);
     // (XTX)^-1 * (XTy)
-
-    vector<vector<long double>> temp = crossMultiply(inverse, x_transpose_x);
-
     vector<vector<long double>> params = crossMultiply_1(inverse, x_transpose_y);
     return params;
+
 }
 
 // -------------------------------------------------------------------------- MAIN ---------------------------------------------------------------------
@@ -245,7 +200,7 @@ int main(int argv, char *argc[])
     }
     // finding the params
     vector<vector<long double>> params = solve(x_matrix, y_matrix);
-    print(y_matrix);
+
     // finally getting to the buying and selling part
     // loading test data
     ifstream file1(symbol + ".csv");
@@ -300,7 +255,7 @@ int main(int argv, char *argc[])
         long double close = data[i].second[0];
 
         // prediction
-        predicted_close = params[0][0] + params[0][1] * prev_close + params[0][2] * prev_open + params[0][3] * prev_vwap + params[0][4] * prev_low + params[0][5] * prev_high + params[0][6] * prev_noOfTrades + params[0][7] * open;
+        predicted_close = params[0][0] + params[1][0] * prev_close + params[2][0] * prev_open + params[3][0] * prev_vwap + params[4][0] * prev_low + params[5][0] * prev_high + params[6][0] * prev_noOfTrades + params[7][0] * open;
         if ((predicted_close > close + (p / 100)) and stocks < x)
         {
             // buy
@@ -320,7 +275,7 @@ int main(int argv, char *argc[])
         cash_file << data[i].first << "," << cashflow << "\n";
     }
     long double final_pnl{cashflow + (stocks * data[len - 1].second[0])};
-    final_file << "Final pnl : " << final_pnl << "\n";
+    final_file << final_pnl << "\n";
 
     cash_file.close();
     order_file.close();
