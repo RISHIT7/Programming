@@ -42,7 +42,7 @@ diffI([X|R], S2, S3) :- diffI(R, S2, S3).
 
 /* cartesian(S1, S2, S3) */
 cartesianH(_, [], []) :- !.
-cartesianH(X, [Y|S], [[X|Y]|Z]) :- cartesianH(X, S, Z).
+cartesianH(X, [Y|S], [(X,Y)|Z]) :- cartesianH(X, S, Z).
 
 cartesian([], _, []) :- !.
 cartesian(_, [], []) :- !.
