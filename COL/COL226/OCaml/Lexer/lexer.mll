@@ -56,9 +56,9 @@ rule token = parse
    | "!="
         { NotEqual }
    | "<="
-        { NotEqual }
+        { LessThanEq }
    | ">="
-        { NotEqual }
+        { GreaterThanEq }
    | [',']
         { Comma }
    | [';']
