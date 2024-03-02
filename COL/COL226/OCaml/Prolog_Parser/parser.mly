@@ -5,7 +5,7 @@
 %token LEFTBRACKET RIGHTBRACKET LEFTSQUARE RIGHTSQUARE
 %token <string> IDENT CONS
 %token <int> INTEGER
-%token COMMA ASSIGN NOTEQUAL STOP BANG PIPE PLUS MINUS ASTERISK SLASH LESSTHAN GREATERTHAN COND PERCENTAGE COMMENTOPEN COMMENTCLOSE
+%token COMMA ASSIGN NOTEQUAL STOP BANG PIPE PLUS MINUS ASTERISK SLASH LESSTHAN GREATERTHAN COND PERCENTAGE COMMENTOPEN COMMENTCLOSE UNDERSCORE
 %token EOF
 
 %left COMMA
@@ -39,7 +39,7 @@ clause:
       atom STOP                           
         {Fact(Head($1))}
     | atom COND atom_list STOP            
-        {Rule(Head($1), BOdy($3))}
+        {Rule(Head($1), Body($3))}
 ;
 
 
@@ -71,7 +71,7 @@ atom:
     | term GREATERTHAN term                        
         {Atom(">", [$1; $3])}
     | BANG                                 
-        {Atom("_bang", [])}
+        {Atom("_ofcourse", [])}
 ;
 
 
@@ -89,9 +89,11 @@ term:
     | IDENT                                 
         {Variable($1)}
     | CONS                                
-        {Constant($1, [])}
+        {Node($1, [])}
     | INTEGER                                 
         {Integer($1)}
+    | UNDERSCORE
+        {Underscore}
     | CONS LEFTBRACKET term_list RIGHTBRACKET                
         {Node($1, $3)}
     | term PLUS term                      

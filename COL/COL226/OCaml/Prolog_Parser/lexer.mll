@@ -11,7 +11,7 @@ let skip = [' ' '\t' '\n' '\r']+
 let number = '0'|['1'-'9']['0'-'9']*
 
 rule token = parse
-    | sp
+    | skip
         { token lexbuf }
     | ['+']
         { PLUS }
@@ -26,7 +26,7 @@ rule token = parse
     | cons as lxm
         { CONS(lxm) }
     | number as lxm
-        { INTEGER(lxm) }
+        { INTEGER(int_of_string lxm) }
     | ['(']
         { LEFTBRACKET }
     | [')']
@@ -54,11 +54,11 @@ rule token = parse
     | ":-"
         { COND }
     | ['%']
-        { PERCENTAGE }
+        { oneLineComment lexbuf }
+    | ['_']
+        { UNDERSCORE }
     | "/*"
-        { COMMENTOPEN }
-    | "*/"
-        { COMMENTCLOSE }
+        {multiLineComment 0 lexbuf }
     | _ as lxm
         {raise (InvalidToken lxm)}
     | eof
@@ -72,13 +72,13 @@ and oneLineComment = parse
     | _
         {oneLineComment lexbuf}
 
-and multiLinecomment = parse
+and multiLineComment depth = parse
       eof
-        { EOF }
+        { failwith "Syntax error" }
     | "*/"
         { if depth = 0 then token lexbuf 
-          else multiLinecomment (depth-1) lexbuf }
+          else multiLineComment (depth-1) lexbuf }
     | "/*"
-        { multiLinecomment (depth+1) lexbuf }
+        { multiLineComment (depth+1) lexbuf }
     | _
-        { multiLinecomment depth lexbuf }
+        { multiLineComment depth lexbuf }
