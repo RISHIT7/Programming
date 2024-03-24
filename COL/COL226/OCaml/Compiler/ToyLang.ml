@@ -23,7 +23,7 @@ let myBool2bool b = match b with
 | F -> false
 ;;
 
-type defs = Adef of string * exp (* definitions and local definitions *)
+type defs = Adef of string * exp | Pdef of defs * defs | Sdef of defs * defs | Ldef of defs * defs (* definitions and local definitions *)
 ;;
 
 let rec compile e = match e with 
@@ -84,9 +84,18 @@ let rec stkmc g s c = match s, c with
 | _, _ -> raise (Stuck (g, s, c)) 
 ;; 
 
-let ret_gamma test prev_gamma = match test with
-| Adef(a, b) -> (a, stkmc prev_gamma [] (compile b))::prev_gamma
-| _ -> raise (Invalid_Def test)
+let ret_gamma (test : defs) (prev_gamma : (string*values) list) : (string*values) list = 
+   let rec ret_gamma_helper test prev_gamma = match test with
+   | Adef(a, b) -> [(a, stkmc prev_gamma [] (compile b))]
+   | Pdef(d1, d2) -> (ret_gamma_helper d1 prev_gamma)@(ret_gamma_helper d2 prev_gamma)
+   | Sdef (d1, d2) ->
+      let val_d1 = ret_gamma_helper d1 prev_gamma in
+      val_d1@(ret_gamma_helper d2 (val_d1 @ prev_gamma))
+   | Ldef (d1, d2) ->
+      let val_d1 = ret_gamma_helper d1 prev_gamma in
+      (ret_gamma_helper d2 (val_d1 @ prev_gamma))
+   | _ -> raise (Invalid_Def test)
+in (ret_gamma_helper test prev_gamma)@prev_gamma
 ;;
 
 let test1a = Plus (Times (Num 3, Num 4), Times (Num 5, Num 6));; 
@@ -110,10 +119,20 @@ let test13a = Num 3;;
 let test13b = Case (test13a, [test1a; test1b; test2; test3; test4; test5a]);;
 let test13c = Case (test13a, [test1a; test1b]);;
 
-let test14 = Adef("x", test1a);;
+let test14a = Adef("x", test1a);;
+let test14b = Adef("x", test5a);;
+let test15a = Adef("z", test1a);;
+let test15b = Adef("z", test5a);;
+let test16a = Pdef(test14a, test15a);; (* 42, 42 *)
+let test16b = Pdef(test14b, test15b);; (* 62, 62 *)
+let test17a = Sdef(test14a, test15a);; (* 42, 42 *)
+let test17b = Sdef(test14b, test15b);; (* 62, 282 *)
+let test18a = Ldef(test14a, test15a);; (* 42 *)
+let test18b = Ldef(test14b, test15b);; (* 282 *)
+
 
 let gamma = [("x", N 2); ("y", B true); ("x", N 3)];;
 let compiler = compile test10;;
 let stack = stkmc gamma [] compiler;;
 
-let gamma_test = ret_gamma test14 [("x", N 7)];;
+let gamma_test = ret_gamma test18b [("x", N 7)];;
