@@ -11,12 +11,11 @@ type exp =
 
 type values = N of int | B of bool | P of values * values;;
 
-type opcode = LDN of int | LDB of bool | LOOKUP of string
+type opcode =   LDN of int | LDB of bool | LOOKUP of string
               | PLUS | TIMES | SUBTRACT
               | AND | OR | NOT | EQ | GT 
               | COND of opcode list * opcode list | CASE of (opcode list) list
-              | PAIR
-              | FST | SND
+              | PAIR | FST | SND
 ;;
 
 let myBool2bool b = match b with 
@@ -49,7 +48,7 @@ let rec compile e = match e with
 | Snd(e1) -> compile e1 @ [SND]
 ;; 
 
-exception Stuck of (string -> values) * values list * opcode list;; 
+exception Stuck of ((string * values) list) * values list * opcode list;; 
 exception Invalid_Var of string
 
 let rec stkmc g s c = match s, c with 
@@ -57,7 +56,7 @@ let rec stkmc g s c = match s, c with
 | v::_, [ ] -> v
 | s, (LDN n)::c' -> stkmc g ((N n)::s) c' 
 | s, (LDB b)::c' -> stkmc g ((B b)::s) c' 
-| s, (LOOKUP x)::c' -> stkmc g ((g x)::s) c'
+| s, (LOOKUP x)::c' -> stkmc g ((List.assoc x g)::s) c'
 (* Arith *)
 | (N n2)::(N n1)::s', PLUS::c' -> stkmc g (N(n1+n2)::s') c' 
 | (N n2)::(N n1)::s', TIMES::c' -> stkmc g (N(n1*n2)::s') c'  
@@ -83,13 +82,10 @@ let rec stkmc g s c = match s, c with
 
 
 let test1a = Plus (Times (Num 3, Num 4), 
-                  Times (Num 5, Num 6));; 
+                   Times (Num 5, Num 6));; 
 let test1b = Times (Sub (Num 3, Num 4), 
-                  Times (Num 3, Num 4));; 
-let test2 = Or (Not (Bl T),  
-                And (Bl T,  
-                     Or(Bl F,  
-                        Bl T)));; 
+                    Times (Num 3, Num 4));; 
+let test2 = Or (Not (Bl T), And (Bl T, Or(Bl F, Bl T)));; 
 let test3 = Gt (Times (Num 5, Num 6),  
                (Times (Num 3, Num 4)));; 
 let test4 = And (Eq(test1a, Num 42), Not test3);;
@@ -109,13 +105,9 @@ let test13a = Num 3;;
 let test13b = Case (test13a, [test1a; test1b; test2; test3; test4; test5]);;
 let test13c = Case (test13a, [test1a; test1b]);;
 
-let compiler = compile test13b;;
+let gamma = [("x", N 2); ("y", B true); ("x", N 3)];;
 
-let [@warning "-8"]gamma v = match v with
-| "x" -> N 2
-| _ -> raise (Invalid_Var v)
-;;
-
+let compiler = compile test5;;
 let stack = stkmc gamma [] compiler;;
 
 let rec string_of_value value = match value with
