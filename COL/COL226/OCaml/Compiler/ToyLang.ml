@@ -23,6 +23,9 @@ let myBool2bool b = match b with
 | F -> false
 ;;
 
+type defs = Adef of string * exp (* definitions and local definitions *)
+;;
+
 let rec compile e = match e with 
 (* Values *)
 | Num n  -> [LDN n] 
@@ -49,7 +52,8 @@ let rec compile e = match e with
 ;; 
 
 exception Stuck of ((string * values) list) * values list * opcode list;; 
-exception Invalid_Var of string
+exception Invalid_Var of string;;
+exception Invalid_Def of defs;;
 
 let rec stkmc g s c = match s, c with 
 (* Values *)
@@ -80,6 +84,10 @@ let rec stkmc g s c = match s, c with
 | _, _ -> raise (Stuck (g, s, c)) 
 ;; 
 
+let ret_gamma test prev_gamma = match test with
+| Adef(a, b) -> (a, stkmc prev_gamma [] (compile b))::prev_gamma
+| _ -> raise (Invalid_Def test)
+;;
 
 let test1a = Plus (Times (Num 3, Num 4), 
                    Times (Num 5, Num 6));; 
@@ -105,20 +113,10 @@ let test13a = Num 3;;
 let test13b = Case (test13a, [test1a; test1b; test2; test3; test4; test5]);;
 let test13c = Case (test13a, [test1a; test1b]);;
 
-let gamma = [("x", N 2); ("y", B true); ("x", N 3)];;
+let test14 = Adef("x", test1a);;
 
-let compiler = compile test5;;
+let gamma = [("x", N 2); ("y", B true); ("x", N 3)];;
+let compiler = compile test10;;
 let stack = stkmc gamma [] compiler;;
 
-let rec string_of_value value = match value with
-| N n -> (string_of_int n)
-| B b -> (string_of_bool b)
-| P (a, b) -> ("(" ^ (string_of_value a) ^ "," ^ (string_of_value b) ^ ")")
-;;
-
-let print_values value = match value with
-| P (a, b) -> ("(" ^ (string_of_value a) ^ "," ^ (string_of_value b) ^ ")")
-| n -> (string_of_value n)
-;;
-
-let () = print_endline (print_values stack);;
+let gamma_test = ret_gamma test14 [("x", N 7)];;
