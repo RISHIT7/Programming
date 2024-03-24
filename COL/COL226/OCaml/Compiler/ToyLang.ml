@@ -89,16 +89,13 @@ let ret_gamma test prev_gamma = match test with
 | _ -> raise (Invalid_Def test)
 ;;
 
-let test1a = Plus (Times (Num 3, Num 4), 
-                   Times (Num 5, Num 6));; 
-let test1b = Times (Sub (Num 3, Num 4), 
-                    Times (Num 3, Num 4));; 
+let test1a = Plus (Times (Num 3, Num 4), Times (Num 5, Num 6));; 
+let test1b = Times (Sub (Num 3, Num 4), Times (Num 3, Num 4));; 
 let test2 = Or (Not (Bl T), And (Bl T, Or(Bl F, Bl T)));; 
-let test3 = Gt (Times (Num 5, Num 6),  
-               (Times (Num 3, Num 4)));; 
+let test3 = Gt (Times (Num 5, Num 6), (Times (Num 3, Num 4)));; 
 let test4 = And (Eq(test1a, Num 42), Not test3);;
-let test5 = Plus (Times (Plus (Num 1, V "x"), Num 4), 
-                  Times (Num 5, Num 6));;
+let test5a = Plus (Times (Plus (Num 1, V "x"), Num 4), Times (Num 5, Num 6));;
+let test5b = Plus (Times (Plus (Num 1, V "z"), Num 4), Times (Num 5, Num 6));;
 
 let test6 = IfTE (test3, test1a, test2);;
 let test7 = IfTE (test3, test2, test1a);;
@@ -110,7 +107,7 @@ let test11 = Fst (test10);;
 let test12 = Snd (test10);;
 
 let test13a = Num 3;;
-let test13b = Case (test13a, [test1a; test1b; test2; test3; test4; test5]);;
+let test13b = Case (test13a, [test1a; test1b; test2; test3; test4; test5a]);;
 let test13c = Case (test13a, [test1a; test1b]);;
 
 let test14 = Adef("x", test1a);;
