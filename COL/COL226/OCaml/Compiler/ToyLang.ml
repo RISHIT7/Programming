@@ -3,13 +3,13 @@ type myBool = T | F;;
 type exp = Num of int | Bl of myBool | V of string
 | Plus of exp * exp | Times of exp * exp
 | And of exp * exp | Or of exp * exp | Not of exp
-| Eq of exp * exp | Gt of exp * exp
+| Eq of exp * exp | Gt of exp * exp | IfTE of exp * exp * exp
 ;;
 
 type values = N of int | B of bool;;
 
 type opcode = LDN of int | LDB of bool | LOOKUP of string
-              | PLUS | TIMES | AND | OR | NOT | EQ | GT;;
+              | PLUS | TIMES | AND | OR | NOT | EQ | GT | COND of opcode list * opcode list;;
 
 let myBool2bool b = match b with 
 | T -> true
@@ -27,6 +27,7 @@ let rec compile e = match e with
 | Not e1 -> (compile e1) @ [NOT] 
 | Eq (e1, e2)  -> (compile e1) @ (compile e2) @ [EQ] 
 | Gt(e1, e2)  -> (compile e1) @ (compile e2) @ [GT] 
+| IfTE(e0, e1, e2) -> (compile e0) @ [COND(compile e1, compile e2)]
 ;; 
 
 exception Stuck of (string -> values) * values list * opcode list;; 
@@ -43,7 +44,9 @@ let rec stkmc g s c = match s, c with
 | (B b2)::(B b1)::s', OR::c' -> stkmc g (B(b1 || b2)::s') c' 
 | (B b1)::s', NOT::c' -> stkmc g (B(not b1)::s') c' 
 | (N n2)::(N n1)::s', EQ::c' -> stkmc g (B(n1 = n2)::s') c' 
-| (N n2)::(N n1)::s', GT::c' -> stkmc g (B(n1 > n2)::s') c' 
+| (N n2)::(N n1)::s', GT::c' -> stkmc g (B(n1 > n2)::s') c'
+| (B true)::s', COND(c1, c2)::c' -> stkmc g s' (c1@c')
+| (B false)::s', COND(c1, c2)::c' -> stkmc g s' (c2@c')
 | _, _ -> raise (Stuck (g, s, c)) 
 ;; 
 
@@ -55,12 +58,18 @@ let test2 = Or (Not (Bl T),
                         Bl T)));; 
 let test3 = Gt (Times (Num 5, Num 6),  
                (Times (Num 3, Num 4)));; 
+
 let test4 = And (Eq(test1, Num 42), Not test3);;
 
-let test5 = Plus (Times (Plus (Num 1, V "y"), Num 4), 
+let test5 = Plus (Times (Plus (Num 1, V "x"), Num 4), 
                   Times (Num 5, Num 6));;
 
-let compiler = compile test5;;
+let test6 = IfTE (test3, test1, test2);;
+let test7 = IfTE (test3, test2, test1);;
+let test8 = IfTE (Not test3, test1, test2);;
+let test9 = IfTE (Not test3, test2, test1);;
+
+let compiler = compile test6;;
 
 let [@warning "-8"]gamma v = match v with
 | "x" -> N 2
