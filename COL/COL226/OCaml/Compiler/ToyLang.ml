@@ -1,11 +1,12 @@
 type myBool = T | F;;
 
-type exp = Num of int | Bl of myBool | V of string
-| Plus of exp * exp | Times of exp * exp | Sub of exp * exp
-| And of exp * exp | Or of exp * exp | Not of exp
-| Eq of exp * exp | Gt of exp * exp 
-| IfTE of exp * exp * exp | Case of exp * (exp list)
-| Pair of exp * exp | Fst of exp | Snd of exp
+type exp = 
+  Num of int | Bl of myBool | V of string (* Values *)
+| Plus of exp * exp | Times of exp * exp | Sub of exp * exp (* Arithmetics *)
+| And of exp * exp | Or of exp * exp | Not of exp (* Boolean Arithmetics *)
+| Eq of exp * exp | Gt of exp * exp (* Comparison Operators *)
+| IfTE of exp * exp * exp | Case of exp * (exp list) (* Conditionals *)
+| Pair of exp * exp | Fst of exp | Snd of exp (* Pair *)
 ;;
 
 type values = N of int | B of bool | P of values * values;;
@@ -24,19 +25,25 @@ let myBool2bool b = match b with
 ;;
 
 let rec compile e = match e with 
+(* Values *)
 | Num n  -> [LDN n] 
 | Bl b -> [LDB (myBool2bool b) ]
 | V x -> [LOOKUP x]
+(* Arith *)
 | Plus (e1, e2)  ->  (compile e1) @ (compile e2) @ [PLUS] 
 | Times (e1, e2)  ->  (compile e1) @ (compile e2) @ [TIMES]  
 | Sub (e1, e2)  ->  (compile e1) @ (compile e2) @ [SUBTRACT]  
+(* Boolean Arith *)
 | And (e1, e2)  ->  (compile e1) @ (compile e2) @ [AND] 
 | Or (e1, e2)  -> (compile e1) @ (compile e2) @ [OR]  
 | Not e1 -> (compile e1) @ [NOT] 
+(* Comparison Ops *)
 | Eq (e1, e2)  -> (compile e1) @ (compile e2) @ [EQ] 
 | Gt(e1, e2)  -> (compile e1) @ (compile e2) @ [GT] 
+(* Conditionals *)
 | IfTE(e0, e1, e2) -> (compile e0) @ [COND(compile e1, compile e2)]
 | Case(e0, le1) -> (compile e0) @ [CASE( List.map compile le1)]
+(* Pairs *)
 | Pair(e1, e2) -> (compile e1) @ (compile e2) @ [PAIR]
 | Fst(e1) -> compile e1 @ [FST]
 | Snd(e1) -> compile e1 @ [SND]
@@ -46,24 +53,31 @@ exception Stuck of (string -> values) * values list * opcode list;;
 exception Invalid_Var of string
 
 let rec stkmc g s c = match s, c with 
+(* Values *)
 | v::_, [ ] -> v
 | s, (LDN n)::c' -> stkmc g ((N n)::s) c' 
 | s, (LDB b)::c' -> stkmc g ((B b)::s) c' 
 | s, (LOOKUP x)::c' -> stkmc g ((g x)::s) c'
+(* Arith *)
 | (N n2)::(N n1)::s', PLUS::c' -> stkmc g (N(n1+n2)::s') c' 
 | (N n2)::(N n1)::s', TIMES::c' -> stkmc g (N(n1*n2)::s') c'  
 | (N n2)::(N n1)::s', SUBTRACT::c' -> stkmc g (N(n1-n2)::s') c'
+(* Boolean Arith *)
 | (B b2)::(B b1)::s', AND::c' -> stkmc g (B(b1 && b2)::s') c' 
 | (B b2)::(B b1)::s', OR::c' -> stkmc g (B(b1 || b2)::s') c' 
 | (B b1)::s', NOT::c' -> stkmc g (B(not b1)::s') c' 
+(* Comparison Ops *)
 | (N n2)::(N n1)::s', EQ::c' -> stkmc g (B(n1 = n2)::s') c' 
 | (N n2)::(N n1)::s', GT::c' -> stkmc g (B(n1 > n2)::s') c'
+(* Conditionals *)
 | (B true)::s', COND(c1, c2)::c' -> stkmc g s' (c1@c')
 | (B false)::s', COND(c1, c2)::c' -> stkmc g s' (c2@c')
 | (N n)::s', CASE(lc1)::c' -> stkmc g s' ((List.nth lc1 n)@c')
+(* Pairs *)
 | (a)::(b)::s', PAIR::c' -> stkmc g (P(b, a)::s') c'
 | (P (a, b))::s', FST::c' -> stkmc g (a::s') c'
 | (P (a, b))::s', SND::c' -> stkmc g (b::s') c'
+(* Error *)
 | _, _ -> raise (Stuck (g, s, c)) 
 ;; 
 
