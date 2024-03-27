@@ -38,7 +38,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
             cout << "Renderer created!" << endl;
         }
 
-        player = new GameObject("../assets/Images/Character.bmp", renderer);
+        player = new GameObject("../assets/Images/Character.bmp", renderer, 70, 70);
 
         isRunning = true;
     }

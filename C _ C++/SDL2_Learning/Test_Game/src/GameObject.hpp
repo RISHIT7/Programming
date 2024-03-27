@@ -5,7 +5,7 @@ class GameObject
 {
 
 public:
-    GameObject(const char *texturesheet, SDL_Renderer *ren);
+    GameObject(const char *texturesheet, SDL_Renderer *ren, int x, int y);
     ~GameObject();
 
     void Update();
