@@ -1,5 +1,5 @@
 all:
-	@g++ main.cpp Game.cpp -o main `sdl2-config --cflags --libs` -lstdc++
+	@g++ main.cpp Game.cpp TextureManager.cpp -o main `sdl2-config --cflags --libs` -lstdc++
 	@./main
 
 clean:

@@ -27,9 +27,6 @@ private:
     bool isRunning;
     SDL_Window *window;
     SDL_Renderer *renderer;
-    SDL_Surface *bitmapSurf;
-    SDL_Texture *bitmapTex;
-    SDL_Rect rectangle;
 };
 
 #endif /* Game_hpp */

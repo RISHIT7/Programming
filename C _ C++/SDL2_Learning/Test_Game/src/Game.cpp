@@ -1,4 +1,8 @@
 #include "Game.hpp"
+#include "TextureManager.hpp"
+
+SDL_Texture* bitmapTex;
+SDL_Rect rectangle;
 
 Game::Game()
 {
@@ -34,12 +38,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
             cout << "Renderer created!" << endl;
         }
 
-        bitmapSurf = SDL_LoadBMP("../assets/Images/Character.bmp");
-        bitmapTex = SDL_CreateTextureFromSurface(renderer, bitmapSurf);
-        SDL_FreeSurface(bitmapSurf);
-        if (bitmapTex) {
-            cout << "Texture loaded!" <<endl;
-        }
+        bitmapTex = TextureManager::LoadTexture("../assets/Images/Character.bmp", renderer);
 
         // Create rectangle
         rectangle.x = 50;
