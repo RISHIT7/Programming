@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\WebApplication1.csproj": {}
+    "C:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "c:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\WebApplication1.csproj": {
+    "C:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "C:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "c:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\WebApplication1.csproj",
+        "projectPath": "C:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\WebApplication1.csproj",
         "packagesPath": "C:\\Users\\rishi\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\obj\\",
+        "outputPath": "C:\\Users\\rishi\\Desktop\\Programming\\Projects\\Project_1\\WebApplication1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rishi\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -19,17 +19,27 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     {
         cout << "Subsystem Initialised!..." << endl;
 
+        // creating a window
         window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
         if (window)
         {
             cout << "Window Created!" << endl;
         }
 
-        renderer = SDL_CreateRenderer(window, -1, 0);
+        // creating a renderer
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
         if (renderer)
         {
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             cout << "Renderer created!" << endl;
+        }
+
+        bitmapSurf = SDL_LoadBMP("../assets/Images/download.bmp");
+        bitmapTex = SDL_CreateTextureFromSurface(renderer, bitmapSurf);
+        SDL_FreeSurface(bitmapSurf);
+
+        if (bitmapTex) {
+            cout << "Texture loaded!" <<endl;
         }
 
         isRunning = true;
@@ -50,6 +60,19 @@ void Game::handleEvents()
             isRunning = false;
             break;
         
+        case SDL_KEYDOWN:
+            cout << "a key has been pressed" << endl;
+            switch (event.key.keysym.sym)
+            {
+                case SDLK_0:
+                    cout << "0 was pressed" << endl;
+                    break;
+                
+                default:
+                    break;
+            }
+            break;
+
         default:
             break;
     }
@@ -57,14 +80,14 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    cnt++;
-    cout << cnt << endl;
+    // cnt++;
+    // cout << cnt << endl;
 }
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    // add stuff to render
+    SDL_RenderCopy(renderer, bitmapTex, NULL, NULL);
     SDL_RenderPresent(renderer);
 }
 
