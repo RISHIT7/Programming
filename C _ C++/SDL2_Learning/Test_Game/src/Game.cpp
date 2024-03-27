@@ -1,8 +1,8 @@
 #include "Game.hpp"
 #include "TextureManager.hpp"
+#include "GameObject.hpp"
 
-SDL_Texture* bitmapTex;
-SDL_Rect rectangle;
+GameObject* player;
 
 Game::Game()
 {
@@ -22,7 +22,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
     {
         cout << "Subsystem Initialised!..." << endl;
-        
+
         // creating a window
         window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
         if (window)
@@ -38,13 +38,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
             cout << "Renderer created!" << endl;
         }
 
-        bitmapTex = TextureManager::LoadTexture("../assets/Images/Character.bmp", renderer);
-
-        // Create rectangle
-        rectangle.x = 50;
-        rectangle.y = 100;
-        rectangle.w = 200; 
-        rectangle.h = 200;
+        player = new GameObject("../assets/Images/Character.bmp", renderer);
 
         isRunning = true;
     }
@@ -58,39 +52,37 @@ void Game::handleEvents()
 {
     SDL_Event event;
     SDL_PollEvent(&event);
-    rectangle.x += 1;
     switch (event.type)
     {
-        case SDL_QUIT:
-            isRunning = false;
-            break;
+    case SDL_QUIT:
+        isRunning = false;
+        break;
 
-        case SDL_KEYDOWN:
-            switch (event.key.keysym.sym)
-            {
-                case SDLK_SPACE:
-                    break;
-                
-                default:
-                    break;
-            }
+    case SDL_KEYDOWN:
+        switch (event.key.keysym.sym)
+        {
+        case SDLK_SPACE:
             break;
 
         default:
             break;
+        }
+        break;
+
+    default:
+        break;
     }
 }
 
 void Game::update()
 {
-    // cnt++;
-    // cout << cnt << endl;
+    player->Update();
 }
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, bitmapTex, NULL, &rectangle);
+    player->Render();
     SDL_RenderPresent(renderer);
 }
 
