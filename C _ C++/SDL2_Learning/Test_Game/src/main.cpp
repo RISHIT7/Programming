@@ -4,9 +4,14 @@ Game *game = nullptr;
 
 int main(int argc, const char* argv[])
 {
-    game = new Game();
+    const int FPS = 60;
+    const int frameDelay = 1000/FPS;
 
-    game->init("Birch Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
+    Uint32 frameStart;
+    int frameTime;
+
+    game = new Game();
+    game->init("Birch Engine", 800, 600, false);
 
     while(game->running())
     {

@@ -7,7 +7,7 @@ Game::~Game()
 {
 }
 
-void Game::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
+void Game::init(const char *title, int width, int height, bool fullscreen)
 {
     int flags = 0;
     if (fullscreen)
@@ -18,9 +18,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
     {
         cout << "Subsystem Initialised!..." << endl;
-
+        
         // creating a window
-        window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+        window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
         if (window)
         {
             cout << "Window Created!" << endl;
@@ -34,13 +34,18 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
             cout << "Renderer created!" << endl;
         }
 
-        bitmapSurf = SDL_LoadBMP("../assets/Images/download.bmp");
+        bitmapSurf = SDL_LoadBMP("../assets/Images/Character.bmp");
         bitmapTex = SDL_CreateTextureFromSurface(renderer, bitmapSurf);
         SDL_FreeSurface(bitmapSurf);
-
         if (bitmapTex) {
             cout << "Texture loaded!" <<endl;
         }
+
+        // Create rectangle
+        rectangle.x = 50;
+        rectangle.y = 100;
+        rectangle.w = 200; 
+        rectangle.h = 200;
 
         isRunning = true;
     }
@@ -61,11 +66,10 @@ void Game::handleEvents()
             break;
         
         case SDL_KEYDOWN:
-            cout << "a key has been pressed" << endl;
             switch (event.key.keysym.sym)
             {
-                case SDLK_0:
-                    cout << "0 was pressed" << endl;
+                case SDLK_SPACE:
+                    rectangle.x += 1;
                     break;
                 
                 default:
@@ -87,7 +91,7 @@ void Game::update()
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, bitmapTex, NULL, NULL);
+    SDL_RenderCopy(renderer, bitmapTex, NULL, &rectangle);
     SDL_RenderPresent(renderer);
 }
 
