@@ -11,7 +11,7 @@ int main(int argc, const char *argv[])
     int frameTime;
 
     game = new Game();
-    game->init("Birch Engine", 1400, 1000, false);
+    game->init("Birch Engine", 1408, 1024, false);
 
     while (game->running())
     {

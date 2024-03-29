@@ -1,8 +1,12 @@
 #include "Game.hpp"
 #include "TextureManager.hpp"
 #include "GameObject.hpp"
+#include "Map.hpp"
 
 GameObject* player;
+Map* map;
+
+SDL_Renderer* Game::renderer = nullptr;
 
 Game::Game()
 {
@@ -38,7 +42,8 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
             cout << "Renderer created!" << endl;
         }
 
-        player = new GameObject("../assets/Images/Character.bmp", renderer, 70, 70);
+        player = new GameObject("../assets/Character/Character.bmp", 70, 70);
+        map = new Map();
 
         isRunning = true;
     }
@@ -82,6 +87,7 @@ void Game::update()
 void Game::render()
 {
     SDL_RenderClear(renderer);
+    map->DrawMap();
     player->Render();
     SDL_RenderPresent(renderer);
 }
