@@ -2,11 +2,16 @@
 #include "TextureManager.hpp"
 #include "GameObject.hpp"
 #include "Map.hpp"
+#include "ECS.hpp"
+#include "Components.hpp"
 
-GameObject* player;
-Map* map;
+GameObject *player;
+Map *map;
 
-SDL_Renderer* Game::renderer = nullptr;
+SDL_Renderer *Game::renderer = nullptr;
+
+Manager manager;
+auto &newPlayer(manager.addEntity());
 
 Game::Game()
 {
@@ -45,6 +50,9 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
         player = new GameObject("../assets/Character/Character.bmp", 70, 70);
         map = new Map();
 
+        newPlayer.addComponent<PositionComponent>();
+        newPlayer.getComponent<PositionComponent>().set_pos(500, 500);
+
         isRunning = true;
     }
     else
@@ -82,6 +90,8 @@ void Game::handleEvents()
 void Game::update()
 {
     player->Update();
+    manager.update();
+    cout << newPlayer.getComponent<PositionComponent>().x() << "," << newPlayer.getComponent<PositionComponent>().y() << endl;
 }
 
 void Game::render()
