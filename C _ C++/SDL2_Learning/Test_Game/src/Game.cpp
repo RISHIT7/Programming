@@ -8,6 +8,7 @@ Map *map;
 Manager manager;
 
 SDL_Renderer *Game::renderer = nullptr;
+SDL_Event Game::event;
 
 auto &player(manager.addEntity());
 
@@ -49,6 +50,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
 
         player.addComponent<TransformComponent>();
         player.addComponent<SpriteComponent>("../assets/Character/player.bmp");
+        player.addComponent<KeyboardController>();
 
         isRunning = true;
     }
@@ -60,7 +62,6 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
 
 void Game::handleEvents()
 {
-    SDL_Event event;
     SDL_PollEvent(&event);
     switch (event.type)
     {
@@ -88,8 +89,6 @@ void Game::update()
 {
     manager.refresh();
     manager.update();
-    player.getComponent<TransformComponent>().position.Add(Vector2D(0, 5));
-    // player.update();
 }
 
 void Game::render()
@@ -97,7 +96,6 @@ void Game::render()
     SDL_RenderClear(renderer);
     map->DrawMap();
     manager.draw();
-    // player.draw();
     SDL_RenderPresent(renderer);
 }
 
