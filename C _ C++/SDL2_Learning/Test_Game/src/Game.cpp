@@ -2,6 +2,7 @@
 #include "TextureManager.hpp"
 #include "Map.hpp"
 #include "ECS/Components.hpp"
+#include "Vector2D.hpp"
 
 Map *map;
 Manager manager;
@@ -46,7 +47,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
 
         map = new Map();
 
-        player.addComponent<PositionComponent>();
+        player.addComponent<TransformComponent>();
         player.addComponent<SpriteComponent>("../assets/Character/player.bmp");
 
         isRunning = true;
@@ -87,7 +88,8 @@ void Game::update()
 {
     manager.refresh();
     manager.update();
-    player.update();
+    player.getComponent<TransformComponent>().position.Add(Vector2D(0, 5));
+    // player.update();
 }
 
 void Game::render()
@@ -95,7 +97,7 @@ void Game::render()
     SDL_RenderClear(renderer);
     map->DrawMap();
     manager.draw();
-    player.draw();
+    // player.draw();
     SDL_RenderPresent(renderer);
 }
 

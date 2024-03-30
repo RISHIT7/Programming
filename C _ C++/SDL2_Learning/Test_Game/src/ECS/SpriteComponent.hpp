@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Components.hpp"
-// #include "TextureManager.hpp"
 #include "SDL.h"
 
 class SpriteComponent : public Component
@@ -20,7 +19,7 @@ public:
 
     void init() override
     {
-        position = &entity->getComponent<PositionComponent>();
+        transform = &entity->getComponent<TransformComponent>();
 
         srcRect.x = srcRect.y = 0;
         srcRect.w = srcRect.h = 128;
@@ -29,8 +28,8 @@ public:
 
     void update() override
     {
-        destRect.x = position->x();
-        destRect.y = position->y();
+        destRect.x = (int)transform->position.x;
+        destRect.y = (int)transform->position.y;
     }
 
     void draw() override
@@ -39,7 +38,7 @@ public:
     }
 
 private:
-    PositionComponent *position;
+    TransformComponent *transform;
     SDL_Texture *texture;
     SDL_Rect srcRect, destRect;
 };
