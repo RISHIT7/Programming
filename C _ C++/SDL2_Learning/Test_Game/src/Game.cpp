@@ -1,17 +1,14 @@
 #include "Game.hpp"
 #include "TextureManager.hpp"
-#include "GameObject.hpp"
 #include "Map.hpp"
-#include "ECS.hpp"
-#include "Components.hpp"
+#include "ECS/Components.hpp"
 
-GameObject *player;
 Map *map;
+Manager manager;
 
 SDL_Renderer *Game::renderer = nullptr;
 
-Manager manager;
-auto &newPlayer(manager.addEntity());
+auto &player(manager.addEntity());
 
 Game::Game()
 {
@@ -47,11 +44,10 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
             cout << "Renderer created!" << endl;
         }
 
-        player = new GameObject("../assets/Character/Character.bmp", 70, 70);
         map = new Map();
 
-        newPlayer.addComponent<PositionComponent>();
-        newPlayer.getComponent<PositionComponent>().set_pos(500, 500);
+        player.addComponent<PositionComponent>();
+        player.addComponent<SpriteComponent>("../assets/Character/player.bmp");
 
         isRunning = true;
     }
@@ -89,16 +85,17 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    player->Update();
+    manager.refresh();
     manager.update();
-    cout << newPlayer.getComponent<PositionComponent>().x() << "," << newPlayer.getComponent<PositionComponent>().y() << endl;
+    player.update();
 }
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
     map->DrawMap();
-    player->Render();
+    manager.draw();
+    player.draw();
     SDL_RenderPresent(renderer);
 }
 
