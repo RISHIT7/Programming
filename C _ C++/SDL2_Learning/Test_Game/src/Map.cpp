@@ -51,26 +51,11 @@ Map::Map()
     dest.x = dest.y = 0;
 }
 
-// Map::Map(const char* map_name)
-// {
-//     dirt = TextureManager::LoadTexture("../assets/Texture/dirt.bmp");   // type 2
-//     grass = TextureManager::LoadTexture("../assets/Texture/grass.bmp"); // type 1
-//     water = TextureManager::LoadTexture("../assets/Texture/water.bmp"); // type 0
-
-
-//     // file to array
-//     int arr[32][44]  = file_to_array(const char* map_name);
-//     LoadMap(arr);
-
-//     src.x = src.y = 0;
-//     src.w = dest.w = 32;
-//     src.h = dest.h = 32;
-
-//     dest.x = dest.y = 0;
-// }
-
 Map::~Map()
 {
+    SDL_DestroyTexture(water);
+    SDL_DestroyTexture(grass);
+    SDL_DestroyTexture(dirt);
 }
 
 void Map::LoadMap(int arr[32][44])
