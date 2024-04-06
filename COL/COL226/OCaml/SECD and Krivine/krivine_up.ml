@@ -141,17 +141,17 @@ let greaterthan (a1, a2) = match (a1,a2) with
 					(match a0 with
 					| CLtype(Bl b, env) -> (if (myBool2bool b) then (krivinemachine (CLtype(e1, env)) s) else (krivinemachine (CLtype(e2, env)) s))
 					| _ -> raise InvalidOperation)
-	(* | CLtype (Case(e0, el), env) -> 
+	| CLtype (Case(e0, el), env) -> 
 				let a0 = (krivinemachine (CLtype(e0, env)) []) in
-				(match a0 with
-				| (CLtype ((Num b), env)) -> (krivinemachine CLtype((List.nth e1 b), env) s)
-				| _ -> raise InvalidOperation) *)
-	(* | CLtype (Pair(e0, e1), env) -> CLtype (Pair ((CLtype(e0, env)),(CLtype(e1, env))), env) *)
+				  (match a0 with
+				  | CLtype (Num b, env) -> (krivinemachine (CLtype((List.nth el b), env)) s)
+				  | _ -> raise InvalidOperation)
+	(* | CLtype (Pair(e0, e1), env) -> CLtype (Pair (e0, e1), env) *)
 	(* | CLtype (Fst(e0), env) ->  *)
 ;;
 
 let rec executekrivine (prog) (env: environmentCLOS): answer = match prog with
-	| p::prog' -> 
+	| p -> 
 				let cl = krivinemachine (CLtype(p, env)) [] in 
 					(match cl with
 						| CLtype (Num i, _) -> N i
@@ -162,8 +162,8 @@ let rec executekrivine (prog) (env: environmentCLOS): answer = match prog with
 	| _-> raise ReturnEmpty
 ;;
 
-let cur_env = [("x", N 3); ("y", N 5); ("z", B true)];;
-let gamma = [("x", N 2); ("y", B true); ("x", N 3)];;
+let cur_env = [(V "x", CLtype(Num 3, [])); (V "y", CLtype(Num 5, [])); (V "z", CLtype(Bl T, []))];;
+let gamma = [(V "x", CLtype(Num 2, [])); (V "y", CLtype(Bl T, [])); (V "x", CLtype(Num 3, []))];;
 
 let p1 = Abs("x", V "x");;
 let p2 = Abs("x", Num 4);;
@@ -193,27 +193,26 @@ let test13c = Case (test13a, [test1a; test1b]);;
 let p4 = Abs("x", test5a);;
 let p5 = App(p4, Num 7);;
 
-(*
-run p1 cur_env;; (* \x.x *)
-run p2 cur_env;; (* \x.4 *)
-run p3 cur_env;; (* (\x.x).3 -> 3 *)
-run test1a gamma;; (* 42 *)
-run test1b gamma;; (* -12 *)
-run test2 gamma;; (* true *)
-run test3 gamma;; (* true *)
-run test4 gamma;; (* false *)
-run test5a gamma;; (* 42 *)
-run test5b gamma;; (* Not_found *) 
-run test6 gamma;; (* 42 *)
-run test7 gamma;; (* true *)
-run test8 gamma;; (* true *)
-run test9 gamma;; (* 42 *)
-run test10 gamma;; (* ((42, -12), -12) *)
-run test11 gamma;; (* (42, -12) *)
-run test12 gamma;; (* -12 *)
-run test13a gamma;; (* 3 *)
-run test13b gamma;; (* true *)
-run test13c gamma;; (* Failure nth *)
-run p4 cur_env;;
-run p5 cur_env;;
-*)
+
+executekrivine p1 cur_env;; (* \x.x *)
+executekrivine p2 cur_env;; (* \x.4 *)
+executekrivine p3 cur_env;; (* (\x.x).3 -> 3 *)
+executekrivine test1a gamma;; (* 42 *)
+executekrivine test1b gamma;; (* -12 *)
+executekrivine test2 gamma;; (* true *)
+executekrivine test3 gamma;; (* true *)
+executekrivine test4 gamma;; (* false *)
+executekrivine test5a gamma;; (* 42 *)
+(* executekrivine test5b gamma;; (* Not_found *)  *)
+executekrivine test6 gamma;; (* 42 *)
+executekrivine test7 gamma;; (* true *)
+executekrivine test8 gamma;; (* true *)
+executekrivine test9 gamma;; (* 42 *)
+executekrivine test10 gamma;; (* ((42, -12), -12) *)
+executekrivine test11 gamma;; (* (42, -12) *)
+executekrivine test12 gamma;; (* -12 *)
+executekrivine test13a gamma;; (* 3 *)
+executekrivine test13b gamma;; (* true *)
+(* executekrivine test13c gamma;; (*Failure nth*) *)
+executekrivine p4 cur_env;;
+executekrivine p5 cur_env;;

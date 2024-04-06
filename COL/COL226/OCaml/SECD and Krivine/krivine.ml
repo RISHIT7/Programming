@@ -5,7 +5,7 @@ type exp =
           | Plus of exp * exp | Times of exp * exp | Sub of exp * exp | Div of exp * exp | Raise of exp * exp | Mod of exp * exp (* Arithmetics *)
           | And of exp * exp | Or of exp * exp | Not of exp (* Boolean Arithmetics *)
           | Eq of exp * exp | Gt of exp * exp (* Comparison Operators *)
-          | IfTE of exp * exp * exp 
+          | IfTE of exp * exp * exp | Case of exp * (exp list) (* Conditionals *)
           | Abs of string * exp | App of exp * exp (* Abstractions *)
 ;;
 
@@ -29,11 +29,9 @@ and closure = CLtype of exp*environmentCLOS
 and environmentCLOS = (exp*closure) list;;
 type stackCLOS = closure list;;
 
-type stack = answer list;;
-
-exception InvalidVar;;
+exception InvalidVar of exp ;;
 exception InvalidOperation of closure;;
-exception InvalidBigStepAnswerClosure;;
+exception InvalidAns of closure;;
 exception ReturnEmpty;;
 
 let rec lookup (e, env) = match (e, env) with
@@ -41,7 +39,7 @@ let rec lookup (e, env) = match (e, env) with
 					(match cl with
 					| CLtype (Abs (x,x1), env) -> CLtype (Abs (x, x1), (e1,cl)::env)
 					| _ -> cl)
-	| (e, []) -> raise (InvalidVar);;
+	| (e, []) -> raise (InvalidVar e);;
 
 let rec power a b = match (a,b) with
 	(a,0) -> 1 |
@@ -120,10 +118,15 @@ let greaterthan (a1, a2) = match (a1,a2) with
 	| CLtype (Eq(e1, e2), env), s -> (krivinemachine (equal ((krivinemachine (CLtype(e1, env)) []), (krivinemachine (CLtype(e2, env)) []))) s)
 	| CLtype (Gt(e1, e2), env), s -> (krivinemachine (greaterthan ((krivinemachine (CLtype(e1, env)) []), (krivinemachine (CLtype(e2, env)) []))) s)
 	| CLtype (IfTE(e0, e1, e2), env), s ->
-				let a0 = (krivinemachine (CLtype(e0, env)) []) in
-					(match a0 with
-					| CLtype(Bl b, env) -> (if (myBool2bool b) then (krivinemachine (CLtype(e1, env)) s) else (krivinemachine (CLtype(e2, env)) s))
-					| _ -> raise (InvalidOperation a0))
+		let a0 = (krivinemachine (CLtype(e0, env)) []) in
+			(match a0 with
+			| CLtype(Bl b, env) -> (if (myBool2bool b) then (krivinemachine (CLtype(e1, env)) s) else (krivinemachine (CLtype(e2, env)) s))
+			| _ -> raise (InvalidOperation a0))
+  | CLtype (Case(e0, el), env), s -> 
+		let a0 = (krivinemachine (CLtype(e0, env)) []) in
+			(match a0 with
+			| CLtype (Num b, env) -> (krivinemachine (CLtype((List.nth el b), env)) s)
+			| _ -> raise (InvalidOperation a0))
 ;;
 
 let rec executekrivine (prog) (env: environmentCLOS): answer = match prog with
@@ -133,7 +136,7 @@ let rec executekrivine (prog) (env: environmentCLOS): answer = match prog with
 						| CLtype (Num i, _) -> N i
 						| CLtype (Bl b, _) -> B (myBool2bool b)
             | CLtype (Abs(x, exp), env) -> VCLs(x, exp, env)
-						| _-> raise InvalidBigStepAnswerClosure
+						| _-> raise (InvalidAns cl)
 					)
 	| _-> raise ReturnEmpty
 ;;
@@ -159,19 +162,30 @@ let test7 = IfTE (test3, test2, test1a);;
 let test8 = IfTE (Not test3, test1a, test2);;
 let test9 = IfTE (Not test3, test2, test1a);;
 
+let test13a = Num 3;;
+let test13b = Case (test13a, [test1a; test1b; test2; test3; test4; test5a]);;
+let test13c = Case (test13a, [test1a; test1b]);;
+
 let p4 = Abs("x", test5a);;
 let p5 = App(p4, Num 7);;
-
-(* let x = executekrivine test1a cur_env;; *)
-(* let x = executekrivine test1b cur_env;; *)
-(* let x = executekrivine test2 cur_env;; *)
-(* let x = executekrivine test3 cur_env;; *)
-(* let x = executekrivine test4 cur_env;; *)
-(* let x = executekrivine test5a cur_env;; *)
-(* let x = executekrivine test5b cur_env;; (* Invalid Op *) *)
-(* let x = executekrivine test6 cur_env;;
-let x = executekrivine test7 cur_env;;
-let x = executekrivine test8 cur_env;;
-let x = executekrivine test9 cur_env;;
-let x = executekrivine p4 cur_env;;
-let x = executekrivine p5 cur_env;; *)
+(* 
+executekrivine p1 cur_env;; (* \x.x *)
+executekrivine p2 cur_env;; (* \x.4 *)
+executekrivine p3 cur_env;; (* (\x.x).3 -> 3 *)
+executekrivine test1a gamma;; (* 42 *)
+executekrivine test1b gamma;; (* -12 *)
+executekrivine test2 gamma;; (* true *)
+executekrivine test3 gamma;; (* true *)
+executekrivine test4 gamma;; (* false *)
+executekrivine test5a gamma;; (* 42 *)
+executekrivine test5b gamma;; (* Not_found *)
+executekrivine test6 gamma;; (* 42 *)
+executekrivine test7 gamma;; (* true *)
+executekrivine test8 gamma;; (* true *)
+executekrivine test9 gamma;; (* 42 *)
+executekrivine test13a gamma;; (* 3 *)
+executekrivine test13b gamma;; (* true *)
+executekrivine test13c gamma;; (* Failure nth *)
+executekrivine p4 cur_env;;
+executekrivine p5 cur_env;; 
+*)
