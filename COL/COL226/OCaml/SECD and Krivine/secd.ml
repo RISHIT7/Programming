@@ -7,7 +7,6 @@ type exp =
           | Eq of exp * exp | Gt of exp * exp (* Comparison Operators *)
           | IfTE of exp * exp * exp | Case of exp * (exp list) (* Conditionals *)
           | Pair of exp * exp | Fst of exp | Snd of exp (* Pair *)
-          | Lexp of defs * exp (* LEt Expressions *)
           | Abs of string * exp | App of exp * exp (* Abstractions *)
 ;;
 
@@ -17,7 +16,6 @@ type opcode =
           | AND | OR | NOT | EQ | GT 
           | COND of opcode list * opcode list | CASE of (opcode list) list
           | PAIR | FST | SND
-          | LEXP of defs | NI
           | APP | MKCLOS of string * opcode list | RET
 ;;
 
@@ -39,14 +37,13 @@ type dump = (stack * environment * codes) list;;
 
 exception Stuck of stack*environment*codes*dump;; 
 exception Invalid_Var of string;;
-exception Invalid_Def of defs;;
 
-let rec get_elements_until_ni lst =
+(* let rec get_elements_until_ni lst =
   match lst with
   | [] -> []
   | NI :: _ -> []
   | head :: tail -> head :: get_elements_until_ni tail
-;;
+;; *)
 
 let rec compile e = match e with
 (* Values *)
@@ -72,7 +69,7 @@ let rec compile e = match e with
   | Fst(e1) -> compile e1 @ [FST]
   | Snd(e1) -> compile e1 @ [SND]
 (* Let def in exp ni *)
-  | Lexp(d1, e1) -> [LEXP (d1)] @ (compile e1) @ [NI]
+  (* | Lexp(d1, e1) -> [LEXP (d1)] @ (compile e1) @ [NI] *)
 (* Abstractions *)
   | Abs(x, e1) -> [MKCLOS(x, (compile e1) @ [RET])]
   | App(e1, e2) -> (compile e1) @ (compile e2) @ [APP]
