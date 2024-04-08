@@ -98,7 +98,7 @@ let greaterthan (a1, a2) = match (a1,a2) with
 	(CLtype(Num i1, env1), CLtype(Num i2, env2)) -> CLtype(Bl (if i1>i2 then T else F), [])
 	| _-> raise (InvalidOperation a1);;
 
-  let rec krivinemachine cl (s:stackCLOS) = match cl, s with
+let rec krivinemachine cl (s:stackCLOS) = match cl, s with
 	| CLtype (Num i, env), s -> CLtype (Num i, env)
 	| CLtype (Bl b, env), s -> CLtype (Bl b, env)
 	| CLtype (V v, env), s -> krivinemachine (lookup (V (v), env)) s
@@ -163,6 +163,8 @@ let test7 = IfTE (test3, test2, test1a);;
 let test8 = IfTE (Not test3, test1a, test2);;
 let test9 = IfTE (Not test3, test2, test1a);;
 
+let test10 = Pair ( Pair (test1a, test1b), test1b);;
+
 let test13a = Num 3;;
 let test13b = Case (test13a, [test1a; test1b; test2; test3; test4; test5a]);;
 let test13c = Case (test13a, [test1a; test1b]);;
@@ -190,3 +192,4 @@ executekrivine test13c gamma;; (* Failure nth *)
 executekrivine p4 cur_env;;
 executekrivine p5 cur_env;; 
 *)
+executekrivine test10 gamma;;
