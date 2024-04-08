@@ -1,5 +1,4 @@
 #include "../include/character.hpp"
-#include <iostream>
 
 Character::Character()
 {
@@ -32,6 +31,7 @@ void Character::initchar(Vector2 pos, int frame, float updateTime, float running
 
 void Character::updatechar(float dt)
 {
+    lastframe = pos;
     if (IsKeyDown(KEY_A))
     {
         vel.x -= 1.0;
@@ -53,7 +53,8 @@ void Character::updatechar(float dt)
     {
         pos = Vector2Add(pos, Vector2Scale(Vector2Normalize(vel), speed));
 
-        vel.x < 0.f ? right_left = -1.f : right_left = 1.f;
+        if (vel.x < 0.f) { right_left = -1.f; }
+        else if (vel.x > 0.f) { right_left = 1.f; }
 
         texture = run;
         maxframes = 12;
@@ -79,12 +80,25 @@ void Character::updatechar(float dt)
     shouldstay.first ? xpos = 896.f : xpos = pos.x;
     shouldstay.second ? ypos = 476.f : ypos = pos.y;
 
-    if(pos.x > 2816.f) {xpos = pos.x - 1920;}
-    if(pos.y > 3236.f) {ypos = pos.y - 2760;}
+    if (pos.x > 2816.f)
+        xpos = pos.x - 1920;
+
+    if (pos.y > 3236.f)
+        ypos = pos.y - 2760;
 
     Rectangle source{frame * width, 0.f, right_left * width, height};
     Rectangle dest{xpos, ypos, scale * width, scale * height};
     DrawTexturePro(texture.getTexture(), source, dest, Vector2{}, 0.0, WHITE);
+}
+
+void Character::undomove()
+{
+    pos = lastframe;
+}
+
+Rectangle Character::getrec()
+{
+    return Rectangle{pos.x + 25.f, pos.y + 50.f, 78.f, 75.f};
 }
 
 Vector2 Character::getpos()
