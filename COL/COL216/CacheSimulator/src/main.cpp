@@ -1,6 +1,7 @@
 #include <iostream>
+#include "../include/Cache.hpp"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     // Checking if all the inputs are preesent
     if (argc != 8)
@@ -11,10 +12,12 @@ int main(int argc, char* argv[])
     int setNum = std::stoi(argv[1]);
     int blocksPerSet = std::stoi(argv[2]);
     int blockSize = std::stoi(argv[3]);
-    std::string writePolicy = argv[4];
-    std::string replacementPolicy = argv[5];
-    std::string traceFile = argv[6];
+    std::string writeHitPolicy = argv[4];
+    std::string writeMissPolicy = argv[5];
+    std::string replacementPolicy = argv[6];
+    std::string traceFile = argv[7];
 
+    Cache *cache = new Cache(setNum, blocksPerSet, blockSize, writeHitPolicy, writeMissPolicy, replacementPolicy);
 
     return 0;
 }
