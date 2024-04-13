@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 #include <vector>
 #include <stdexcept>
 #include <map>
@@ -22,14 +23,17 @@ private:
     std::string writeMissPolicy;
     std::string replacementPolicy;
 
-    std::vector<std::vector<MemoryAccess>> cacheIsValid;
+    friend MemoryAccess stringToMemAccess(std::string trace);
+    
+    std::vector<std::vector<MemoryAccess>> cache;
 
 public:
     // Constructor
     Cache(int sets_number, int blocks_per_set, int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy);
 
+    
     // Access memory function
-    void accessMemory(const MemoryAccess &access);
+    void accessMemory(std::string trace);
 
     // Destructor
     ~Cache();

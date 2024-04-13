@@ -1,5 +1,14 @@
 #include "../include/Cache.hpp"
 
+MemoryAccess stringToMemAccess(std::string trace)
+{
+    MemoryAccess access;
+    access.readWrite = trace[0];
+    access.address =  std::stoull(trace.substr(2, 10), nullptr, 16);
+
+    return access;
+}
+
 Cache::Cache(int sets_number, int blocks_per_set, int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy)
 {
     setsNum = sets_number;
@@ -10,12 +19,13 @@ Cache::Cache(int sets_number, int blocks_per_set, int block_size, std::string wr
     writeMissPolicy = write_miss_policy;
     replacementPolicy = replacement_policy;
 
-    cacheIsValid = {};
+    cache = {};
 }
 
-void Cache::accessMemory(const MemoryAccess &access)
+void Cache::accessMemory(std::string trace)
 {
-    // a lot of jargan
+    MemoryAccess access = stringToMemAccess(trace);
+    std::cout << access.readWrite << " " << access.address << "\n";
 }
 
-Cache::~Cache(){}
+Cache::~Cache() {}
