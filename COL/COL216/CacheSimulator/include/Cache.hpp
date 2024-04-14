@@ -14,9 +14,8 @@ struct MemoryAccess
 
 struct CacheConstruct
 {
-    bool dirty;
-    bool valid;
-    unsigned long long int tag;
+    bool dirty, valid;
+    unsigned long long int tag, lruPosition, fifoCount;
 };
 
 // Cache class
@@ -43,6 +42,10 @@ public:
     
     // Memory access
     void memoryAccess(const MemoryAccess access);
+
+    // replacement policies updateLRU updateFIFO
+    void updateLRU(int index, int blockIndex);
+    void updateFIFO(int index, int blockIndex, long long int miss);
 
     // Destructor
     ~Cache();
