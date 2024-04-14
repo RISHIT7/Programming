@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     std::string writeHitPolicy = argv[5];
     std::string replacementPolicy = argv[6];
 
-    Cache *cache = new Cache(setNum, blocksPerSet, blockSize, writeHitPolicy, writeMissPolicy, replacementPolicy);
+    Cache* cache = new Cache(setNum, blocksPerSet, blockSize, writeHitPolicy, writeMissPolicy, replacementPolicy);
     
     std::string traceLine;
     
@@ -24,8 +24,6 @@ int main(int argc, char **argv)
         cache->parseTrace(traceLine);
     }
     cache->memoryAccess();
-
-    delete cache;
 
     return 0;
 }

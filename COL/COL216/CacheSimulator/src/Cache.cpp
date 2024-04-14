@@ -41,15 +41,22 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask)
         {
             // Hit
             updateLRU(index, i);
+            // updateFIFO(index, i);
             return true;
         }
     }
 
+    // Miss
     if (writeMissPolicy == "write-allocate")
     {
         // write allocate
-        cache[index][offset] = {false, true, tag, 0, 0};
+        cache[index][offset].dirty = false;
+        cache[index][offset].valid = true;
+        cache[index][offset].tag = tag;
+        cache[index][offset].lruPosition = 0;
+        cache[index][offset].fifoCount = 0;
         updateLRU(index, offset);
+        // updateFIFO(index, offset);
     }
     return false;
 }
@@ -65,11 +72,19 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask)
         if (cache[index][i].valid && cache[index][i].tag == tag)
         {
             // Hit
+            if(writeHitPolicy == "write-back")
+            {
+                // setting the dirty bit to true for write-back
+                cache[index][i].dirty = true;
+            }
             updateLRU(index, i);
+            // updateFIFO(index, i);
+
             return true;
         }
     }
 
+    // Miss
     if (writeMissPolicy == "write-allocate")
     {
         // write allocate
@@ -110,11 +125,22 @@ void Cache::memoryAccess()
             loads++;
             if (read(access, indexMask))
             {
+                // load hit
                 loadHit++;
+                totalCycles += 1;
             }
             else
             {
+                // load Miss
                 loadMiss++;
+                if (writeMissPolicy == "write-allocate")
+                {
+                    totalCycles += 101;
+                }
+                else
+                {
+                    totalCycles += 100;
+                }
             }
         }
         else
@@ -122,115 +148,35 @@ void Cache::memoryAccess()
             stores++;
             if (write(access, indexMask))
             {
+                // store hit
                 storeHit++;
+                if (writeHitPolicy == "write-back")
+                {
+                    // since data updated in the cache
+                    totalCycles += 1;
+                }
+                else
+                {
+                    // considering both updates in the cache and main memory
+                    totalCycles += 101;
+                }
             }
             else
             {
                 storeMiss++;
+                if (writeMissPolicy == "write-allocate")
+                {
+                    totalCycles += 101;
+                }
+                else
+                {
+                    totalCycles += 100;
+                }
             }
         }
-
-        // // checking for access address in cache
-        // for (unsigned long long i = 0; i < blocksPerSet; i++)
-        // {
-        //     if (cache[index][i].valid && tag == cache[index][i].tag)
-        //     {
-        //         // address found
-        //         hit++;
-        //         if (access.loadStore == "s")
-        //         {
-        //             storeHit++;
-        //             // choosing whether write-back or write-through
-        //             if (writeHitPolicy == "write-back")
-        //             {
-        //                 cache[index][i].dirty = true;
-        //             }
-        //             else
-        //             {
-        //                 // stores++;
-        //             }
-        //         }
-        //         else
-        //         {
-        //             loadHit++;
-        //         }
-
-        //         if (replacementPolicy == "lru")
-        //         {
-        //             updateLRU(index, i);
-        //         }
-        //         break;
-        //     }
-        // }
-
-        // miss++;
-        // if (access.loadStore == "s")
-        // {
-        //     // stores++;
-        //     storeMiss++;
-        // }
-        // else
-        // {
-        //     // loads++;
-        //     loadMiss++;
-        // }
-
-        // int victimBlockIndex = -1;
-        // unsigned long long int minCounter = -1;
-
-        // // updating victim block index
-        // for (unsigned long long i = 0; i < blocksPerSet; i++)
-        // {
-        //     unsigned long long int counter = cache[index][i].lruPosition;
-
-        //     if (replacementPolicy == "fifo")
-        //     {
-        //         counter = cache[index][i].fifoCount;
-        //     }
-
-        //     if (counter < minCounter)
-        //     {
-        //         minCounter = counter;
-        //         victimBlockIndex = i;
-        //     }
-        // }
-
-        // if (access.loadStore == "s")
-        // {
-        //     if (writeHitPolicy == "write-back")
-        //     {
-        //         if (cache[index][victimBlockIndex].dirty)
-        //         {
-        //             // stores++;
-        //         }
-        //     }
-        //     else
-        //     {
-        //         // stores++;
-        //     }
-        // }
-
-        // if (access.loadStore == "l" && writeHitPolicy == "write-back" && cache[index][victimBlockIndex].dirty && cache[index][victimBlockIndex].valid)
-        // {
-        //     // loads++;
-        // }
-
-        // cache[index][victimBlockIndex].valid = true;
-        // cache[index][victimBlockIndex].tag = tag;
-        // cache[index][victimBlockIndex].dirty = (access.loadStore == "s" && writeHitPolicy == "write-back");
-
-        // if (replacementPolicy == "lru")
-        // {
-        //     updateLRU(index, victimBlockIndex);
-        // }
-        // else
-        // {
-        //     updateFIFO(index, victimBlockIndex, miss);
-        // }
-        // std::cout << access.loadStore << " " << access.address << "\n";
     }
     std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
-    std::cout << "Total loads: " << loads << "\nTotal stores: " << stores << "\nLoad hits: " << loadHit << "\nLoad Misses: " << loadMiss << "\nStore hits: " << storeHit << "\nStore misses: " << storeMiss << "\nTotal cycles: " << totalCycles << "\n";
+    std::cout << "Total Loads: " << loads << "\nTotal Stores: " << stores << "\nLoad Hits: " << loadHit << "\nLoad Misses: " << loadMiss << "\nStore Hits: " << storeHit << "\nStore Misses: " << storeMiss << "\nTotal Cycles: " << totalCycles << "\n";
 }
 
 Cache::Cache(unsigned long long int sets_number, unsigned long long int blocks_per_set, unsigned long long int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy)
