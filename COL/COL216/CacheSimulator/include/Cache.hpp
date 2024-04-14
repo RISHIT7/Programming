@@ -8,12 +8,13 @@
 
 struct MemoryAccess
 {
-    std::string readWrite;
-    std::string address;
+    std::string loadStore;
+    unsigned long long int address;
 };
 
 struct CacheConstruct
 {
+    bool dirty;
     bool valid;
     unsigned long long int tag;
 };
@@ -30,7 +31,6 @@ private:
     std::string replacementPolicy;
 
     friend MemoryAccess stringToMemAccess(const std::string trace);
-    friend void memoryAccess(const MemoryAccess access);
     
     std::vector<std::vector<CacheConstruct>> cache;
 
@@ -40,6 +40,9 @@ public:
 
     // Access memory function
     void parseTrace(const std::string trace);
+    
+    // Memory access
+    void memoryAccess(const MemoryAccess access);
 
     // Destructor
     ~Cache();

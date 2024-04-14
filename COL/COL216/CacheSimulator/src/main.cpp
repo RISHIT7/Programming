@@ -12,8 +12,8 @@ int main(int argc, char **argv)
     int setNum = std::stoi(argv[1]);
     int blocksPerSet = std::stoi(argv[2]);
     int blockSize = std::stoi(argv[3]);
-    std::string writeHitPolicy = argv[4];
-    std::string writeMissPolicy = argv[5];
+    std::string writeMissPolicy = argv[4];
+    std::string writeHitPolicy = argv[5];
     std::string replacementPolicy = argv[6];
 
     Cache *cache = new Cache(setNum, blocksPerSet, blockSize, writeHitPolicy, writeMissPolicy, replacementPolicy);

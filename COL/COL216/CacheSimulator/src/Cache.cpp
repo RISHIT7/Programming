@@ -3,15 +3,36 @@
 MemoryAccess stringToMemAccess(const std::string trace)
 {
     MemoryAccess access;
-    access.readWrite = trace[0];
-    access.address = trace.substr(4, 8);
+    access.loadStore = trace[0];
+    access.address = std::stoull(trace.substr(2, 10), nullptr, 16);
 
     return access;
 }
 
-void memoryAccess(const MemoryAccess access)
+void Cache::memoryAccess(const MemoryAccess access)
 {
-    std::cout << access.readWrite << " " << access.address << "\n";
+    unsigned long long int cacheSize = setsNum * blocksPerSet * blockSize;
+    // bitwise AND with address will give the indexBits
+    unsigned long long int indexMask = (cacheSize / (blocksPerSet * blockSize)) - 1;
+    unsigned long long int index = (access.address / blockSize) & indexMask;
+    unsigned long long int tag = (access.address / (blockSize * (indexMask + 1)));
+
+    // result variables
+    long long int hit = 0, miss = 0, reads = 0, writes = 0, totalcycles = 0;
+
+    // checking for access address in cache
+    for (int i = 0; i < blocksPerSet; i++)
+    {
+        if (cache[index][i].valid && tag == cache[index][i].tag)
+        {
+            // address found
+            hit++;
+            if (access.loadStore == "l")
+            {
+                if (writeHitPolicy == 'write-back')
+            }
+        }
+    }
 }
 
 Cache::Cache(unsigned long long int sets_number, unsigned long long int blocks_per_set, unsigned long long int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy)
@@ -25,10 +46,10 @@ Cache::Cache(unsigned long long int sets_number, unsigned long long int blocks_p
     replacementPolicy = replacement_policy;
 
     // initialise cache
-    for (unsigned long long int  i = 0; i < setsNum; i++)
+    for (unsigned long long int i = 0; i < setsNum; i++)
     {
         std::vector<CacheConstruct> internal_cache(blocksPerSet);
-        cache.push_back(internal_cache);        
+        cache.push_back(internal_cache);
     }
 }
 
