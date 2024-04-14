@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     std::string traceLine;
     
     while (std::getline(std::cin, traceLine)) {
-        cache->accessMemory(traceLine);
+        cache->parseTrace(traceLine);
     }
 
     delete cache;

@@ -1,15 +1,20 @@
 #include "../include/Cache.hpp"
 
-MemoryAccess stringToMemAccess(std::string trace)
+MemoryAccess stringToMemAccess(const std::string trace)
 {
     MemoryAccess access;
     access.readWrite = trace[0];
-    access.address =  std::stoull(trace.substr(2, 10), nullptr, 16);
+    access.address = trace.substr(4, 8);
 
     return access;
 }
 
-Cache::Cache(int sets_number, int blocks_per_set, int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy)
+void memoryAccess(const MemoryAccess access)
+{
+    std::cout << access.readWrite << " " << access.address << "\n";
+}
+
+Cache::Cache(unsigned long long int sets_number, unsigned long long int blocks_per_set, unsigned long long int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy)
 {
     setsNum = sets_number;
     blocksPerSet = blocks_per_set;
@@ -19,13 +24,18 @@ Cache::Cache(int sets_number, int blocks_per_set, int block_size, std::string wr
     writeMissPolicy = write_miss_policy;
     replacementPolicy = replacement_policy;
 
-    cache = {};
+    // initialise cache
+    for (unsigned long long int  i = 0; i < setsNum; i++)
+    {
+        std::vector<CacheConstruct> internal_cache(blocksPerSet);
+        cache.push_back(internal_cache);        
+    }
 }
 
-void Cache::accessMemory(std::string trace)
+void Cache::parseTrace(const std::string trace)
 {
     MemoryAccess access = stringToMemAccess(trace);
-    std::cout << access.readWrite << " " << access.address << "\n";
+    memoryAccess(access);
 }
 
 Cache::~Cache() {}

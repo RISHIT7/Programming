@@ -9,7 +9,13 @@
 struct MemoryAccess
 {
     std::string readWrite;
-    unsigned long long address;
+    std::string address;
+};
+
+struct CacheConstruct
+{
+    bool valid;
+    unsigned long long int tag;
 };
 
 // Cache class
@@ -23,17 +29,17 @@ private:
     std::string writeMissPolicy;
     std::string replacementPolicy;
 
-    friend MemoryAccess stringToMemAccess(std::string trace);
+    friend MemoryAccess stringToMemAccess(const std::string trace);
+    friend void memoryAccess(const MemoryAccess access);
     
-    std::vector<std::vector<MemoryAccess>> cache;
+    std::vector<std::vector<CacheConstruct>> cache;
 
 public:
     // Constructor
-    Cache(int sets_number, int blocks_per_set, int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy);
+    Cache(unsigned long long int sets_number, unsigned long long int blocks_per_set, unsigned long long int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy);
 
-    
     // Access memory function
-    void accessMemory(std::string trace);
+    void parseTrace(const std::string trace);
 
     // Destructor
     ~Cache();

@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <iostream>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,6 +10,9 @@ bool **dirty, **valid;
 
 int num_sets, assoc, cache_size, lru, wb;
 long long int hit = 0, miss = 0, reads = 0, writes = 0;
+
+int setNum, blockPerSet, blockSize;
+char* writehitPolicy, writeMissPolicy, replacementPolicy;
 
 void update_lru(int index, int block_index)
 {
@@ -127,11 +130,15 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // cache_size = setNum*blockPerSet*blockSize;
+    // assoc = blockPerSet
+    // lru = replacementPolicy
+    // wb = wrtieHitPolicy
+
     cache_size = atoi(argv[1]);
     assoc = atoi(argv[2]);
     lru = atoi(argv[3]);
     wb = atoi(argv[4]);
-    char *trace_file = argv[5];
 
     num_sets = cache_size / (64 * assoc);
 
@@ -149,23 +156,16 @@ int main(int argc, char *argv[])
         valid[i] = calloc(assoc, sizeof(bool));
     }
 
-    FILE *inp = fopen(trace_file, "r");
-    if (inp == NULL)
-    {
-        printf("Error: Could not open trace file.\n");
-        return 1;
-    }
-
     char op;
     long long int add;
     int cnt = 0;
 
-    while (!feof(inp))
+    std::string traceLine;
+    while (std::getline(std::cin, traceLine))
     {
-        fscanf(inp, " %c %llx", &op, &add);
-        simulate_access(op, add);
+        unsigned long long address = std::stoull(trace.substr(2, 10), nullptr, 16);
+        simulate_access(traceLine[0], address);
     }
-    fclose(inp);
 
     for (int i = 0; i < num_sets; i++)
     {
