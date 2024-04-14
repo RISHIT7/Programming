@@ -33,7 +33,6 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask)
 {
     unsigned long long int index = (access.address / blockSize) & indexMask;
     unsigned long long int tag = (access.address / (blockSize * (indexMask + 1)));
-    unsigned long long int offset = access.address % blockSize;
 
     for (unsigned long long int i = 0; i < blocksPerSet; i++)
     {
@@ -50,13 +49,27 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask)
     if (writeMissPolicy == "write-allocate")
     {
         // write allocate
-        cache[index][offset].dirty = false;
-        cache[index][offset].valid = true;
-        cache[index][offset].tag = tag;
-        cache[index][offset].lruPosition = 0;
-        cache[index][offset].fifoCount = 0;
-        updateLRU(index, offset);
-        // updateFIFO(index, offset);
+        for (unsigned long long int i = 0; i < blocksPerSet; i++)
+        {
+            if (!cache[index][i].valid)
+            {
+                // Found Empty
+                cache[index][i].dirty = false;
+                cache[index][i].valid = true;
+                cache[index][i].tag = tag;
+                cache[index][i].lruPosition = 0;
+                cache[index][i].fifoCount = 0;
+                updateLRU(index, i);
+
+                // updateFIFO(index, i);
+                break;
+            }
+        }
+        // Did not find any empty positions
+        
+        // implement lru and fifo
+        
+        return false;
     }
     return false;
 }
@@ -65,14 +78,13 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask)
 {
     unsigned long long int index = (access.address / blockSize) & indexMask;
     unsigned long long int tag = (access.address / (blockSize * (indexMask + 1)));
-    unsigned long long int offset = access.address % blockSize;
 
     for (unsigned long long int i = 0; i < blocksPerSet; i++)
     {
         if (cache[index][i].valid && cache[index][i].tag == tag)
         {
             // Hit
-            if(writeHitPolicy == "write-back")
+            if (writeHitPolicy == "write-back")
             {
                 // setting the dirty bit to true for write-back
                 cache[index][i].dirty = true;
@@ -88,18 +100,28 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask)
     if (writeMissPolicy == "write-allocate")
     {
         // write allocate
-        cache[index][offset].dirty = false;
-        cache[index][offset].valid = true;
-        cache[index][offset].tag = tag;
-        cache[index][offset].lruPosition = 0;
-        cache[index][offset].fifoCount = 0;
-        updateLRU(index, offset);
-    }
-    else
-    {
-        // No-write allocate: Write directly to main memory
-    }
+        for (unsigned long long int i = 0; i < blocksPerSet; i++)
+        {
+            if (!cache[index][i].valid)
+            {
+                // Found Empty
+                cache[index][i].dirty = false;
+                cache[index][i].valid = true;
+                cache[index][i].tag = tag;
+                cache[index][i].lruPosition = 0;
+                cache[index][i].fifoCount = 0;
+                updateLRU(index, i);
 
+                // updateFIFO(index, i);
+                break;
+            }
+        }
+        // Did not find any empty positions
+        
+        // implement lru and fifo
+        
+        return false;
+    }
     return false;
 }
 

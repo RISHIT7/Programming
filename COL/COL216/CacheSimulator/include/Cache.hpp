@@ -21,7 +21,7 @@ struct CacheConstruct
 // Cache class
 class Cache
 {
-private:z
+private:
     unsigned long long int setsNum;
     unsigned long long int blocksPerSet;
     unsigned long long int blockSize;
