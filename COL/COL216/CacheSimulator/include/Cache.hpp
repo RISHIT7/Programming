@@ -30,7 +30,8 @@ private:
     std::string replacementPolicy;
 
     friend MemoryAccess stringToMemAccess(const std::string trace);
-    
+
+    std::vector<MemoryAccess> accessList;
     std::vector<std::vector<CacheConstruct>> cache;
 
 public:
@@ -39,9 +40,11 @@ public:
 
     // Access memory function
     void parseTrace(const std::string trace);
-    
+
     // Memory access
-    void memoryAccess(const MemoryAccess access);
+    void memoryAccess();
+    bool read(MemoryAccess access, unsigned long long int indexMask);
+    bool write(MemoryAccess access, unsigned long long int indexMask);
 
     // replacement policies updateLRU updateFIFO
     void updateLRU(int index, int blockIndex);

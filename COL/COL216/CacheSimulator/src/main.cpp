@@ -23,6 +23,7 @@ int main(int argc, char **argv)
     while (std::getline(std::cin, traceLine)) {
         cache->parseTrace(traceLine);
     }
+    cache->memoryAccess();
 
     delete cache;
 
