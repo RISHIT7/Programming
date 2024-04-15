@@ -25,5 +25,8 @@ int main(int argc, char **argv)
     }
     cache->memoryAccess();
 
+    delete cache;
+    cache = nullptr;
+
     return 0;
 }
