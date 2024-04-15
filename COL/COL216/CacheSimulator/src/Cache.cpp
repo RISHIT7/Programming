@@ -187,11 +187,11 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
 
             if (writeHitPolicy == "write-back")
             {
-                cache[index][i].dirty = true;
+                cache[index][victimBlock].dirty = true;
             }
             else
             {
-                cache[index][i].dirty = false;
+                cache[index][victimBlock].dirty = false;
             }
             cache[index][victimBlock].valid = true;
             cache[index][victimBlock].tag = tag;
@@ -216,7 +216,14 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
                 totalCycles += 100;
             }
 
-            cache[index][victimBlock].dirty = false;
+            if (writeHitPolicy == "write-back")
+            {
+                cache[index][victimBlock].dirty = true;
+            }
+            else
+            {
+                cache[index][victimBlock].dirty = false;
+            }
             cache[index][victimBlock].valid = true;
             cache[index][victimBlock].tag = tag;
             cache[index][victimBlock].lruPosition = 0;
