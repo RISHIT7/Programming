@@ -48,7 +48,6 @@ public:
 
     // replacement policies updateLRU updateFIFO
     void updateLRU(int index, int blockIndex);
-    void updateFIFO(int index, int blockIndex, long long int miss);
 
     // Destructor
     ~Cache();

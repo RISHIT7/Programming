@@ -24,11 +24,6 @@ void Cache::updateLRU(int index, int blockIndex)
     cache[index][blockIndex].lruPosition = maxLRUCounter + 1;
 }
 
-void Cache::updateFIFO(int index, int blockIndex, long long int miss)
-{
-    cache[index][blockIndex].fifoCount = miss;
-}
-
 bool Cache::read(MemoryAccess access, unsigned long long int indexMask, unsigned long long int instructionCount, long long int &totalCycles)
 {
     unsigned long long int index = (access.address / blockSize) & indexMask;
@@ -70,7 +65,26 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask, unsigned
         if (replacementPolicy == "lru")
         {
             // lru replacement
+            for (unsigned long long int i = 0; i < blocksPerSet; i++)
+            {
+                if (counter > cache[index][i].lruPosition)
+                {
+                    counter = cache[index][i].lruPosition;
+                    victimBlock = i;
+                }
+            }
+
             // at that set index, we look at a block index, with min lru_position, if dirty bit is 1 then total cycles += 100 from default
+            if (cache[index][victimBlock].dirty)
+            {
+                totalCycles += 100;
+            }
+
+            cache[index][victimBlock].dirty = false;
+            cache[index][victimBlock].valid = true;
+            cache[index][victimBlock].tag = tag;
+            cache[index][victimBlock].lruPosition = 0;
+            cache[index][victimBlock].fifoCount = instructionCount;
         }
         else
         {
@@ -150,7 +164,26 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
         if (replacementPolicy == "lru")
         {
             // lru replacement
+            for (unsigned long long int i = 0; i < blocksPerSet; i++)
+            {
+                if (counter > cache[index][i].lruPosition)
+                {
+                    counter = cache[index][i].lruPosition;
+                    victimBlock = i;
+                }
+            }
+
             // at that set index, we look at a block index, with min lru_position, if dirty bit is 1 then total cycles += 100 from default
+            if (cache[index][victimBlock].dirty)
+            {
+                totalCycles += 100;
+            }
+
+            cache[index][victimBlock].dirty = false;
+            cache[index][victimBlock].valid = true;
+            cache[index][victimBlock].tag = tag;
+            cache[index][victimBlock].lruPosition = 0;
+            cache[index][victimBlock].fifoCount = instructionCount;
         }
         else
         {
