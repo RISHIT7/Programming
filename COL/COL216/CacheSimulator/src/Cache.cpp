@@ -245,12 +245,6 @@ void Cache::memoryAccess()
     long long int loads = 0, stores = 0, totalCycles = 0;
     long long int storeHit = 0, loadHit = 0, storeMiss = 0, loadMiss = 0;
 
-    for (auto access : accessList)
-    {
-        std::cout << access.loadStore << " " << std::hex << access.address << std::dec << std::endl;
-    }
-    std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
-
     unsigned long long int instructionCount = 0;
 
     for (MemoryAccess access : accessList)
@@ -311,7 +305,7 @@ void Cache::memoryAccess()
             }
         }
     }
-    std::cout << "Total Loads: " << loads << "\nTotal Stores: " << stores << "\nLoad Hits: " << loadHit << "\nLoad Misses: " << loadMiss << "\nStore Hits: " << storeHit << "\nStore Misses: " << storeMiss << "\nTotal Cycles: " << totalCycles << "\n";
+    std::cout << "Total Loads: " << loads << "\nTotal Stores: " << stores << "\nLoad Hits: " << loadHit << "\nLoad Misses: " << loadMiss << "\nStore Hits: " << storeHit << "\nStore Misses: " << storeMiss << "\nTotal Cycles: " << totalCycles*(blockSize/4) << "\n";
 }
 
 Cache::Cache(unsigned long long int sets_number, unsigned long long int blocks_per_set, unsigned long long int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy)
