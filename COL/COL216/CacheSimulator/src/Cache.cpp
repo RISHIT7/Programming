@@ -132,7 +132,6 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
                 cache[index][i].dirty = true;
             }
             updateLRU(index, i);
-
             return true;
         }
     }
@@ -146,7 +145,14 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
             if (!cache[index][i].valid)
             {
                 // Found Empty
-                cache[index][i].dirty = false;
+                if (writeHitPolicy == "write-back")
+                {
+                    cache[index][i].dirty = true;
+                }
+                else
+                {
+                    cache[index][i].dirty = false;
+                }
                 cache[index][i].valid = true;
                 cache[index][i].tag = tag;
                 cache[index][i].lruPosition = 0;
@@ -179,7 +185,14 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
                 totalCycles += 100;
             }
 
-            cache[index][victimBlock].dirty = false;
+            if (writeHitPolicy == "write-back")
+            {
+                cache[index][i].dirty = true;
+            }
+            else
+            {
+                cache[index][i].dirty = false;
+            }
             cache[index][victimBlock].valid = true;
             cache[index][victimBlock].tag = tag;
             cache[index][victimBlock].lruPosition = 0;
