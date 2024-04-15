@@ -29,7 +29,7 @@ void Cache::updateFIFO(int index, int blockIndex, long long int miss)
     cache[index][blockIndex].fifoCount = miss;
 }
 
-bool Cache::read(MemoryAccess access, unsigned long long int indexMask)
+bool Cache::read(MemoryAccess access, unsigned long long int indexMask, unsigned long long int instructionCount, long long int &totalCycles)
 {
     unsigned long long int index = (access.address / blockSize) & indexMask;
     unsigned long long int tag = (access.address / (blockSize * (indexMask + 1)));
@@ -40,7 +40,6 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask)
         {
             // Hit
             updateLRU(index, i);
-            // updateFIFO(index, i);
             return true;
         }
     }
@@ -58,23 +57,52 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask)
                 cache[index][i].valid = true;
                 cache[index][i].tag = tag;
                 cache[index][i].lruPosition = 0;
-                cache[index][i].fifoCount = 0;
+                cache[index][i].fifoCount = instructionCount;
                 updateLRU(index, i);
-
-                // updateFIFO(index, i);
                 break;
             }
         }
         // Did not find any empty positions
-        
+
         // implement lru and fifo
-        
+        unsigned long long int counter = instructionCount;
+        unsigned long long int victimBlock = 0;
+        if (replacementPolicy == "lru")
+        {
+            // lru replacement
+            // at that set index, we look at a block index, with min lru_position, if dirty bit is 1 then total cycles += 100 from default
+        }
+        else
+        {
+            // fifo replacement
+            for (unsigned long long int i = 0; i < blocksPerSet; i++)
+            {
+                if (counter > cache[index][i].fifoCount)
+                {
+                    counter = cache[index][i].fifoCount;
+                    victimBlock = i;
+                }
+            }
+
+            // at that set index, we look at a block with highest fifo_count, if dirty bit is 1 then total cycles += 100
+            if (cache[index][victimBlock].dirty == 1)
+            {
+                totalCycles += 100;
+            }
+
+            cache[index][victimBlock].dirty = false;
+            cache[index][victimBlock].valid = true;
+            cache[index][victimBlock].tag = tag;
+            cache[index][victimBlock].lruPosition = 0;
+            cache[index][victimBlock].fifoCount = instructionCount;
+        }
+
         return false;
     }
     return false;
 }
 
-bool Cache::write(MemoryAccess access, unsigned long long int indexMask)
+bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigned long long int instructionCount, long long int &totalCycles)
 {
     unsigned long long int index = (access.address / blockSize) & indexMask;
     unsigned long long int tag = (access.address / (blockSize * (indexMask + 1)));
@@ -90,7 +118,6 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask)
                 cache[index][i].dirty = true;
             }
             updateLRU(index, i);
-            // updateFIFO(index, i);
 
             return true;
         }
@@ -109,17 +136,47 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask)
                 cache[index][i].valid = true;
                 cache[index][i].tag = tag;
                 cache[index][i].lruPosition = 0;
-                cache[index][i].fifoCount = 0;
+                cache[index][i].fifoCount = instructionCount;
                 updateLRU(index, i);
 
-                // updateFIFO(index, i);
                 break;
             }
         }
         // Did not find any empty positions
-        
+
         // implement lru and fifo
-        
+        unsigned long long int counter = instructionCount;
+        unsigned long long int victimBlock = 0;
+        if (replacementPolicy == "lru")
+        {
+            // lru replacement
+            // at that set index, we look at a block index, with min lru_position, if dirty bit is 1 then total cycles += 100 from default
+        }
+        else
+        {
+            // fifo replacement
+            for (unsigned long long int i = 0; i < blocksPerSet; i++)
+            {
+                if (counter > cache[index][i].fifoCount)
+                {
+                    counter = cache[index][i].fifoCount;
+                    victimBlock = i;
+                }
+            }
+
+            // at that set index, we look at a block with highest fifo_count, if dirty bit is 1 then total cycles += 100
+            if (cache[index][victimBlock].dirty == 1)
+            {
+                totalCycles += 100;
+            }
+
+            cache[index][victimBlock].dirty = false;
+            cache[index][victimBlock].valid = true;
+            cache[index][victimBlock].tag = tag;
+            cache[index][victimBlock].lruPosition = 0;
+            cache[index][victimBlock].fifoCount = instructionCount;
+        }
+
         return false;
     }
     return false;
@@ -137,15 +194,19 @@ void Cache::memoryAccess()
 
     for (auto access : accessList)
     {
-        std::cout << access.loadStore << " " << access.address << std::endl;
+        std::cout << access.loadStore << " " << std::hex << access.address << std::dec << std::endl;
     }
+    std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
+
+    unsigned long long int instructionCount = 0;
 
     for (MemoryAccess access : accessList)
     {
+        instructionCount++;
         if (access.loadStore == "l")
         {
             loads++;
-            if (read(access, indexMask))
+            if (read(access, indexMask, instructionCount, totalCycles))
             {
                 // load hit
                 loadHit++;
@@ -168,7 +229,7 @@ void Cache::memoryAccess()
         else
         {
             stores++;
-            if (write(access, indexMask))
+            if (write(access, indexMask, instructionCount, totalCycles))
             {
                 // store hit
                 storeHit++;
@@ -197,7 +258,6 @@ void Cache::memoryAccess()
             }
         }
     }
-    std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
     std::cout << "Total Loads: " << loads << "\nTotal Stores: " << stores << "\nLoad Hits: " << loadHit << "\nLoad Misses: " << loadMiss << "\nStore Hits: " << storeHit << "\nStore Misses: " << storeMiss << "\nTotal Cycles: " << totalCycles << "\n";
 }
 

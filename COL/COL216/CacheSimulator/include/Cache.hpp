@@ -43,8 +43,8 @@ public:
 
     // Memory access
     void memoryAccess();
-    bool read(MemoryAccess access, unsigned long long int indexMask);
-    bool write(MemoryAccess access, unsigned long long int indexMask);
+    bool read(MemoryAccess access, unsigned long long int indexMask, unsigned long long int instructionCount, long long int &totalCycles);
+    bool write(MemoryAccess access, unsigned long long int indexMask, unsigned long long int instructionCount, long long int &totalCycles);
 
     // replacement policies updateLRU updateFIFO
     void updateLRU(int index, int blockIndex);
