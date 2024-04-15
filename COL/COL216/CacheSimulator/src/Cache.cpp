@@ -85,7 +85,7 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask, unsigned
             }
 
             // at that set index, we look at a block with highest fifo_count, if dirty bit is 1 then total cycles += 100
-            if (cache[index][victimBlock].dirty == 1)
+            if (cache[index][victimBlock].dirty == true)
             {
                 totalCycles += 100;
             }
@@ -165,7 +165,7 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
             }
 
             // at that set index, we look at a block with highest fifo_count, if dirty bit is 1 then total cycles += 100
-            if (cache[index][victimBlock].dirty == 1)
+            if (cache[index][victimBlock].dirty == true)
             {
                 totalCycles += 100;
             }
