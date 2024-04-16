@@ -37,7 +37,7 @@ void Game::startscreen(const char *name)
     }
     lvl1 = new Level1();
     lvl2 = new Level2();
-    currLevel = 1;
+    currLevel = 2;
 }
 
 void Game::begin()
