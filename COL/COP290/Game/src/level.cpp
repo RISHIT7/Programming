@@ -18,9 +18,6 @@ void Level::render()
     movecamera.first ? cameramovement.first = 1 : cameramovement.first = 0;
     movecamera.second ? cameramovement.second = 1 : cameramovement.second = 0;
 
-    BeginDrawing();
-    ClearBackground(WHITE);
-
     camx = (player->pos.x - 896.f) * cameramovement.first;
     camy = (player->pos.y - 476.f) * cameramovement.second;
 
@@ -52,3 +49,5 @@ void Level::update(float dt)
 void Level::addcolliders() {}
 
 void Level::updatechar(float dt) {}
+
+bool Level::complete() {return false;}

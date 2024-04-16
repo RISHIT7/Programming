@@ -3,7 +3,7 @@
 CXX := g++
 CCBUILDFLAGS := -o
 
-RFLAGS := -lraylib
+RFLAGS := -lraylib -lrlPhysics
 
 SRC_PATH := src
 INC_PATH := include

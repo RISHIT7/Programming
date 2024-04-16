@@ -77,7 +77,7 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask, unsigned
             // at that set index, we look at a block index, with min lru_position, if dirty bit is 1 then total cycles += 100 from default
             if (cache[index][victimBlock].dirty)
             {
-                totalCycles += 100;
+                totalCycles += 1 * (blockSize / 4);
             }
 
             cache[index][victimBlock].dirty = false;
@@ -101,7 +101,7 @@ bool Cache::read(MemoryAccess access, unsigned long long int indexMask, unsigned
             // at that set index, we look at a block with highest fifo_count, if dirty bit is 1 then total cycles += 100
             if (cache[index][victimBlock].dirty)
             {
-                totalCycles += 100;
+                totalCycles += 100 * (blockSize / 4);
             }
 
             cache[index][victimBlock].dirty = false;
@@ -182,7 +182,7 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
             // at that set index, we look at a block index, with min lru_position, if dirty bit is 1 then total cycles += 100 from default
             if (cache[index][victimBlock].dirty)
             {
-                totalCycles += 100;
+                totalCycles += 100 * (blockSize / 4);
             }
 
             if (writeHitPolicy == "write-back")
@@ -213,7 +213,7 @@ bool Cache::write(MemoryAccess access, unsigned long long int indexMask, unsigne
             // at that set index, we look at a block with highest fifo_count, if dirty bit is 1 then total cycles += 100
             if (cache[index][victimBlock].dirty)
             {
-                totalCycles += 100;
+                totalCycles += 100 * (blockSize / 4);
             }
 
             if (writeHitPolicy == "write-back")
@@ -257,7 +257,7 @@ void Cache::memoryAccess()
             {
                 // load hit
                 loadHit++;
-                totalCycles += 1;
+                totalCycles += 1; // cache read would take 1 cycle
             }
             else
             {
@@ -265,7 +265,7 @@ void Cache::memoryAccess()
                 loadMiss++;
                 if (writeMissPolicy == "write-allocate")
                 {
-                    totalCycles += 101;
+                    totalCycles += 100 * (blockSize / 4) + 1; // cache copy from memory to cache, then read from cache
                 }
                 else
                 {
@@ -283,12 +283,12 @@ void Cache::memoryAccess()
                 if (writeHitPolicy == "write-back")
                 {
                     // since data updated in the cache
-                    totalCycles += 1;
+                    totalCycles += (blockSize / 4);
                 }
                 else
                 {
                     // considering both updates in the cache and main memory
-                    totalCycles += 101;
+                    totalCycles += 101 * (blockSize / 4);
                 }
             }
             else
@@ -296,16 +296,16 @@ void Cache::memoryAccess()
                 storeMiss++;
                 if (writeMissPolicy == "write-allocate")
                 {
-                    totalCycles += 101;
+                    totalCycles += 101 * (blockSize / 4);
                 }
                 else
                 {
-                    totalCycles += 100;
+                    totalCycles += 100 * (blockSize / 4);
                 }
             }
         }
     }
-    std::cout << "Total Loads: " << loads << "\nTotal Stores: " << stores << "\nLoad Hits: " << loadHit << "\nLoad Misses: " << loadMiss << "\nStore Hits: " << storeHit << "\nStore Misses: " << storeMiss << "\nTotal Cycles: " << totalCycles * (blockSize / 4) << "\n";
+    std::cout << "Total Loads: " << loads << "\nTotal Stores: " << stores << "\nLoad Hits: " << loadHit << "\nLoad Misses: " << loadMiss << "\nStore Hits: " << storeHit << "\nStore Misses: " << storeMiss << "\nTotal Cycles: " << totalCycles << "\n";
 }
 
 Cache::Cache(unsigned long long int sets_number, unsigned long long int blocks_per_set, unsigned long long int block_size, std::string write_hit_policy, std::string write_miss_policy, std::string replacement_policy)

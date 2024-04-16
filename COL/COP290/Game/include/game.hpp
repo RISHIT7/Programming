@@ -8,6 +8,7 @@ class Game
 {
     Level1 *lvl1;
     Level2 *lvl2;
+    int currLevel;
 
 public:
     Game();
@@ -17,6 +18,7 @@ public:
 
     void startscreen(const char *name);
 
+    void begin();
     void update(float dt);
     void end();
     void close();

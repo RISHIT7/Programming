@@ -5,21 +5,33 @@ Level1::Level1()
     loadplayer();
     loadmap();
     addcolliders();
+    s = LoadSound("assets/sounds/nothing.mp3");
 }
 
 Level1::~Level1()
 {
     player = nullptr;
     map = nullptr;
+    UnloadSound(s);
 }
 
 void Level1::loadmap()
 {
-    map = new Map("assets/map1.png");
+    map = new Map("assets/maps/map1.png", 1.f);
 }
 
 void Level1::updatechar(float dt)
 {
+
+    if ((player->pos.x > 2950.f) and (player->pos.y > 3300.f))
+    {
+        finish = true;
+        if (first)
+            PlaySound(s);
+        
+        first = false;
+    }
+
     player->lastframe = player->pos;
     if (IsKeyDown(KEY_A))
         player->vel.x = -1.0;
@@ -162,4 +174,9 @@ void Level1::addcolliders()
     colliders.push_back(Rectangle{2560.f, 2432.f, 64.f, 512.f});
     colliders.push_back(Rectangle{2624.f, 2560.f, 320.f, 64.f});
     colliders.push_back(Rectangle{2752.f, 2752.f, 64.f, 384.f});
+}
+
+bool Level1::complete()
+{
+    return (finish and IsKeyPressed(KEY_SPACE));
 }
