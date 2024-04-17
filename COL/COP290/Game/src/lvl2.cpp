@@ -2,7 +2,7 @@
 
 void Level2::loadplayer()
 {
-    player = new Character("assets/main_char/Idle.png", "assets/main_char/Run.png", "assets/main_char/Jump.png", "assets/main_char/Fall.png");
+    player = new Character("assets/main_char/Idle.png", "assets/main_char/Run.png", "assets/main_char/Jump.png", "assets/main_char/Fall.png", "assets/main_char/Double_jump.png");
     player->initchar(Vector2{256.f, 256.f}, 0, 1.0 / 15.0, 0.f);
 }
 
@@ -100,7 +100,10 @@ void Level2::updatechar(float dt)
     }
     if (player->vel.y < 0)
     {
-        player->texture = player->jump;
+        if (jumpCount == 1)
+            player->texture = player->jump;
+        else if (jumpCount == 2)
+            player->texture = player->doubleJump;
     }
     if (player->vel.y == 0)
     {
