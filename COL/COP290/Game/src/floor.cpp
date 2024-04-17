@@ -41,7 +41,7 @@ bool Floor::CheckCollision(Character *player, float playerx, float playery)
         {
             if (block.is_active && (CheckCollisionRecs(playerRect, block.rect)))
             {
-                if (playery + 125 > block.rect.y)
+                if (playery + 115 > block.rect.y)
                 {
                     player->vel.x = 0;
                     if (player->pos.x < block.rect.x)

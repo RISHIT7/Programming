@@ -30,4 +30,5 @@ void Level3::updatechar(float dt)
 
 bool Level3::complete()
 {
+    return false;
 }
