@@ -1,5 +1,5 @@
 #include "../include/floor.hpp"
-#define LEVEL 4
+#define LEVEL 3
 #define TEXTURE_SIZE 64
 
 Floor::Floor()
@@ -14,34 +14,26 @@ Floor::~Floor()
 Floor::Floor(char *path)
 {
     floor.resize(LEVEL);
+    int i = 0;
     for (auto &one_floor : floor)
     {
-        one_floor.resize(64);
+        one_floor.resize(32);
         for (auto &block : one_floor)
         {
             block.texture.load(path);
             block.rect = {};
             block.is_active = true;
+            i++;
+            if (i % 3 == 0 || i % 4 == 0)
+            {
+                block.is_active = false;
+            }
         }
     }
 }
 
 bool Floor::CheckCollision(Character *player, float playerx, float playery)
 {
-    // Wall
-    if (playerx < 128)
-    {
-        player->vel.x = 0;
-        player->pos.x += 1;
-        return true;
-    }
-    if (playerx > 1080)
-    {
-        player->vel.x = 0;
-        player->pos.x -= 1;
-        return true;
-    }
-
     Rectangle playerRect = {playerx + 32, playery + 15, 55, 115};
     for (auto &one_floor : floor)
     {
@@ -49,7 +41,7 @@ bool Floor::CheckCollision(Character *player, float playerx, float playery)
         {
             if (block.is_active && (CheckCollisionRecs(playerRect, block.rect)))
             {
-                if (playery + 115 > block.rect.y)
+                if (playery + 125 > block.rect.y)
                 {
                     player->vel.x = 0;
                     if (player->pos.x < block.rect.x)
@@ -61,7 +53,6 @@ bool Floor::CheckCollision(Character *player, float playerx, float playery)
             }
         }
     }
-
     return false;
 }
 
@@ -82,16 +73,6 @@ void Floor::Draw(Character *player, float camx, float camy)
             }
             x += 64;
         }
-        y += 540;
+        y += 1080;
     }
-}
-
-std::vector<std::vector<Block>> Floor::getFloor()
-{
-    return floor;
-}
-
-void Floor::removeBlock(int i, int j)
-{
-    floor[i][j].is_active = false;
 }

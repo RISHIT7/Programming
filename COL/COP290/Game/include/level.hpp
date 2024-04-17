@@ -10,6 +10,7 @@ protected:
     Character *player;
     Map *map;
 
+    Textures instpage;
     std::pair<bool, bool> movecamera{};
     std::pair<int, int> cameramovement;
     float camx{}, camy{};
@@ -21,12 +22,15 @@ protected:
 
     std::vector<Rectangle> colliders;
     virtual void addcolliders();
-    
+
     virtual void updatechar(float dt);
+    virtual void loadinstr();
 
 public:
     Level();
     ~Level();
+
+    virtual void instr();
 
     virtual void render();
     virtual void update(float dt);
