@@ -26,6 +26,17 @@ void Level2::loadmap()
 
 void Level2::updatechar(float dt)
 {
+
+    player->lastframe = player->pos;
+    if (IsKeyDown(KEY_A))
+        player->vel.x = -1.0;
+    if (IsKeyDown(KEY_D))
+        player->vel.x = 1.0;
+    if (IsKeyReleased(KEY_A) || IsKeyReleased(KEY_D))
+    {
+        player->vel = {};
+    }
+
     if (!floor.CheckCollision(player, player->xpos, player->ypos))
     {
         player->vel.y += .05;
@@ -36,20 +47,11 @@ void Level2::updatechar(float dt)
         isIdle = true;
         jumpCount = 0;
     }
-    player->lastframe = player->pos;
-    if (IsKeyDown(KEY_A))
-        player->vel.x = -1.0;
-    if (IsKeyDown(KEY_D))
-        player->vel.x = 1.0;
+
     if (IsKeyPressed(KEY_SPACE) && jumpCount < MAX_JUMP_COUNT)
     {
         player->vel.y = -1.f;
         jumpCount += 1;
-    }
-
-    if (IsKeyReleased(KEY_A) || IsKeyReleased(KEY_D))
-    {
-        player->vel = {};
     }
 
     if (Vector2Length(player->vel) != 0.0)

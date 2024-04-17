@@ -34,13 +34,21 @@ Floor::Floor(char *path)
 
 bool Floor::CheckCollision(Character *player, float playerx, float playery)
 {
-    Rectangle playerRect = {playerx+32, playery+15, 55, 115};
+    Rectangle playerRect = {playerx + 32, playery + 15, 55, 115};
     for (auto &one_floor : floor)
     {
         for (auto &block : one_floor)
         {
             if (block.is_active && (CheckCollisionRecs(playerRect, block.rect)))
             {
+                if (playery + 125 > block.rect.y)
+                {
+                    player->vel.x = 0;
+                    if (player->pos.x < block.rect.x)
+                        player->pos.x -= 1;
+                    else
+                        player->pos.x += 1;
+                }
                 return true;
             }
         }
