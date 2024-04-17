@@ -160,7 +160,7 @@ bool Level2::complete()
     {
         if (score > 100)
             DrawText((char *)"YOU WIN!!", 712, 512, 96, RED);
-        else 
+        else
             DrawText((char *)"YOU LOSE", 712, 512, 96, RED);
         return true;
     }
