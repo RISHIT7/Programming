@@ -26,7 +26,7 @@ void Level2::loadmap()
 
 void Level2::updatechar(float dt)
 {
-    if (!floor.CheckCollision(player))
+    if (!floor.CheckCollision(player, player->xpos, player->ypos))
     {
         player->vel.y += .05;
     }
@@ -114,9 +114,9 @@ void Level2::updatechar(float dt)
         }
     }
 
-    floor.Draw(player, camx, camy);
     Rectangle source{player->frame * player->width, 0.f, player->right_left * player->width, player->height};
     Rectangle dest{player->xpos, player->ypos, player->scale * player->width, player->scale * player->height};
+    floor.Draw(player, camx, camy);
     DrawTexturePro(player->texture.getTexture(), source, dest, Vector2{}, 0.0, WHITE);
 }
 
