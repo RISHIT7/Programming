@@ -75,15 +75,33 @@ void Game::update(float dt)
             mute = !mute;
         }
         break;
-    case 0:
+case 0:
         home->render();
         home->update(dt);
         if (IsKeyPressed(KEY_P))
             currLevel = -1;
 
         if (IsKeyPressed(KEY_ENTER))
+        {
             currLevel = home->pressed;
-
+            switch(currLevel)
+            {
+            case 1:
+                lvl1 = new Level1();
+                break;
+            case 2:
+                lvl2 = new Level2();
+                break;
+            case 3:
+                lvl3 = new Level3();
+                break;
+            case 4:
+                // lvl4 = new Level1();
+                break;
+            default:
+                break;    
+            }    
+        }
         break;
     case 1:
         if (instruction[0])

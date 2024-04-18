@@ -6,7 +6,7 @@ int main(int argc, char **argv)
     // Checking if all the inputs are preesent
     if (argc != 7)
     {
-        std::cerr << "Usage: \n./cacheSim <no_sets> <no_blocks_per_set> <block_size> <write_policy> <replacement_policy> < <trace_file>" << std::endl;
+        std::cerr << "Usage: \n./cacheSim <no_sets> <no_blocks_per_set> <block_size> <write_policy> <write_strategy> <replacement_policy> < <trace_file>" << std::endl;
     }
 
     int setNum = std::stoi(argv[1]);
