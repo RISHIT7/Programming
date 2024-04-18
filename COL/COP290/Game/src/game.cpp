@@ -35,13 +35,9 @@ void Game::startscreen()
         }
         EndDrawing();
     }
-    currLevel = 0;
     startsc.unload();
     menu = new Menu();
     home = new Home();
-    lvl1 = new Level1();
-    lvl2 = new Level2();
-    lvl3 = new Level3();
 }
 
 void Game::begin()
@@ -75,7 +71,7 @@ void Game::update(float dt)
             mute = !mute;
         }
         break;
-case 0:
+    case 0:
         home->render();
         home->update(dt);
         if (IsKeyPressed(KEY_P))
@@ -102,6 +98,7 @@ case 0:
                 break;    
             }    
         }
+        
         break;
     case 1:
         if (instruction[0])
@@ -119,6 +116,7 @@ case 0:
             if (home->currmap == 0)
                 home->currmap = 1;
             currLevel = 0;
+            delete lvl1;
         }
 
         break;
@@ -138,11 +136,12 @@ case 0:
             if (home->currmap == 1)
                 home->currmap = 2;
             currLevel = 0;
+            delete lvl2;
         }
         else if (lvl2->complete() && lvl2->getScore() < 100)
         {
-            home->currmap = 1;
             currLevel = 0;
+            delete lvl2;
         }
 
         break;
@@ -164,7 +163,7 @@ case 0:
         //     currLevel = 0;
         // }
 
-        // break;
+        break;
     case 4:
         // if (instruction[3])
         // {

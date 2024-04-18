@@ -8,7 +8,8 @@ class Character
 {
 protected:
 
-    Textures idle, run, jump, fall, doubleJump, hit;
+    Textures idle, run, fall, jump, doubleJump, hit;
+
     Textures texture;
     Rectangle rec;
     Vector2 pos, vel, lastframe;
