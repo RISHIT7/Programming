@@ -108,7 +108,9 @@ let rec stkmc s e c d = match (s, e, c, d) with
   | (_, _, _, _) -> raise (Stuck (s, e, c, d))
 ;;
 
-let run p env = stkmc [] env (compile p) [];;
+(* let run p env = stkmc [] env (compile p) [];; *)
+
+(* 
 
 let cur_env = [("x", N 3); ("y", N 5); ("z", B true)];;
 let gamma = [("x", N 2); ("y", B true); ("x", N 3)];;
@@ -140,7 +142,7 @@ let test13c = Case (test13a, [test1a; test1b]);;
 
 let p4 = Abs("x", test5a);;
 let p5 = App(p4, Num 7);;
-
+ *)
 (*
 run p1 cur_env;; (* \x.x *)
 run p2 cur_env;; (* \x.4 *)

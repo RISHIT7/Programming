@@ -140,7 +140,7 @@ let rec executekrivine (prog) (env: environmentCLOS): answer = match prog with
 					)
 	| _-> raise ReturnEmpty
 ;;
-
+(* 
 let cur_env = [(V "x", CLtype(Num 3, [])); (V "y", CLtype(Num 5, [])); (V "z", CLtype(Bl T, []))];;
 let gamma = [(V "x", CLtype(Num 2, [])); (V "y", CLtype(Bl T, [])); (V "x", CLtype(Num 3, []))];;
 
@@ -167,7 +167,7 @@ let test13b = Case (test13a, [test1a; test1b; test2; test3; test4; test5a]);;
 let test13c = Case (test13a, [test1a; test1b]);;
 
 let p4 = Abs("x", test5a);;
-let p5 = App(p4, Num 7);;
+let p5 = App(p4, Num 7);; *)
 (* 
 executekrivine p1 cur_env;; (* \x.x *)
 executekrivine p2 cur_env;; (* \x.4 *)
