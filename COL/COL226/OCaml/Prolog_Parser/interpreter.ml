@@ -18,9 +18,9 @@ let rec print_term term =
   | Integer i -> Printf.printf "Integer: %d\n" i
   | Underscore -> Printf.printf "Variable: _\n"
   | Node (s, terms) ->
-      Printf.printf "Term: %s{\n" s;
+      Printf.printf "Term: %s\n\t" s;
       print_term_list terms;
-      Printf.printf "}\n"
+      Printf.printf "\n"
 
 and print_term_list terms =
   match terms with
@@ -35,9 +35,9 @@ and print_term_list terms =
 let rec print_atom atom =
   match atom with
   | Atom (s, terms) ->
-      Printf.printf "Atom: %s{\n" s;
+      Printf.printf "Atom: %s\n\t" s;
       print_term_list terms;
-      Printf.printf "}\n"
+      Printf.printf "\n"
 
 let print_head head =
   match head with
