@@ -22,6 +22,7 @@ exception NotFound
 exception InvalidProgram
 exception NotPossible
 
+(* Helper Functions *)
 let rec mem x y = match y with
     [] -> false
   | z::rest -> (x = z) || (mem x rest)
@@ -56,6 +57,7 @@ let rec checkProgram (prog: program): bool = match prog with
     | _ -> checkProgram rest
 ;;
 
+(* Modifying Program *)
 let rec modifyTerm (i: int) (t: term): term = match t with
     V(v) -> V((string_of_int i) ^ v)
   | Node(s, l) -> Node(s, map (modifyTerm i) l)
@@ -83,6 +85,7 @@ let rec modifyProg2 (Atom(s, _): atom) (prog: program): program = match prog wit
                 else cl::modifyProg2 (Atom(s, [])) rest
 ;;
 
+(* Variable list *)
 let rec vars_term (t: term): var list = 
   match t with
     V(v) -> [v]
@@ -94,6 +97,23 @@ let vars_atom (Atom(s, l): atom): var list = vars_term (Node(s, l))
 ;;
 
 let rec vars_goal (Goal(g): goal): var list = fold__left union [] (map vars_atom g)
+;;
+
+let rec subst (s: subs) (t: term): term = match t with
+    Node(s', l) -> Node(s', map (subs s) l)
+  | N(_) -> t
+  | V(x) -> match s with
+                [] -> t
+              | s'::rest -> if fst s' = x then snd s' else subst subst rest t
+;;
+
+let rec subst_atom (s: subs) (Atom(s', l): atom): atom = Atom(s', map (subst s) l)
+;;
+
+let rec variableInTerm (v: var) (t: term): bool = match t with
+    V(x) -> x = v
+  | Node(s, l) -> fold__left (||) false (map (variableInTerm v) l)
+  | _ -> false
 ;;
 
 let interpret_goal (prog: program) (g: goal) = solve_goal prog g [] (vars_goal g)
