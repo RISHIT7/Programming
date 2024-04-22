@@ -100,11 +100,13 @@ let rec vars_goal (Goal(g): goal): var list = fold__left union [] (map vars_atom
 ;;
 
 let rec subst (s: subs) (t: term): term = match t with
-    Node(s', l) -> Node(s', map (subs s) l)
+    Node(s', l) -> Node(s', map (subst s) l)
   | N(_) -> t
+  | B(_) -> t
+  | Underscore -> t
   | V(x) -> match s with
                 [] -> t
-              | s'::rest -> if fst s' = x then snd s' else subst subst rest t
+              | s'::rest -> if fst s' = x then snd s' else subst rest t
 ;;
 
 let rec subst_atom (s: subs) (Atom(s', l): atom): atom = Atom(s', map (subst s) l)
@@ -116,6 +118,24 @@ let rec variableInTerm (v: var) (t: term): bool = match t with
   | _ -> false
 ;;
 
-let interpret_goal (prog: program) (g: goal) = solve_goal prog g [] (vars_goal g)
+let compose (s1:subs) (s2:subs): subs = 
+  let f s x = (fst x, subst s (snd x)) 
+in (map (f s2) s1) @ s2
 ;;
+
+let rec mgu_term (t1:term) (t2:term): subs = match (t1, t2) with
+    (V(x), V(y)) -> if x = y then [] else [(x, V(y))]
+  | (V(x), Node(_, _)) -> if variableInTerm x t2 then raise NOT_UNIFIABLE else [(x, t2)]
+  | (Node(_, _), V(y)) -> if variableInTerm y t1 then raise NOT_UNIFIABLE else [(y, t1)]
+  | (N(n1), N(n2)) -> if n1 = n2 then [] else raise NOT_UNIFIABLE
+  | (N(n1), V(x)) -> [(x, t1)]
+  | (V(x), N(n2)) -> [(x, t2)] 
+  | (Node(s1, l1), Node(s2, l2)) -> if s1 <> s2 || (List.length l1 <> List.length l2) then raise NOT_UNIFIABLE else
+    let f s tt = compose s (mgu_term (subst s (fst tt)) (subst s (snd tt))) in
+    fold__left f [] (combine l1 l2)
+  | _ -> raise NOT_UNIFIABLE
+;;
+
+(* let interpret_goal (prog: program) (g: goal) = solve_goal prog g [] (vars_goal g)
+;; *)
 
