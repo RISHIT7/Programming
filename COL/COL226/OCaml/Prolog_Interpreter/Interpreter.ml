@@ -174,6 +174,46 @@ and print_term (t:term) = match t with
   | N(n) -> Printf.printf " %d " n
 ;;
 
+let rec getSolution (unif: subs) (vars: var list) = match vars with
+    [] -> []
+  | v::rest -> let rec occurs l = match l with
+                [] -> raise NotFound
+              | x::xrest -> if (fst x) = v then x
+              else occurs xrest
+            in
+            try (occurs unif)::getSolution unif rest
+          with NotFound-> getSolution unif rest
+;;
+
+let get1char () = let termio = Unix.tcgetattr Unix.stdin in
+                    let () = Unix.tcsetattr Unix.stdin Unix.TCSADRAIN
+                              { termio with Unix.c_icanon = false } in
+                    let res = input_char stdin in
+                    Unix.tcsetattr Unix.stdin Unix.TCSADRAIN termio;
+                    res
+;;
+
+let rec printSolution (unif: subs) = match unif with
+    [] -> Printf.printf "true. "
+  | [(v, t)] -> (
+    Printf.printf "%s =" v;
+    print_term t;
+    )
+  | (v, t)::rest -> (
+    Printf.printf "%s =" v;
+    print_term t;
+    Printf.printf ", ";
+    printSolution rest;
+    )
+;;
+
+let solve_atom_atom (a1: atom) (a2: atom) (unif: subs): subs = 
+  compose unif (mgu_atom (subst_atom unif a1) (subst_atom unif a2))
+;;
+
+let solve_term_term (t1: term) (t2: term) (unif: subs): subs =
+  compose unif (mgu_term (subst unif t1) (subst unif t2))
+;;
 
 (* let interpret_goal (prog: program) (g: goal) = solve_goal prog g [] (vars_goal g)
 ;; *)
