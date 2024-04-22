@@ -11,7 +11,7 @@ end
 let fstream = open_in Sys.argv.(1);;
 let init_prog = Parser.program Lexer.token (Lexing.from_channel fstream);;
 let _ = checkProgram init_prog;;
-let prog = modifyInitialProg 1 init_prog;;
+let prog = modifyInitialProg init_prog 1;;
 
 print_string "Prgram Loaded Successfully\n";;
 

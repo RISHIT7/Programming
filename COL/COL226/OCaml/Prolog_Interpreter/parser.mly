@@ -57,7 +57,7 @@ atom:
         {Atom($1, [])}
     | CONS LEFTBRACKET term_list RIGHTBRACKET                
         {Atom($1, $3)}
-    | term EQUAL term                        
+    | term ASSIGN term                        
         {Atom("_equal", [$1; $3])}
     | term NOTEQUAL term                    
         {Atom("_not_equal", [$1; $3])}
