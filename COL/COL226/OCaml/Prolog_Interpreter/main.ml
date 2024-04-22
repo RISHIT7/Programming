@@ -17,7 +17,7 @@ print_string "Prgram Loaded Successfully\n";;
 
 try
   while (true) do
-    print_string "?-";
+    print_string "?- ";
     let line = read_line() in
     if line = "halt." then exit 0
     else try

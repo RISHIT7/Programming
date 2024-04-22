@@ -1,6 +1,6 @@
 {
     open Parser;;
-    exception InvalidToken of char;;
+    exception InvalidToken of string;;
 }
 
 let alpha_num = ['A'-'Z' 'a'-'z' '0'-'9' '_' '\'']
@@ -60,7 +60,7 @@ rule token = parse
     | "/*"
         {multiLineComment 0 lexbuf }
     | _ as lxm
-        {raise (InvalidToken lxm)}
+        {raise (InvalidToken (String.make 1 lxm))}
     | eof
         { EOF }
 

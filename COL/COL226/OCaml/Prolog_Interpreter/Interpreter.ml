@@ -117,6 +117,8 @@ let rec mgu_term (t1:term) (t2:term): substitution =
   match (t1, t2) with
       (V(x), V(y)) -> if x = y then []
                       else [(x, V(y))]
+    | (Underscore, _) -> []
+    | (_, Underscore) -> []
     | (V(x), Node(_, _)) -> if variableInTerm x t2 then raise NOT_UNIFIABLE
                             else [(x, t2)]
     | (Node(_, _), V(y)) -> if variableInTerm y t1 then raise NOT_UNIFIABLE
@@ -301,7 +303,7 @@ let rec solve_goal (prog:program) (g:goal) (unif:substitution) (vars:variable li
                       | _ -> iter ps
                   with NOT_UNIFIABLE -> iter ps
                 )
-        in iter prog
+        in iter new_prog
 ;;
 
 let interpret_goal (prog:program) (g:goal) = solve_goal prog g [] (vars_goal g)
