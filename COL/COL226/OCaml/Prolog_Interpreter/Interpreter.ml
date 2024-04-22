@@ -256,6 +256,53 @@ let eval (a:atom) (unif:subs): subs = match a with
   | _ -> unif
 ;;
 
-(* let interpret_goal (prog: program) (g: goal) = solve_goal prog g [] (vars_goal g)
-;; *)
+let rec solve_goal (prog: program) (g: goal) (unif: subs) (vars: var list): (bool * subs) = 
+  match g with
+    Goal([]) -> (
+      printSolution (getSolution unif vars);
+      flush stdout;
+      let c = ref (get1char ()) in
+      while (!c <> '.' && !c <> ';') do
+        Printf.printf "Invalid input. Please enter '.' or ';' ";
+        flush stdout;
+        c := get1char ()
+      done;
+      Printf.printf "\n";
+      if !c = '.' then (true, []) else (false, [])
+    )
+  | Goal(a::grest) -> match a with
+        Atom("_eq", _) | Atom(">", _) | Atom("<", _) -> (
+          try solve_goal prog (Goal(grest)) (eval a unif) vars
+          with NOT_UNIFIABLE -> (false, [])
+        )
+      | Atom("_not_eq", _) -> (
+        try (false, eval a unif)
+        with NOT_UNIFIABLE -> solve_goal prog (Goal(grest)) unif vars
+      )
+      | Atom("_cut", _) -> let _ = solve_goal prog (Goal(grest)) unif vars in (true, [])
+      | _ -> let new_prog = modifyProg2 a prog in
+             let rec iter prog' = match prog' with
+                [] -> (false, [])
+              | cl::prest -> match cl with
+                  Fact(Head(a')) -> (
+                    try 
+                      let u = solve_atom_atom a a' unif in
+                      match solve_goal prog (Goal(grest)) u vars with
+                          (true, u') -> (true, u')
+                        | _ -> iter prest
+                    with NOT_UNIFIABLE -> iter prest
+                  )
+                | Rule(Head(a'), Body(al)) -> (
+                  try 
+                    let u = solve_atom_atom a a' unif in
+                    match solve_goal prog (Goal(al @ grest)) u vars with
+                        (true, u') -> (true, u')
+                      | _ -> iter prest
+                  with NOT_UNIFIABLE -> iter prest                
+                )
+        in iter new_prog
+;;
+
+let interpret_goal (prog: program) (g: goal) = solve_goal prog g [] (vars_goal g)
+;;
 
