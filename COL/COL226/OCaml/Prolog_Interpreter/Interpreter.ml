@@ -215,6 +215,47 @@ let solve_term_term (t1: term) (t2: term) (unif: subs): subs =
   compose unif (mgu_term (subst unif t1) (subst unif t2))
 ;;
 
+let rec simplify_term (t:term): term = match t with
+    N(_) -> t
+  | Node("+", [t1; t2]) -> (
+      match ((simplify_term t1), (simplify_term t2)) with
+          (N(n1), N(n2)) -> N(n1 + n2)
+        | _ -> raise NOT_UNIFIABLE
+    )
+  | Node("-", [t1; t2]) -> (
+      match ((simplify_term t1), (simplify_term t2)) with
+          (N(n1), N(n2)) -> N(n1 - n2)
+        | _ -> raise NOT_UNIFIABLE
+    )
+  | Node("*", [t1; t2]) -> (
+      match ((simplify_term t1), (simplify_term t2)) with
+          (N(n1), N(n2)) -> N(n1 * n2)
+        | _ -> raise NOT_UNIFIABLE
+    )
+  | Node("/", [t1; t2]) -> (
+      match ((simplify_term t1), (simplify_term t2)) with
+          (N(n1), N(n2)) -> N(n1 / n2)
+        | _ -> raise NOT_UNIFIABLE
+      )
+  | _ -> t
+;;
+
+let eval (a:atom) (unif:subs): subs = match a with
+    Atom("_eq", [t1; t2])
+  | Atom("_not_eq", [t1; t2]) -> compose unif (mgu_term (simplify_term (subst unif t1)) (simplify_term (subst unif t2)))
+  | Atom(">", [t1; t2]) -> (
+        match (simplify_term (subst unif t1), simplify_term (subst unif t2)) with
+            (N(n1), N(n2)) -> if n1 > n2 then unif else raise NOT_UNIFIABLE
+          | _ -> raise NOT_UNIFIABLE
+    )
+  | Atom("<", [t1; t2]) -> (
+      match (simplify_term (subst unif t1), simplify_term (subst unif t2)) with
+          (N(n1), N(n2)) -> if n1 < n2 then unif else raise NOT_UNIFIABLE
+        | _ -> raise NOT_UNIFIABLE
+    )
+  | _ -> unif
+;;
+
 (* let interpret_goal (prog: program) (g: goal) = solve_goal prog g [] (vars_goal g)
 ;; *)
 
