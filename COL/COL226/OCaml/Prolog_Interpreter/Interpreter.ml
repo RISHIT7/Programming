@@ -238,6 +238,11 @@ let rec simplify_term (t:term): term = match t with
           (N(n1), N(n2)) -> N(n1 / n2)
         | _ -> raise NOT_UNIFIABLE
       )
+  | Node("integer", [t1]) -> (
+      match (simplify_term t1) with
+          N(_) -> t
+        | _ -> raise NOT_UNIFIABLE
+    )
   | _ -> t
 ;;
 

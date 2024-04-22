@@ -18,7 +18,6 @@ mem(X, [X|_]) :- !.
 mem(X, [_|Ra]) :- mem(X, Ra).
 */
 
-/*
 type(intT).
 type(boolT).
 
@@ -39,4 +38,3 @@ hastype(not(E1), boolT) :- hastype(E1, boolT).
 hastype(eq(E1, E2), boolT) :- hastype(E1, intT), hastype(E2, intT).
 
 hastype(gt(E1, E2), boolT) :- hastype(E1, intT), hastype(E2, intT).
-*/
