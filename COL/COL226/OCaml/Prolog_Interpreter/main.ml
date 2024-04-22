@@ -8,10 +8,8 @@ if Array.length Sys.argv <> 2 then begin
 end
 ;;
 
+let init_prog = Parser.program Lexer.token (Lexing.from_channel (open_in Sys.argv.(1)));;
 let counter = ref 1;;
-let fstream = open_in Sys.argv.(1);;
-let init_prog = Parser.program Lexer.token (Lexing.from_channel fstream);;
-let _ = checkProgram init_prog;;
 let prog = modifyInitialProg init_prog 1;;
 
 Printf.printf "%s Loaded Successfully!!\n" Sys.argv.(1);;
@@ -23,9 +21,9 @@ try
     if line = "halt." then exit 0
     else try
       let goal = Parser.goal Lexer.token (Lexing.from_string line) in
-      match (interpret_goal prog goal) with
-          (true, _) -> print_string "true.\n"
-        | (false, _) -> print_string "false.\n";
+      match (interpret_goal goal prog) with
+          (true, _) -> Printf.printf "true.\n"
+        | (false, _) -> Printf.printf "false.\n";
         counter := !counter + 1
     with e -> Printf.printf "%s\n" (Printexc.to_string e)
   done

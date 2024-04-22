@@ -78,14 +78,6 @@ let rec union l1 l2 = match l1 with
              else x::(union xs l2)
 ;;
 
-let rec checkProgram (prog:program): bool = match prog with
-    [] -> true
-  | (Fact(Head(a)))::xs | (Rule(Head(a), _))::xs -> match a with
-          Atom("_equal", _) | Atom("_not_equal", _) | Atom("_ofcourse", _)
-        | Atom(">", _) | Atom("<", _)-> raise InvalidProgram
-        | _ -> checkProgram xs
-;;
-
 let rec modifyTerm (i:int) (t:term): term = match t with
     V(v) -> V((string_of_int i) ^ v)
   | Node(s, l) -> Node(s, map (modifyTerm i) l)
@@ -311,5 +303,5 @@ let rec solve_goal (prog:program) (g:goal) (unif:substitution) (vars:variable li
         in iter new_prog
 ;;
 
-let interpret_goal (prog:program) (g:goal) = solve_goal prog g [] (vars_goal g)
+let interpret_goal (g:goal) (prog:program) = solve_goal prog g [] (vars_goal g)
 ;;
