@@ -56,7 +56,7 @@ let rec modifyTerm (i:int) (t:term): term = match t with
 ;;
 
 let rec modifyAtom (i:int) (a:atom): atom = match a with
-  Atom(s, l) -> Atom(s, map (modifyTerm i) l)
+  | Atom(s, l) -> Atom(s, map (modifyTerm i) l)
 ;;
 
 let rec modifyClause (cl:clause) (i:int): clause = match cl with
