@@ -1,23 +1,3 @@
-/*
-% Facts
-parent(john, jim).
-parent(john, ann).
-parent(susan, jim).
-parent(susan, ann).
-male(john).
-female(susan).
-
-% Rules
-father(X, Y) :- parent(X, Y), male(X).
-mother(X, Y) :- parent(X, Y), female(X).
-*/
-
-/*
-mem(X, []) :- fail.
-mem(X, [X|_]) :- !.
-mem(X, [_|Ra]) :- mem(X, Ra).
-*/
-
 type(intT).
 type(boolT).
 

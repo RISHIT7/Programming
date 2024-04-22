@@ -34,8 +34,3 @@ merge(A, [], A).
 merge([], B, B).
 merge([A|Ra], [B|Rb], [A|M]) :-  min(A, B, A), merge(Ra, [B|Rb], M).
 merge([A|Ra], [B|Rb], [B|M]) :-  B < A, merge([A|Ra], Rb, M).
-
-/* 
-    Example Query
-        mergesort([4, 7, 1, 9, 17, 3, 4, 9, 5, 2, 2], X).
-*/

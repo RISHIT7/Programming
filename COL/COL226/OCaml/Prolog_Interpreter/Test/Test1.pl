@@ -1,4 +1,3 @@
-invalidCode() :- 
-    X = 1
-    Y = 2,
-    Z is X + Y
+mem(X, []) :- fail.
+mem(X, [X|_]) :- !.
+mem(X, [_|Ra]) :- mem(X, Ra).
