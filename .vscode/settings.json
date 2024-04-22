@@ -12,7 +12,7 @@
     "cmake.configureOnOpen": false,
     "ocaml.sandbox": {
         "kind": "custom",
-        "template": "ocamlc -o $prog $args"
+        "template": "$prog $args"
     },
     "files.associations": {
         "any": "cpp",

@@ -15,6 +15,43 @@ exception NotFound
 exception InvalidProgram
 exception NotPossible
 
+let rec print_term_list (tl:term list) = match tl with
+    [] -> Printf.printf ""
+  | [t] -> print_term t
+  | t::tls -> (
+      print_term t;
+      Printf.printf ",";
+      print_term_list tls;
+    )
+
+and print_list_body (t:term) = match t with
+    Node("_empty_list", []) -> Printf.printf ""
+  | Node("_list", [t1; Node("_empty_list", [])]) -> print_term t1
+  | Node("_list", [t1; t2]) -> (
+      print_term t1;
+      Printf.printf ",";
+      print_list_body t2;
+    )
+  | _ -> raise NotPossible
+
+and print_term (t:term) = match t with
+    V(v) -> Printf.printf " %s " v
+  | Node("_empty_list", []) -> Printf.printf " [] "
+  | Node(s, []) -> Printf.printf " %s " s
+  | Node("_list", _) -> (
+      Printf.printf " [";
+      print_list_body t;
+      Printf.printf "] ";
+    )
+  | Node(s, l) -> (
+      Printf.printf " %s ( " s;
+      print_term_list l;
+      Printf.printf " ) ";
+    )
+  | N(n) -> Printf.printf " %d " n
+  | Underscore -> Printf.printf " _ "
+;;
+
 let rec exists x y = match y with
     [] -> false
   | z::ys -> (x = z) || (exists x ys)
@@ -137,43 +174,6 @@ let rec mgu_term (t1:term) (t2:term): substitution =
 let mgu_atom (Atom(s1, l1): atom) (Atom(s2, l2): atom): substitution = mgu_term (Node(s1, l1)) (Node(s2, l2))
 ;;
 
-let rec print_term_list (tl:term list) = match tl with
-    [] -> Printf.printf ""
-  | [t] -> print_term t
-  | t::tls -> (
-      print_term t;
-      Printf.printf ",";
-      print_term_list tls;
-    )
-
-and print_list_body (t:term) = match t with
-    Node("_empty_list", []) -> Printf.printf ""
-  | Node("_list", [t1; Node("_empty_list", [])]) -> print_term t1
-  | Node("_list", [t1; t2]) -> (
-      print_term t1;
-      Printf.printf ",";
-      print_list_body t2;
-    )
-  | _ -> raise NotPossible
-
-and print_term (t:term) = match t with
-    V(v) -> Printf.printf " %s " v
-  | Node("_empty_list", []) -> Printf.printf " [] "
-  | Node(s, []) -> Printf.printf " %s " s
-  | Node("_list", _) -> (
-      Printf.printf " [";
-      print_list_body t;
-      Printf.printf "] ";
-    )
-  | Node(s, l) -> (
-      Printf.printf " %s ( " s;
-      print_term_list l;
-      Printf.printf " ) ";
-    )
-  | N(n) -> Printf.printf " %d " n
-  | Underscore -> Printf.printf " _ "
-;;
-
 let rec getSolution (unif:substitution) (vars:variable list) = match vars with
     [] -> []
   | v::vs ->
@@ -238,11 +238,6 @@ let rec simplify_term (t:term): term = match t with
           (N(n1), N(n2)) -> N(n1 / n2)
         | _ -> raise NOT_UNIFIABLE
       )
-  | Node("integer", [t1]) -> (
-      match (simplify_term t1) with
-          N(_) -> t
-        | _ -> raise NOT_UNIFIABLE
-    )
   | _ -> t
 ;;
 
@@ -287,6 +282,11 @@ let rec solve_goal (prog:program) (g:goal) (unif:substitution) (vars:variable li
             with NOT_UNIFIABLE -> solve_goal prog (Goal(gs)) unif vars
           )
         | Atom("_ofcourse", _) -> let _ = solve_goal prog (Goal(gs)) unif vars in (true, [])
+        | Atom("integer", [t]) -> (
+            match (simplify_term (subst unif t)) with
+                N(_) -> solve_goal prog (Goal(gs)) unif vars
+              | _ -> (false, [])
+          )
         | _ ->
           let new_prog = modifyProg2 prog a in
           let rec iter prog' = match prog' with
