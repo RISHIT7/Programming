@@ -6,7 +6,6 @@ type signature = (symbol * int) list
 type term =
     V of var
   | N of int
-  | B of bool
   | Node of symbol * term list
   | Underscore
 type atom = Atom of symbol * term list
@@ -102,7 +101,6 @@ let rec vars_goal (Goal(g): goal): var list = fold__left union [] (map vars_atom
 let rec subst (s: subs) (t: term): term = match t with
     Node(s', l) -> Node(s', map (subst s) l)
   | N(_) -> t
-  | B(_) -> t
   | Underscore -> t
   | V(x) -> match s with
                 [] -> t
@@ -135,6 +133,47 @@ let rec mgu_term (t1:term) (t2:term): subs = match (t1, t2) with
     fold__left f [] (combine l1 l2)
   | _ -> raise NOT_UNIFIABLE
 ;;
+
+let mgu_atom (Atom(s1, l1): atom) (Atom(s2, l2): atom): subs = mgu_term (Node(s1, l1)) (Node(s2, l2))
+;;
+
+let rec print_term_list (tl:term list) = match tl with
+    [] -> Printf.printf ""
+  | [t] -> print_term t
+  | t::tls -> (
+      print_term t;
+      Printf.printf ",";
+      print_term_list tls;
+    )
+
+and print_list_body (t:term) = match t with
+    Node("_empty_list", []) -> Printf.printf ""
+  | Node("_list", [t1; Node("_empty_list", [])]) -> print_term t1
+  | Node("_list", [t1; t2]) -> (
+      print_term t1;
+      Printf.printf ",";
+      print_list_body t2;
+    )
+  | _ -> raise NotPossible
+
+and print_term (t:term) = match t with
+    V(v) -> Printf.printf " %s " v
+  | Node("_empty_list", []) -> Printf.printf " [] "
+  | Node(s, []) -> Printf.printf " %s " s
+  | Node("_list", _) -> (
+      Printf.printf " [";
+      print_list_body t;
+      Printf.printf "] ";
+    )
+  | Node(s, l) -> (
+      Printf.printf " %s ( " s;
+      print_term_list l;
+      Printf.printf " ) ";
+    )
+  | Underscore -> Printf.printf ""  
+  | N(n) -> Printf.printf " %d " n
+;;
+
 
 (* let interpret_goal (prog: program) (g: goal) = solve_goal prog g [] (vars_goal g)
 ;; *)
