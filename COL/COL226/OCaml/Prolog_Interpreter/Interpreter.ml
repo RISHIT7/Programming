@@ -20,38 +20,34 @@ exception InvalidProgram
 exception NotPossible
 
 let rec print_term_list tl = match tl with
-    [] -> Printf.printf ""
+    [] -> ()
   | [t] -> print_term t
-  | t::tls -> (
+  | t::tls ->
       print_term t;
       Printf.printf ",";
-      print_term_list tls;
-    )
+      print_term_list tls
 
-and print_list_body t = match t with
-    Node("_empty_list", []) -> Printf.printf ""
+and print_list_body = function
+  | Node("_empty_list", []) -> ()
   | Node("_list", [t1; Node("_empty_list", [])]) -> print_term t1
-  | Node("_list", [t1; t2]) -> (
-      print_term t1;
-      Printf.printf ",";
-      print_list_body t2;
-    )
+  | Node("_list", [t1; t2]) -> 
+    print_term t1;
+    Printf.printf ",";
+    print_list_body t2
   | _ -> raise NotPossible
 
-and print_term t = match t with
-    V(v) -> Printf.printf " %s " v
+and print_term = function
+  | V(v) -> Printf.printf " %s " v
   | Node("_empty_list", []) -> Printf.printf " [] "
   | Node(s, []) -> Printf.printf " %s " s
-  | Node("_list", _) -> (
-      Printf.printf " [";
-      print_list_body t;
-      Printf.printf "] ";
-    )
-  | Node(s, l) -> (
-      Printf.printf " %s ( " s;
-      print_term_list l;
-      Printf.printf " ) ";
-    )
+  | Node("_list", _) as t -> 
+    Printf.printf " [";
+    print_list_body t;
+    Printf.printf "] "
+  | Node(s, l) -> 
+    Printf.printf " %s ( " s;
+    print_term_list l;
+    Printf.printf " ) "
   | N(n) -> Printf.printf " %d " n
   | Underscore -> Printf.printf " _ "
 ;;
@@ -139,10 +135,10 @@ let rec mgu_term t1 t2= match (t1, t2) with
   | _, _ -> raise NotUnifiable
 ;;
 
-let mgu_atom (Atom(s1, l1): atom) (Atom(s2, l2): atom): substitution = mgu_term (Node(s1, l1)) (Node(s2, l2))
+let mgu_atom a1 a2 = match a1, a2 with Atom(s1, l1), Atom(s2, l2) -> mgu_term (Node(s1, l1)) (Node(s2, l2))
 ;;
 
-let rec getSolution (unif:substitution) (vars:var list) = match vars with
+let rec getSolution unif vars = match vars with
     [] -> []
   | v::vs ->
       let rec occurs l = match l with
@@ -162,7 +158,7 @@ let get1char () =
   Unix.tcsetattr Unix.stdin Unix.TCSADRAIN termio;
   res
 
-let rec printSolution (unif:substitution) = match unif with
+let rec printSolution unif = match unif with
     [] -> Printf.printf "true. "
   | [(v, t)] -> (
       Printf.printf "%s =" v;
@@ -176,15 +172,15 @@ let rec printSolution (unif:substitution) = match unif with
     )
 ;;
 
-let solve_atom_atom (a1:atom) (a2:atom) (unif:substitution): substitution =
+let solve_atom_atom a1 a2 unif =
   compose unif (mgu_atom (subst_atom unif a1) (subst_atom unif a2))
 ;;
 
-let solve_term_term (t1:term) (t2:term) (unif:substitution): substitution =
+let solve_term_term t1 t2 unif =
   compose unif (mgu_term (subst unif t1) (subst unif t2))
 ;;
 
-let rec simplify_term (t:term): term = match t with
+let rec simplify_term t= match t with
     N(_) -> t
   | Node("+", [t1; t2]) -> (
       match ((simplify_term t1), (simplify_term t2)) with
@@ -209,7 +205,7 @@ let rec simplify_term (t:term): term = match t with
   | _ -> t
 ;;
 
-let eval (a:atom) (unif:substitution): substitution = match a with
+let eval a unif = match a with
     Atom("_equal", [t1; t2])
   | Atom("_not_equal", [t1; t2]) -> compose unif (mgu_term (simplify_term (subst unif t1)) (simplify_term (subst unif t2)))
   | Atom(">", [t1; t2]) -> (
@@ -225,7 +221,7 @@ let eval (a:atom) (unif:substitution): substitution = match a with
   | _ -> unif
 ;;
 
-let rec solve_goal (prog:program) (g:goal) (unif:substitution) (vars:var list): (bool * substitution) =
+let rec solve_goal prog g unif vars=
   match g with
       Goal([]) -> (
         printSolution (getSolution unif vars);
@@ -279,5 +275,5 @@ let rec solve_goal (prog:program) (g:goal) (unif:substitution) (vars:var list): 
         in iter new_prog
 ;;
 
-let interpret_goal (g:goal) (prog:program) = solve_goal prog g [] (vars_goal g)
+let interpret_goal g prog = solve_goal prog g [] (vars_goal g)
 ;;
