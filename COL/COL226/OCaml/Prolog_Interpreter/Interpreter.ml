@@ -163,7 +163,7 @@ let get1char () =
   res
 
 let rec printSolution unif = match unif with
-    [] -> Printf.printf "true. "
+    [] -> print_string "true. "
   | [(v, t)] -> (
       Printf.printf "%s =" v;
       print_term t;
@@ -171,7 +171,7 @@ let rec printSolution unif = match unif with
   | (v, t)::xs -> (
       Printf.printf "%s =" v;
       print_term t;
-      Printf.printf ", ";
+      print_string ", ";
       printSolution xs;
     )
 ;;
@@ -232,24 +232,24 @@ let rec solve_goal prog g unif vars=
         flush stdout;
         let choice = ref (get1char()) in
         while(!choice <> '.' && !choice <> ';') do
-          Printf.printf "\nUnknown Action: %c \nAction? " (!choice);
+          Printf.printf "\nUnknown Input: %c \nIntended action? " (!choice);
           flush stdout;
           choice := get1char();
         done;
-        Printf.printf "\n";
+        print_endline "";
         if !choice = '.' then (true, [])
         else (false, [])
       )
     | Goal(a::gs) -> match a with
-          Atom("_equal", _) | Atom(">", _) | Atom("<", _) -> (
+        | Atom("_equal", _) | Atom(">", _) | Atom("<", _) -> (
             try solve_goal prog (Goal(gs)) (eval a unif) vars
             with NotUnifiable -> (false, [])
           )
+        | Atom("_ofcourse", _) -> let _ = solve_goal prog (Goal(gs)) unif vars in (true, [])
         | Atom("_not_equal", _) -> (
             try (false, eval a unif)
             with NotUnifiable -> solve_goal prog (Goal(gs)) unif vars
           )
-        | Atom("_ofcourse", _) -> let _ = solve_goal prog (Goal(gs)) unif vars in (true, [])
         | Atom("integer", [t]) -> (
             match (simplify_term (subst unif t)) with
                 N(_) -> solve_goal prog (Goal(gs)) unif vars
