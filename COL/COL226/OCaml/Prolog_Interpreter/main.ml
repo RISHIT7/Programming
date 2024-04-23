@@ -22,9 +22,9 @@ try
     if line = "halt." then exit 0
     else try
       let goal = Parser.goal Lexer.token (Lexing.from_string line) in
-      match (interpret_goal goal new_prog) with
-          (true, _) -> Printf.printf "true.\n"
-        | (false, _) -> Printf.printf "false.\n";
+      let result, _ = (interpret_goal goal new_prog) in
+      if result then Printf.printf "true.\n"
+      else Printf.printf "false.\n"
     with e -> Printf.printf "%s\n" (Printexc.to_string e)
   done
 with _ -> print_string "\n% halt\n"

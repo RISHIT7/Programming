@@ -32,7 +32,7 @@ and print_list_body = function
   | Node("_list", [t1; Node("_empty_list", [])]) -> print_term t1
   | Node("_list", [t1; t2]) -> 
     print_term t1;
-    Printf.printf ",";
+    print_string ",";
     print_list_body t2
   | _ -> raise NotPossible
 
@@ -121,18 +121,22 @@ let compose s1 s2 =
   let f s x = (fst x, subst s (snd x)) in (List.map (f s2) s1) @ s2
 ;;
 
-let rec mgu_term t1 t2= match (t1, t2) with
-  | V x, V y when x = y -> []
-  | (N(n1), N(n2)) when n1 = n2 -> []
-  | (Underscore, _) | (_, Underscore) -> []
-  | V x, Node(_, _) | V x, N _ when not (varInTerm x t2) -> [(x, t2)]
-  | Node(_, _), V y | N _, V y when not (varInTerm y t1) -> [(y, t1)]  
-  | (Node(s1, l1), Node(s2, l2)) ->
-      if s1 <> s2 || (List.length l1 <> List.length l2) then raise NotUnifiable
-      else
-        let f s tt = compose s (mgu_term (subst s (fst tt)) (subst s (snd tt))) in
-        List.fold_left f [] (List.combine l1 l2)
-  | _, _ -> raise NotUnifiable
+let rec mgu_term (t1:term) (t2:term): substitution =
+  match (t1, t2) with
+    (V(x), V(y)) -> if x = y then []
+        else [(x, V(y))]
+    | (V(x), Node(_, _)) when not (varInTerm x t2) -> [(x, t2)]
+    | (Underscore, _) | (_, Underscore) -> []
+    | (Node(_, _), V(y)) when not (varInTerm y t1) -> [(y, t1)]
+    | (N(n1), N(n2)) -> if n1 = n2 then [] else raise NotUnifiable
+    | (N _ , V(x)) -> [(x, t1)]
+    | (V(x), N _) -> [(x, t2)] 
+    | (Node(s1, l1), Node(s2, l2)) ->
+        if s1 <> s2 || (List.length l1 <> List.length l2) then raise NotUnifiable
+        else
+          let f s tt = compose s (mgu_term (subst s (fst tt)) (subst s (snd tt))) in
+          List.fold_left f [] (List.combine l1 l2)
+    | _ -> raise NotUnifiable
 ;;
 
 let mgu_atom a1 a2 = match a1, a2 with Atom(s1, l1), Atom(s2, l2) -> mgu_term (Node(s1, l1)) (Node(s2, l2))

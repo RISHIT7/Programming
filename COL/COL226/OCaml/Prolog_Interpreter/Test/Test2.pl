@@ -1,8 +1,8 @@
-max(X, X, X).
+max(X, X, X) :- !.
 max(X, Y, Z) :- X > Y, Z = X.
 max(X, Y, Z) :- Y > X, Z = Y.
-
-fact(0, 1).
+/*
+fact(0, 1) :- !.
 fact(X, Y) :-
         X > 0,
         Z = X - 1,
@@ -34,3 +34,4 @@ merge(A, [], A).
 merge([], B, B).
 merge([A|Ra], [B|Rb], [A|M]) :-  min(A, B, A), merge(Ra, [B|Rb], M).
 merge([A|Ra], [B|Rb], [B|M]) :-  B < A, merge([A|Ra], Rb, M).
+*/
