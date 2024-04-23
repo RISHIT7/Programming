@@ -38,7 +38,7 @@ and print_list_body = function
 
 and print_term = function
   | V(v) -> Printf.printf " %s " v
-  | Node("_empty_list", []) -> Printf.printf " [] "
+  | Node("_empty_list", []) -> print_string " [] "
   | Node(s, []) -> Printf.printf " %s " s
   | Node("_list", _) as t -> 
     Printf.printf " [";
@@ -69,24 +69,24 @@ let rec modifyAtom i a = match a with
 
 let rec modifyClause cl i = match cl with
     Fact(Head(a)) -> Fact(Head(modifyAtom i a))
-  | Rule(Head(a), Body(l)) -> Rule(Head(modifyAtom i a), Body(List.map (modifyAtom i) l))
+  | Rule(Head(a), Body(al)) -> Rule(Head(modifyAtom i a), Body(List.map (modifyAtom i) al))
 ;;
 
 let rec modifyInitialProg prog i = match prog with
     [] -> []
-  | cl::ps -> (modifyClause cl i)::modifyInitialProg ps (i+1)
+  | cl::rest -> (modifyClause cl i)::modifyInitialProg rest (i+1)
 ;;
 
 let rec modifyProg2 prog a = match prog, a with
     [], _ -> []
-  | cl::ps, Atom(s, _) -> match cl with Fact(Head(Atom(s', _))) | Rule(Head(Atom(s', _)), _) ->
-                if s = s' then (modifyClause cl 0)::modifyProg2 ps (Atom(s, []))
-                else cl::modifyProg2 ps (Atom(s, []))
+  | cl::rest, Atom(s, _) -> match cl with Fact(Head(Atom(s', _))) | Rule(Head(Atom(s', _)), _) ->
+                if (s = s') then (modifyClause cl 0)::modifyProg2 rest (Atom(s, []))
+                else cl::modifyProg2 rest (Atom(s, []))
 ;;
 
 let rec vars_term t =
   match t with
-      V(v) -> [v]
+      V v -> [v]
     | Node(s, l) -> List.fold_left union [] (List.map vars_term l)
     | _ -> []
 ;;
@@ -100,9 +100,9 @@ let rec vars_goal goal = match goal with Goal(g) -> List.fold_left union [] (Lis
 let rec subst s t =
   match t with
       Node(s', l) -> Node(s', List.map (subst s) l)
-    | N(_) -> t
+    | N _ -> t
     | Underscore -> t
-    | V(x) -> match s with
+    | V x -> match s with
                   [] -> t
                 | s'::xs -> if fst s' = x then snd s' else subst xs t
 ;;
@@ -125,14 +125,14 @@ let rec mgu_term (t1:term) (t2:term): substitution =
   match (t1, t2) with
     (V(x), V(y)) -> if x = y then []
         else [(x, V(y))]
-    | (V(x), Node(_, _)) when not (varInTerm x t2) -> [(x, t2)]
+    | (V x, Node(_, _)) when not (varInTerm x t2) -> [(x, t2)]
+    | (Node(_, _), V y) when not (varInTerm y t1) -> [(y, t1)]
     | (Underscore, _) | (_, Underscore) -> []
-    | (Node(_, _), V(y)) when not (varInTerm y t1) -> [(y, t1)]
-    | (N(n1), N(n2)) -> if n1 = n2 then [] else raise NotUnifiable
-    | (N _ , V(x)) -> [(x, t1)]
-    | (V(x), N _) -> [(x, t2)] 
+    | (N n1, N n2) -> if n1 = n2 then [] else raise NotUnifiable
+    | (N _ , V x) -> [(x, t1)]
+    | (V x, N _) -> [(x, t2)] 
     | (Node(s1, l1), Node(s2, l2)) ->
-        if s1 <> s2 || (List.length l1 <> List.length l2) then raise NotUnifiable
+        if (List.length l1 <> List.length l2) || s1 <> s2 then raise NotUnifiable
         else
           let f s tt = compose s (mgu_term (subst s (fst tt)) (subst s (snd tt))) in
           List.fold_left f [] (List.combine l1 l2)
