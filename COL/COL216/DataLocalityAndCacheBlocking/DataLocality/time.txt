@@ -1,0 +1,102 @@
+n = 10
+ijk: 1.429 Gflop/s      , ikj: 1.429 Gflop/s    , jik: 1.667 Gflop/s    , jki: 3.333 Gflop/s    , kij: 1.429 Gflop/s    , kji: 2.500 Gflop/s    ,
+n = 30
+ijk: 1.280 Gflop/s      , ikj: 2.269 Gflop/s    , jik: 2.477 Gflop/s    , jki: 9.000 Gflop/s    , kij: 2.250 Gflop/s    , kji: 7.941 Gflop/s    ,
+n = 50
+ijk: 1.324 Gflop/s      , ikj: 2.404 Gflop/s    , jik: 2.332 Gflop/s    , jki: 11.792 Gflop/s   , kij: 2.577 Gflop/s    , kji: 10.331 Gflop/s   ,
+n = 70
+ijk: 1.402 Gflop/s      , ikj: 2.533 Gflop/s    , jik: 1.063 Gflop/s    , jki: 6.712 Gflop/s    , kij: 1.741 Gflop/s    , kji: 8.728 Gflop/s    ,
+n = 90
+ijk: 1.302 Gflop/s      , ikj: 2.801 Gflop/s    , jik: 1.634 Gflop/s    , jki: 8.360 Gflop/s    , kij: 1.906 Gflop/s    , kji: 9.382 Gflop/s    ,
+n = 110
+ijk: 1.060 Gflop/s      , ikj: 2.643 Gflop/s    , jik: 1.219 Gflop/s    , jki: 8.456 Gflop/s    , kij: 2.717 Gflop/s    , kji: 10.366 Gflop/s   ,
+n = 130
+ijk: 1.039 Gflop/s      , ikj: 2.517 Gflop/s    , jik: 1.976 Gflop/s    , jki: 12.540 Gflop/s   , kij: 2.657 Gflop/s    , kji: 10.124 Gflop/s   ,
+n = 150
+ijk: 0.959 Gflop/s      , ikj: 2.637 Gflop/s    , jik: 1.884 Gflop/s    , jki: 10.000 Gflop/s   , kij: 2.904 Gflop/s    , kji: 10.547 Gflop/s   ,
+n = 170
+ijk: 1.130 Gflop/s      , ikj: 2.656 Gflop/s    , jik: 1.865 Gflop/s    , jki: 10.898 Gflop/s   , kij: 2.832 Gflop/s    , kji: 10.765 Gflop/s   ,
+n = 190
+ijk: 1.182 Gflop/s      , ikj: 2.666 Gflop/s    , jik: 1.759 Gflop/s    , jki: 6.321 Gflop/s    , kij: 2.390 Gflop/s    , kji: 11.386 Gflop/s   ,
+n = 210
+ijk: 1.103 Gflop/s      , ikj: 2.484 Gflop/s    , jik: 1.810 Gflop/s    , jki: 11.678 Gflop/s   , kij: 2.391 Gflop/s    , kji: 10.711 Gflop/s   ,
+n = 230
+ijk: 1.203 Gflop/s      , ikj: 2.480 Gflop/s    , jik: 1.806 Gflop/s    , jki: 11.603 Gflop/s   , kij: 2.498 Gflop/s    , kji: 11.651 Gflop/s   ,
+n = 250
+ijk: 1.157 Gflop/s      , ikj: 2.454 Gflop/s    , jik: 1.758 Gflop/s    , jki: 11.786 Gflop/s   , kij: 2.521 Gflop/s    , kji: 11.755 Gflop/s   ,
+n = 270
+ijk: 1.186 Gflop/s      , ikj: 2.459 Gflop/s    , jik: 1.558 Gflop/s    , jki: 12.459 Gflop/s   , kij: 2.489 Gflop/s    , kji: 11.928 Gflop/s   ,
+n = 290
+ijk: 1.003 Gflop/s      , ikj: 1.936 Gflop/s    , jik: 1.479 Gflop/s    , jki: 12.023 Gflop/s   , kij: 1.907 Gflop/s    , kji: 8.336 Gflop/s    ,
+n = 310
+ijk: 1.154 Gflop/s      , ikj: 2.306 Gflop/s    , jik: 1.730 Gflop/s    , jki: 12.476 Gflop/s   , kij: 2.382 Gflop/s    , kji: 12.028 Gflop/s   ,
+n = 330
+ijk: 1.215 Gflop/s      , ikj: 2.360 Gflop/s    , jik: 1.741 Gflop/s    , jki: 12.308 Gflop/s   , kij: 2.274 Gflop/s    , kji: 11.935 Gflop/s   ,
+n = 350
+ijk: 1.213 Gflop/s      , ikj: 2.339 Gflop/s    , jik: 1.750 Gflop/s    , jki: 12.001 Gflop/s   , kij: 2.288 Gflop/s    , kji: 10.767 Gflop/s   ,
+n = 370
+ijk: 1.170 Gflop/s      , ikj: 2.312 Gflop/s    , jik: 1.701 Gflop/s    , jki: 12.081 Gflop/s   , kij: 2.341 Gflop/s    , kji: 11.611 Gflop/s   ,
+n = 390
+ijk: 1.181 Gflop/s      , ikj: 1.913 Gflop/s    , jik: 1.719 Gflop/s    , jki: 11.315 Gflop/s   , kij: 1.960 Gflop/s    , kji: 10.476 Gflop/s   ,
+n = 410
+ijk: 1.233 Gflop/s      , ikj: 1.683 Gflop/s    , jik: 1.708 Gflop/s    , jki: 10.921 Gflop/s   , kij: 1.647 Gflop/s    , kji: 11.678 Gflop/s   ,
+n = 430
+ijk: 1.154 Gflop/s      , ikj: 1.728 Gflop/s    , jik: 1.664 Gflop/s    , jki: 11.473 Gflop/s   , kij: 1.591 Gflop/s    , kji: 10.931 Gflop/s   ,
+n = 450
+ijk: 1.142 Gflop/s      , ikj: 1.510 Gflop/s    , jik: 1.597 Gflop/s    , jki: 10.963 Gflop/s   , kij: 1.466 Gflop/s    , kji: 10.577 Gflop/s   ,
+n = 470
+ijk: 1.212 Gflop/s      , ikj: 1.504 Gflop/s    , jik: 1.605 Gflop/s    , jki: 10.227 Gflop/s   , kij: 1.384 Gflop/s    , kji: 9.376 Gflop/s    ,
+n = 490
+ijk: 1.132 Gflop/s      , ikj: 1.319 Gflop/s    , jik: 1.682 Gflop/s    , jki: 11.782 Gflop/s   , kij: 1.286 Gflop/s    , kji: 9.943 Gflop/s    ,
+n = 510
+ijk: 1.183 Gflop/s      , ikj: 1.545 Gflop/s    , jik: 1.482 Gflop/s    , jki: 11.505 Gflop/s   , kij: 1.496 Gflop/s    , kji: 11.041 Gflop/s   ,
+n = 530
+ijk: 1.193 Gflop/s      , ikj: 1.451 Gflop/s    , jik: 1.231 Gflop/s    , jki: 11.292 Gflop/s   , kij: 1.310 Gflop/s    , kji: 10.820 Gflop/s   ,
+n = 550
+ijk: 1.081 Gflop/s      , ikj: 1.326 Gflop/s    , jik: 1.406 Gflop/s    , jki: 11.630 Gflop/s   , kij: 1.325 Gflop/s    , kji: 11.346 Gflop/s   ,
+n = 570
+ijk: 1.200 Gflop/s      , ikj: 1.379 Gflop/s    , jik: 1.570 Gflop/s    , jki: 11.888 Gflop/s   , kij: 1.398 Gflop/s    , kji: 10.913 Gflop/s   ,
+n = 590
+ijk: 1.185 Gflop/s      , ikj: 1.392 Gflop/s    , jik: 1.619 Gflop/s    , jki: 11.354 Gflop/s   , kij: 1.380 Gflop/s    , kji: 10.806 Gflop/s   ,
+n = 610
+ijk: 1.155 Gflop/s      , ikj: 1.243 Gflop/s    , jik: 1.608 Gflop/s    , jki: 11.856 Gflop/s   , kij: 1.302 Gflop/s    , kji: 10.914 Gflop/s   ,
+n = 630
+ijk: 1.144 Gflop/s      , ikj: 1.406 Gflop/s    , jik: 1.571 Gflop/s    , jki: 12.195 Gflop/s   , kij: 1.381 Gflop/s    , kji: 10.331 Gflop/s   ,
+n = 650
+ijk: 1.010 Gflop/s      , ikj: 1.431 Gflop/s    , jik: 1.627 Gflop/s    , jki: 11.636 Gflop/s   , kij: 1.399 Gflop/s    , kji: 11.794 Gflop/s   ,
+n = 670
+ijk: 1.198 Gflop/s      , ikj: 1.412 Gflop/s    , jik: 1.511 Gflop/s    , jki: 12.323 Gflop/s   , kij: 1.365 Gflop/s    , kji: 11.612 Gflop/s   ,
+n = 690
+ijk: 1.144 Gflop/s      , ikj: 1.319 Gflop/s    , jik: 1.344 Gflop/s    , jki: 10.100 Gflop/s   , kij: 1.247 Gflop/s    , kji: 9.385 Gflop/s    ,
+n = 710
+ijk: 0.944 Gflop/s      , ikj: 1.057 Gflop/s    , jik: 1.469 Gflop/s    , jki: 9.724 Gflop/s    , kij: 1.180 Gflop/s    , kji: 9.746 Gflop/s    ,
+n = 730
+ijk: 1.062 Gflop/s      , ikj: 1.145 Gflop/s    , jik: 1.295 Gflop/s    , jki: 10.370 Gflop/s   , kij: 1.260 Gflop/s    , kji: 10.414 Gflop/s   ,
+n = 750
+ijk: 1.037 Gflop/s      , ikj: 1.300 Gflop/s    , jik: 1.336 Gflop/s    , jki: 9.434 Gflop/s    , kij: 1.086 Gflop/s    , kji: 11.318 Gflop/s   ,
+n = 770
+ijk: 1.020 Gflop/s      , ikj: 1.118 Gflop/s    , jik: 1.159 Gflop/s    , jki: 9.238 Gflop/s    , kij: 1.142 Gflop/s    , kji: 9.491 Gflop/s    ,
+n = 790
+ijk: 0.977 Gflop/s      , ikj: 1.186 Gflop/s    , jik: 1.396 Gflop/s    , jki: 10.976 Gflop/s   , kij: 1.281 Gflop/s    , kji: 8.870 Gflop/s    ,
+n = 810
+ijk: 0.996 Gflop/s      , ikj: 1.209 Gflop/s    , jik: 1.346 Gflop/s    , jki: 9.731 Gflop/s    , kij: 1.194 Gflop/s    , kji: 10.853 Gflop/s   ,
+n = 830
+ijk: 1.016 Gflop/s      , ikj: 1.168 Gflop/s    , jik: 1.384 Gflop/s    , jki: 9.916 Gflop/s    , kij: 1.025 Gflop/s    , kji: 8.786 Gflop/s    ,
+n = 850
+ijk: 1.054 Gflop/s      , ikj: 1.219 Gflop/s    , jik: 1.269 Gflop/s    , jki: 9.929 Gflop/s    , kij: 1.124 Gflop/s    , kji: 8.688 Gflop/s    ,
+n = 870
+ijk: 0.988 Gflop/s      , ikj: 0.999 Gflop/s    , jik: 1.269 Gflop/s    , jki: 10.302 Gflop/s   , kij: 1.050 Gflop/s    , kji: 8.705 Gflop/s    ,
+n = 890
+ijk: 0.981 Gflop/s      , ikj: 1.161 Gflop/s    , jik: 1.311 Gflop/s    , jki: 10.825 Gflop/s   , kij: 1.172 Gflop/s    , kji: 8.325 Gflop/s    ,
+n = 910
+ijk: 0.975 Gflop/s      , ikj: 1.075 Gflop/s    , jik: 1.285 Gflop/s    , jki: 10.355 Gflop/s   , kij: 1.059 Gflop/s    , kji: 9.185 Gflop/s    ,
+n = 930
+ijk: 1.000 Gflop/s      , ikj: 1.183 Gflop/s    , jik: 1.148 Gflop/s    , jki: 9.464 Gflop/s    , kij: 1.108 Gflop/s    , kji: 8.846 Gflop/s    ,
+n = 950
+ijk: 1.061 Gflop/s      , ikj: 1.182 Gflop/s    , jik: 1.283 Gflop/s    , jki: 10.515 Gflop/s   , kij: 1.103 Gflop/s    , kji: 8.713 Gflop/s    ,
+n = 970
+ijk: 1.072 Gflop/s      , ikj: 1.254 Gflop/s    , jik: 1.411 Gflop/s    , jki: 10.096 Gflop/s   , kij: 1.153 Gflop/s    , kji: 10.291 Gflop/s   ,
+n = 990
+ijk: 1.168 Gflop/s      , ikj: 1.198 Gflop/s    , jik: 1.573 Gflop/s    , jki: 11.034 Gflop/s   , kij: 1.172 Gflop/s    , kji: 9.702 Gflop/s    ,
+n = 1000
+ijk: 1.139 Gflop/s      , ikj: 1.118 Gflop/s    , jik: 1.525 Gflop/s    , jki: 13.780 Gflop/s   , kij: 1.168 Gflop/s    , kji: 10.792 Gflop/s   ,
