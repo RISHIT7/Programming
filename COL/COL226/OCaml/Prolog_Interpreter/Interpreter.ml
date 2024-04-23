@@ -77,18 +77,18 @@ let rec modifyInitialProg prog i = match prog with
   | cl::rest -> (modifyClause cl i)::modifyInitialProg rest (i+1)
 ;;
 
-let rec modifyProg2 prog a = match prog, a with
-    [], _ -> []
-  | cl::rest, Atom(s, _) -> match cl with Fact(Head(Atom(s', _))) | Rule(Head(Atom(s', _)), _) ->
-                if (s = s') then (modifyClause cl 0)::modifyProg2 rest (Atom(s, []))
-                else cl::modifyProg2 rest (Atom(s, []))
-;;
-
 let rec vars_term t =
   match t with
       V v -> [v]
     | Node(s, l) -> List.fold_left union [] (List.map vars_term l)
     | _ -> []
+;;
+
+let rec modifyProg2 prog a = match prog, a with
+    [], _ -> []
+  | cl::rest, Atom(s, _) -> match cl with Fact(Head(Atom(s', _))) | Rule(Head(Atom(s', _)), _) ->
+                if (s = s') then (modifyClause cl 0)::modifyProg2 rest (Atom(s, []))
+                else cl::modifyProg2 rest (Atom(s, []))
 ;;
 
 let vars_atom a = match a with Atom(s, l) -> vars_term (Node(s, l))
@@ -97,14 +97,12 @@ let vars_atom a = match a with Atom(s, l) -> vars_term (Node(s, l))
 let rec vars_goal goal = match goal with Goal(g) -> List.fold_left union [] (List.map vars_atom g)
 ;;
 
-let rec subst s t =
-  match t with
-      Node(s', l) -> Node(s', List.map (subst s) l)
-    | N _ -> t
-    | Underscore -> t
-    | V x -> match s with
-                  [] -> t
-                | s'::xs -> if fst s' = x then snd s' else subst xs t
+let rec subst s t = match s, t with
+      _, Node(s', l) -> Node(s', List.map (subst s) l)
+    | _, N _ -> t
+    | _, Underscore -> t
+    | [], V x -> t
+    | s'::xs, V x -> if fst s' = x then snd s' else subst xs t
 ;;
 
 let rec subst_atom s a = match a with Atom(s', l) -> Atom(s', List.map (subst s) l)
@@ -164,16 +162,14 @@ let get1char () =
 
 let rec printSolution unif = match unif with
     [] -> print_string "true. "
-  | [(v, t)] -> (
+  | [(v, t)] -> 
+      Printf.printf "%s =" v;
+      print_term t
+  | (v, t)::xs ->
       Printf.printf "%s =" v;
       print_term t;
-    )
-  | (v, t)::xs -> (
-      Printf.printf "%s =" v;
-      print_term t;
-      print_string ", ";
-      printSolution xs;
-    )
+      print_string ",";
+      printSolution xs
 ;;
 
 let solve_atom_atom a1 a2 unif =
