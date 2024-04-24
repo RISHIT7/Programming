@@ -140,25 +140,25 @@ let rec mgu_term (t1:term) (t2:term): substitution =
 let mgu_atom a1 a2 = match a1, a2 with Atom(s1, l1), Atom(s2, l2) -> mgu_term (Node(s1, l1)) (Node(s2, l2))
 ;;
 
-let rec getSolution unif vars = match vars with
+let rec getSolution unifiers variables = match variables with
     [] -> []
-  | v::vs ->
-      let rec occurs l = match l with
+  | var::remaining_vars ->
+      let rec findInList list = match list with
           [] -> raise NotFound
-        | x::xs -> if (fst x) = v then x
-                    else occurs xs
+        | pair::rest -> if (fst pair) = var then pair
+                        else findInList rest
       in
-      try (occurs unif)::getSolution unif vs
-      with NotFound -> getSolution unif vs
+      try (findInList unifiers)::getSolution unifiers remaining_vars
+      with NotFound -> getSolution unifiers remaining_vars
 ;;
 
 let get1char () =
-  let termio = Unix.tcgetattr Unix.stdin in
+  let terminal_settings = Unix.tcgetattr Unix.stdin in
   let () = Unix.tcsetattr Unix.stdin Unix.TCSADRAIN
-          { termio with Unix.c_icanon = false } in
-  let res = input_char stdin in
-  Unix.tcsetattr Unix.stdin Unix.TCSADRAIN termio;
-  res
+          { terminal_settings with Unix.c_icanon = false } in
+  let result = input_char stdin in
+  Unix.tcsetattr Unix.stdin Unix.TCSADRAIN terminal_settings;
+  result
 
 let rec printSolution unif = match unif with
     [] -> print_string "true. "
