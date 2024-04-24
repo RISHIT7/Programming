@@ -11,8 +11,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "cmake.configureOnOpen": false,
     "ocaml.sandbox": {
-        "kind": "custom",
-        "template": "$prog $args"
+        "kind": "global"
     },
     "files.associations": {
         "any": "cpp",
