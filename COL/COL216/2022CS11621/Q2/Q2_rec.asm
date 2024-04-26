@@ -1,4 +1,4 @@
-# 2022CS11621, Rishit Jakahria
+
 .global _start
 _start:
 	li a7, 5

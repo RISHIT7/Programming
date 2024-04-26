@@ -87,7 +87,7 @@ void matMultkji(int n, float *A, float *B, float *C)
 
 int main(int argc, char **argv)
 {
-    int nmax = 1000, i, n;
+    int nmax = 5000, i, n;
 
     void (*orderings[])(int, float *, float *, float *) = {&matMultijk, &matMultikj, &matMultjik, &matMultjki, &matMultkij, &matMultkji};
     char *names[] = {"ijk", "ikj", "jik", "jki", "kij", "kji"};
@@ -129,7 +129,6 @@ int main(int argc, char **argv)
                     seconds += sec_list[iter];
                 }
                 seconds /= 5;
-                double Gflops = 2e-9 * n * n * n / seconds;
                 printf("%.3f ,", seconds);
             }
             printf("\n");

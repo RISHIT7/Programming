@@ -274,15 +274,6 @@ void Cache::memoryAccess()
         else
         {
             stores++;
-            if (write(access, indexMask, instructionCount, totalCycles))
-            {
-                // store hit
-                storeHit++;
-                if (writeHitPolicy == "write-back")
-                {
-                    // since data updated in the cache
-                    totalCycles += (blockSize / 4);
-                }
                 else
                 {
                     // considering both updates in the cache and main memory

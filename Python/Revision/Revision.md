@@ -1,74 +1,63 @@
-# Comparison of Models
+Here's a comprehensive README for the Cache Simulator project:
 
-Welcome to the Comparison of Models project! This project aims to evaluate the performance of various machine learning models in predicting student performance based on a dataset containing attributes related to students' backgrounds and academic outcomes. The models under comparison include linear regression, neural networks, and decision trees.
+---
+
+# Cache Simulator Project
 
 ## Table of Contents
-- [Overview](#overview)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
+
+- [Introduction](#introduction)
+- [Assumptions](#assumptions)
 - [Usage](#usage)
-- [Models](#models)
-- [Results](#results)
-- [License](#license)
+    - [Compilation](#compilation)
+    - [Execution](#execution)
 
-## Overview
-The goal of this project is to assess the predictive capabilities of different machine learning models using a student performance dataset. The dataset contains various features related to students' backgrounds and academic performance. By comparing different models, the project aims to identify the best approach for predicting student outcomes.
+## Introduction
 
-## Project Structure
-The project is organized into the following directories and files:
+The Cache Simulator project provides a comprehensive tool for analyzing the performance of different cache configurations and policies. This simulator allows users to specify a range of cache design parameters, including the number of sets, blocks per set, block size, and cache policies such as write-allocate, write-through/write-back, and replacement strategies (LRU/FIFO).
 
-```
-.
-├── data
-│   ├── processed_data
-|   |      └── student-mat.csv
-|   └── raw_data
-|          ├── student.txt
-|          └── student-mat.csv        # Dataset file
-├── notebooks
-│   ├── preprocessing.ipynb           # Jupyter file for data preprocessing
-│   └── model_training.ipynb          # Jupyter file for model training
-├── models
-│   ├── Tree.pkl         # Trained decision tree model
-│   ├── Regression.pkl   # Trained linear regression model
-│   └── Neural.keras     # Trained neural network model
-├── src
-│   ├── preprocessing.py             # Script for data preprocessing
-│   └── model_training.py            # Script for model training
-├── README.md                        # Project README
-└── requirements.txt                 # Project dependencies
-```
+## Assumptions
 
-- **data**: Contains raw and processed data for the project.
-- **notebooks**: Contains Jupyter notebooks for data preprocessing and model training.
-- **models**: Contains the trained models (decision tree, linear regression, and neural network).
-- **src**: Contains Python scripts for data preprocessing and model training.
-- **README.md**: This file provides an overview and guide to the project.
-- **requirements.txt**: Lists the Python packages required for the project.
+The simulator operates under the following assumptions:
 
-## Installation
-To install the required dependencies, run the following command in your terminal:
-
-```bash
-pip install -r requirements.txt
-```
+- **Processor Cycles**: Loads and stores to/from the cache require one processor cycle, while memory accesses (loads/stores) require 100 processor cycles for each 4-byte quantity transferred.
 
 ## Usage
-1. **Preprocess Data**: Start by running the `preprocessing.ipynb` notebook or the `preprocessing.py` script to preprocess the raw data.
 
-2. **Train Models**: Run the `model_training.ipynb` notebook or the `model_training.py` script to train the different models on the processed data.
+### Compilation
 
-3. **Compare Models**: After training the models, compare their performance using metrics such as accuracy, precision, recall, or F1 score.
+To compile and link the program, execute the following command:
 
-4. **Evaluate Results**: Review the results to determine which model performs best for predicting student performance.
+```shell
+make
+```
 
-## Models
-- **Linear Regression**: A classic model for predicting continuous outcomes.
-- **Decision Tree**: A decision-making model that segments data into branches based on features.
-- **Neural Network**: A deep learning model capable of handling complex data patterns.
+This will generate the executable for the cache simulator.
 
-## Results
-The project includes results obtained from training and evaluating each model. These results include performance metrics such as accuracy, precision, recall, and F1 score. You can find more detailed information about the results in the respective notebooks.
+To remove all object files and executables, use the following command:
 
-## License
-This project is licensed under the [MIT License](LICENSE). Please see the LICENSE file for more details.
+```shell
+make clean
+```
+
+### Execution
+
+To execute the simulator, use the following command format:
+
+```shell
+./cacheSim <num_sets> <block_size> <blocks_per_set> <write_policy> <allocation_policy> <replacement_policy> < trace_file
+```
+
+- `<num_sets>`: Number of cache sets.
+- `<block_size>`: Size of each cache block.
+- `<blocks_per_set>`: Number of blocks per set.
+- `<write_policy>`: Write-through or write-back policy.
+- `<allocation_policy>`: Write-allocate or no-write-allocate policy.
+- `<replacement_policy>`: LRU (Least Recently Used) or FIFO (First In, First Out) replacement strategy.
+- `<trace_file>`: Path to the trace file.
+
+**Example:**
+
+```shell
+./cacheSim 1024 32 16 write-allocate write-back lru < path/to/tracefile
+```

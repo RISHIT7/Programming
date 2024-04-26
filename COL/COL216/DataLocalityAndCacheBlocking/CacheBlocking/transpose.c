@@ -42,7 +42,7 @@ void transpose_ji_inp(int n, int blocksize, int *src)
 
 int main(int argc, char **argv)
 {
-    int n = 2000, i;
+    int n = 5000, i;
     int blocksize = 20; /* to do: find a better block size */
 
     /* allocate an n*n block of integers for the matrices */
