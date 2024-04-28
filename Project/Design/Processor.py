@@ -48,10 +48,17 @@ def registers(instr, regW, data = 0):
             pass
         elif (instr[0:2] == "01"):
             # this is a R-type instruction
-            pass
+            register_data[int(instr[10:14], 2)] = data
         else:
-            raise CustomError("invalid instruction")
+            raise SystemError("invalid instruction")        
+
+            # handling x0 register
+        if (instr[10:14] == "0000"):
+            register_data[int(instr[10:14], 2)] = 0
+
+
         print(f"{instr} -> {register_data}")
+
     else:
         # return rs1, rs2
         print(f"{instr} -> {register_data}")
@@ -149,16 +156,16 @@ def main():
             # Execution: Ex
             if (instr[0:2] != "10"):
                 output = ALU.aluOP(instr, registersData[0], registersData[1])
-                print(output)
                 # Memory Access: Mem
                 # Write Back: Wb
+                registers(instr, True, output)
 
             # Instruction Fetch: IF
             pc = pc_counter(pc)
             # Instruction Decode: ID
             instr = instruction_fetch(pc, machine_code)
         except:
-            raise CustomError("EOF Error")
+            raise SystemError("EOF Error")
     
 
 if __name__ == "__main__":

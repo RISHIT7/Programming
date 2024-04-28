@@ -1,0 +1,32 @@
+.global _main
+
+main:
+	# move
+	
+	mv x0, $40
+	mv x1, $40
+	mv x2, $40
+
+	# R-type
+
+	add x3, x2, x1
+	sub x3, x2, x1
+	mul x3, x2, x1
+	div x3, x2, x1
+
+	# I-type
+
+	addi x3, x2, $4
+	subi x3, x2, $4
+	muli x3, x2, $4
+	divi x3, x2, $4
+
+	# print logic, ecall $<imm>
+	# for print, we will use ecall $42 and x1 will be printed
+	
+	add x1, x3, x0
+	ecall $42
+
+	# exit logic
+	# ecall $<exit code>
+	ecall $0
